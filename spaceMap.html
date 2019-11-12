@@ -3,11 +3,18 @@
     .mainMap {
       text-align: center;
       align-content: center;
+      background-image: url("assets/Scene-1.jpg");
       border: 0.2rem solid black;
       width: 80%;
       height: 65%;
       margin: 1rem;
       display: inline-block;
+    }
+    #playerShip {
+      height: 15%;
+      background-image: url("assets/Titan.png");
+      background-repeat: no-repeat;
+      background-size: contain;
     }
   </style>
   <script src="map.js"></script>
@@ -15,9 +22,10 @@
     <title>SpaceHunt</title>
   </head>
 
-  <body>
-    <div style="padding-top:3rem; text-align: center">
-      <div id="mainMap" class="mainMap">ok</div>
+  <input type="button" onclick="generateMap()" value="map" />
+  <div style="padding-top:3rem; text-align: center">
+    <div id="mainMap" class="mainMap">
+      <div id="playerShip"></div>
     </div>
-  </body>
+  </div>
 </html>
