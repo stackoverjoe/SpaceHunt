@@ -60,41 +60,121 @@ function renderMap(X, Y) {
 }
 var player = {
   xcoord: 0,
-  ycoord: 0
+  ycoord: 0,
+  orientation: 1 //1right, 2left, 3up, 4 down
 };
 
 var counter = 0;
 
 document.onkeydown = function(e) {
+  var update = 1;
   var oldx = player.xcoord;
   var oldy = player.ycoord;
   if (e.keyCode === 37) {
     //left
+    player.orientation = 2;
     if (player.xcoord > 0) {
       --player.xcoord;
     }
-  }
-  if (e.keyCode === 39) {
-    //down
+  } else if (e.keyCode === 39) {
+    //right
+    player.orientation = 1;
     if (player.xcoord < coords[0] - 1) ++player.xcoord;
-  }
-  if (e.keyCode === 38) {
+  } else if (e.keyCode === 38) {
     //up
+    player.orientation = 3;
     if (player.ycoord > 0) {
       --player.ycoord;
     }
-  }
-  if (e.keyCode === 40) {
+  } else if (e.keyCode === 40) {
     //down
-
+    player.orientation = 4;
     if (player.ycoord < coords[1] - 1) {
       ++player.ycoord;
     }
+  } else if (e.keyCode === 32) {
+    let zone = player.xcoord;
+    let yz = player.ycoord;
+    let laser;
+    if (player.orientation === 1) {
+      zone = player.xcoord + 1;
+      yz = player.ycoord;
+      laser = setInterval(() => {
+        if (zone < coords[0] - 1) {
+          document.getElementById(
+            `${zone + 1}-${yz}`
+          ).innerHTML = `<div><img style='height:100%; transform: rotate(90deg)' src='/assets/PNG/beams22.png'/></div>`;
+          document.getElementById(
+            `${zone}-${yz}`
+          ).innerHTML = `<div class = "mapCell"></div>`;
+          ++zone;
+        }
+      }, 100);
+    } else if (player.orientation === 2) {
+      zone = player.xcoord - 1;
+      yz = player.ycoord;
+      laser = setInterval(() => {
+        if (zone > 0) {
+          document.getElementById(
+            `${zone - 1}-${yz}`
+          ).innerHTML = `<div><img style='height:100%; transform: rotate(-90deg)' src='/assets/PNG/beams22.png'/></div>`;
+          document.getElementById(
+            `${zone}-${yz}`
+          ).innerHTML = `<div class = "mapCell"></div>`;
+          --zone;
+        }
+      }, 100);
+    } else if (player.orientation === 3) {
+      zone = player.xcoord;
+      yz = player.ycoord - 1;
+      laser = setInterval(() => {
+        if (yz > 0) {
+          document.getElementById(
+            `${zone}-${yz - 1}`
+          ).innerHTML = `<div style='text-align:center'><img style='height:100%; transform: rotate(0deg)' src='/assets/PNG/beams22.png'/></div>`;
+          document.getElementById(
+            `${zone}-${yz}`
+          ).innerHTML = `<div class = "mapCell"></div>`;
+          --yz;
+        }
+      }, 100);
+    }
+    if (player.orientation === 4) {
+      zone = player.xcoord;
+      yz = player.ycoord + 1;
+      laser = setInterval(() => {
+        if (yz < coords[1] - 1) {
+          document.getElementById(
+            `${zone}-${yz + 1}`
+          ).innerHTML = `<div style='text-align:center'><img style='height:100%; transform: rotate(180deg)' src='/assets/PNG/beams22.png'/></div>`;
+          document.getElementById(
+            `${zone}-${yz}`
+          ).innerHTML = `<div class = "mapCell"></div>`;
+          ++yz;
+        }
+      }, 100);
+    }
+    if (zone >= coords[0] && player.orientation === 1) {
+      clearInterval(laser);
+    }
+    if (zone <= 0 && player.orientation === 2) {
+      clearInterval(laser);
+    }
+    if (yz >= coords[1] && player.orientation === 3) {
+      clearInterval(laser);
+    }
+    if (yz < 0 && player.orientation === 4) {
+      clearInterval(laser);
+    }
+    return false;
+  } else {
+    update = 0;
   }
-
-  document.getElementById(
-    `${oldx}-${oldy}`
-  ).innerHTML = `<div class='mapCell'></div>`;
+  if (update === 1) {
+    document.getElementById(
+      `${oldx}-${oldy}`
+    ).innerHTML = `<div class='mapCell'></div>`;
+  }
   if (e.keyCode === 37) {
     document.getElementById(
       `${player.xcoord}-${player.ycoord}`
@@ -113,8 +193,10 @@ document.onkeydown = function(e) {
     ).innerHTML = `<div id='theMotherShip' style='text-align: center; color: white; transform: rotate(180deg);'><img style='height: 100%' src='/assets/Titan.png'/></div>`;
   }
   //$("#theMotherShip").scrollintoview();
-  document
-    .getElementById("theMotherShip")
-    .scrollIntoView({ behaviour: "smooth", block: "center" });
+  if (update === 1) {
+    document
+      .getElementById("theMotherShip")
+      .scrollIntoView({ behaviour: "smooth", block: "center" });
+  }
   //window.location.hash = "#theMotherShip";
 };
