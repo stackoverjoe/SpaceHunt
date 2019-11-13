@@ -1,18 +1,26 @@
 <html>
   <style>
+    @font-face {
+      font-family: "spaceAge";
+      src: url("fonts/spaceAge.ttf") format("truetype");
+    }
+    body {
+      background: grey;
+    }
     .mainMap {
       text-align: center;
       align-content: center;
       background-image: url("assets/Scene-1.jpg");
       border: 0.2rem solid black;
-      width: 80%;
-      height: 65%;
+      width: 90%;
+      height: 75%;
       margin: 1rem;
       display: inline-block;
+      overflow: auto;
     }
     .gameCell {
-      width: 25px;
-      height: 15px;
+      width: 80px;
+      height: 40px;
       border: 1px solid white;
     }
     table {
@@ -26,14 +34,25 @@
       background-size: fill !important;
       display: inline-flex;
     }
+    ::-webkit-scrollbar {
+      width: 0px;
+      background: transparent;
+    }
+    h1 {
+      text-align: center;
+    }
   </style>
   <head>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="map.js"></script>
     <title>SpaceHunt</title>
   </head>
-  <input type="button" onclick="renderMap(20,20)" value="map" />
-  <div style="padding-top:3rem; text-align: center">
-    <div id="mainMap" class="mainMap"></div>
-  </div>
+  <body onload="renderMap(20,20)">
+    <h1 style="font-family: spaceAge; font-size: 3rem; padding-top: 1rem">
+      SpaceHunt
+    </h1>
+    <div style="padding-top:.5rem; text-align: center;">
+      <div id="mainMap" class="mainMap"></div>
+    </div>
+  </body>
 </html>
