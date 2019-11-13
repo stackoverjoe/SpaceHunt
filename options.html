@@ -1,62 +1,43 @@
 <html>
+  <head>
+      <link rel="stylesheet" href="options.css">
+  </head>
+  <body onload="init()">
+    <h1>Customize your Experience!</h2>
+    <form name="options">
+      <label for="maxX">Max Map X</label>
+      <input type="number" name="maxX">
+      <label for="maxY">Max Map Y</label>
+      <input type="number" name="maxY">
 
-<head>
- <link rel="stylesheet" href="options.css">
-<body>
+      <label for="startX">Starting X</label>
+      <input type="number" name="startX">
+      <label for="startY">Starting Y</label>
+      <input type="number" name="startY">
 
-  <div class="bg"></div>
+      <label for="baseEnergy">Starting Energy</label>
+      <input type="number" name="baseEnergy">
 
-  <h1>
-    <b>SpaceHunt Game Options</b>
-  </h1>
+      <label for="baseSupplies">Starting Supplies</label>
+      <input type="number" name="baseSupplies">
 
-  <form>
-    <div class="game-input">
+      <label for="baseCredits">Starting Credits</label>
+      <input type="number" name="baseCredits">
 
-      <!-- Width x Height of game board. Default is 128 x 128. -->
-      <label for="size"><b>Please Enter the Desired Map Size: </b></label><br><br>
-      <input type="text" name="size" id="dimension" style="width: 10%;" value="128,128"><br><br>
+      <label for="wormhole">Wormholes</label><br>
+      <input type="radio" name="wormhole" value="random" id="Random">
+      <label for="Random">Random</label>
+      <input type="radio" name="wormhole" value="fixed"  id="Fixed">
+      <label for="Fixed" >Fixed</label>
 
-      <!-- //(x,y) coordinates of where the player starts. -->
-      <label for="location"><b>Starting Location:</b></label><br><br>
-      <input type="text" name="location" id="Location" style="width: 10%;" value="50,50"><br><br>
+      <br><label for="death">Death</label><br>
+      <input type="radio" name="canDie" value="on"  id="On">
+      <label for="On" >On</label>
+      <input type="radio" name="canDie" value="off" id="Off">
+      <label for="Off">Off</label>
 
-      <!-- //Energy the ship has to start. -->
-      <label for="energy"><b>Starting Energy:</b></label><br><br>
-      <input type="text" name="energy" id="Energy" style="width: 10%;" value="1000"><br><br>
-
-      <!-- //Supplies the player starts with. -->
-      <label for="supplies"><b>Starting Supplies:</b></label><br><br>
-      <input type="text" name="supplies" id="Supplies" style="width: 10%;" value="100"><br><br>
-
-      <!-- //Credits the player starts with. -->
-      <label for="credits"><b>Starting Credits:</b></label><br><br>
-      <input type="text" name="credits" id="Credits" style="width: 10%;" value="550"><br><br>
-
-      <!-- //Option to place a wormhole, or have it randomly placed. Possibly implement option to place multiple? -->
-      <label for="wormholes"><b>Wormhole Behaviour:</b></label><br><br>
-
-      <input type="radio" name="wormhole" id="Fixed" checked>
-      <label for="Fixed">Fixed Wormholes</label><br>
-
-      <input type="radio" name="wormhole" id="Random">
-      <label for="Random">Random Wormholes</label><br><br>
-
-      <!-- //Option to determine whether the player can die when energy is depleted. -->
-      <label for="godMode"><b>Can Your Player Die?</b></label><br><br>
-
-      <input type="radio" name="death" id="Mortal" checked>
-      <label for="Mortal">Mortal</label><br>
-
-      <input type="radio" name="nodeath" id="God">
-      <label for="God">God</label><br><br>
-
-      <!-- //Submit button that links to js file to setup gameplay. -->
-      <input type="button" class="button" onclick="gameSetup();" value="Submit">
-
-    </div>
-  </form>
-
-</body>
-
+      <br><button type="button" onclick="save()">Submit</button>
+    </form>
+  </body>
+  <script src="options.js"></script>
 </html>
