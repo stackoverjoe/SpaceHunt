@@ -44,7 +44,7 @@ function renderMap(X, Y) {
     for (var col = 0; col < Y; ++col) {
       var mapCell = document.createElement("td"),
         mapObj = document.createElement("div");
-      mapCell.className = "gameCell";
+      mapCell.className = "gameCell"; //mapCell for fun game
       mapCell.setAttribute("id", col + "-" + row);
       mapObj.className = "gameCell";
       mapObj.setAttribute("id", row + "--" + col);
@@ -62,6 +62,8 @@ var player = {
   xcoord: 0,
   ycoord: 0
 };
+
+var counter = 0;
 
 document.onkeydown = function(e) {
   var oldx = player.xcoord;
@@ -84,6 +86,7 @@ document.onkeydown = function(e) {
   }
   if (e.keyCode === 40) {
     //down
+
     if (player.ycoord < coords[1] - 1) {
       ++player.ycoord;
     }
@@ -92,7 +95,26 @@ document.onkeydown = function(e) {
   document.getElementById(
     `${oldx}-${oldy}`
   ).innerHTML = `<div class='mapCell'></div>`;
-  document.getElementById(
-    `${player.xcoord}-${player.ycoord}`
-  ).innerHTML = `<div style='text-align: center; color: white'><img style='height: 100%' src='/assets/Titan.png'/></div>`;
+  if (e.keyCode === 37) {
+    document.getElementById(
+      `${player.xcoord}-${player.ycoord}`
+    ).innerHTML = `<div id='theMotherShip' style='text-align: center; color: white; transform: rotate(-90deg);'><img style='height: 100%' src='/assets/Titan.png'/></div>`;
+  } else if (e.keyCode === 39) {
+    document.getElementById(
+      `${player.xcoord}-${player.ycoord}`
+    ).innerHTML = `<div id='theMotherShip' style='text-align: center; color: white; transform: rotate(90deg);'><img style='height: 100%' src='/assets/Titan.png'/></div>`;
+  } else if (e.keyCode === 38) {
+    document.getElementById(
+      `${player.xcoord}-${player.ycoord}`
+    ).innerHTML = `<div id='theMotherShip' style='text-align: center; color: white; transform: rotate(0deg);'><img style='height: 100%' src='/assets/Titan.png'/></div>`;
+  } else if (e.keyCode === 40) {
+    document.getElementById(
+      `${player.xcoord}-${player.ycoord}`
+    ).innerHTML = `<div id='theMotherShip' style='text-align: center; color: white; transform: rotate(180deg);'><img style='height: 100%' src='/assets/Titan.png'/></div>`;
+  }
+  //$("#theMotherShip").scrollintoview();
+  document
+    .getElementById("theMotherShip")
+    .scrollIntoView({ behaviour: "smooth", block: "center" });
+  //window.location.hash = "#theMotherShip";
 };
