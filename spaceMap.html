@@ -10,22 +10,30 @@
       margin: 1rem;
       display: inline-block;
     }
-    #playerShip {
-      height: 15%;
-      background-image: url("assets/Titan.png");
-      background-repeat: no-repeat;
-      background-size: contain;
+    .gameCell {
+      width: 25px;
+      height: 15px;
+      border: 1px solid white;
+    }
+    table {
+      border-collapse: collapse;
+    }
+    .playerShip {
+      height: 15% !important;
+      z-index: 5;
+      background-image: url("assets/Titan.png") !important;
+      background-repeat: no-repeat !important;
+      background-size: fill !important;
+      display: inline-flex;
     }
   </style>
-  <script src="map.js"></script>
   <head>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="map.js"></script>
     <title>SpaceHunt</title>
   </head>
-
-  <input type="button" onclick="generateMap()" value="map" />
+  <input type="button" onclick="renderMap(20,20)" value="map" />
   <div style="padding-top:3rem; text-align: center">
-    <div id="mainMap" class="mainMap">
-      <div id="playerShip"></div>
-    </div>
+    <div id="mainMap" class="mainMap"></div>
   </div>
 </html>

@@ -4,7 +4,7 @@ class tile {
     this.energyLoss = 1;
   }
 }
-
+/*
 document.onkeydown = function(e) {
   console.log(e);
 };
@@ -14,16 +14,37 @@ function generateMap() {
     mapArray[i] = new Array(25);
   }
   for (let i = 0; i < mapArray.length; ++i) {
-    document.getElementById(
-      "mainMap"
-    ).innerHTML += `<div style="text-align: left">ok</div>`;
+    document.getElementById("mainMap").innerHTML += `<div id=${i}></div>`;
     for (let j = 0; j < mapArray.length; ++j) {
       console.log(mapArray.length);
       document.getElementById(
         "mainMap"
-      ).innerHTML += `<span style="text-align: left">test</span>`;
+      ).innerHTML += `<span class='gameCell' id=${i},${j}></span>`;
       mapArray[i][j] = new tile();
     }
   }
-  //document.getElementById("mainMap").innerHTML += `<div>Hi</div>`;
+}
+*/
+function renderMap(X, Y) {
+  var outer = document.querySelector("#mainMap");
+
+  let mapContainer = document.createElement("table");
+
+  outer.appendChild(mapContainer);
+  mapContainer.className = "gameCell";
+  for (var row = 0; row < X; ++row) {
+    var mapRow = document.createElement("tr");
+    mapRow.className = "map-row";
+    mapRow.setAttribute("class", "gameCell");
+    for (var col = 0; col < Y; ++col) {
+      var mapCell = document.createElement("td"),
+        mapObj = document.createElement("div");
+      mapCell.className = "map-cell";
+      mapCell.setAttribute("id", col + "," + row);
+      mapObj.className = "gameCell";
+      mapCell.appendChild(mapObj);
+      mapRow.appendChild(mapCell);
+    }
+    mapContainer.appendChild(mapRow);
+  }
 }
