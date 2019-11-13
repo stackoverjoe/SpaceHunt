@@ -4,8 +4,6 @@
  <link rel="stylesheet" href="options.css">
 <body>
 
-  <div class="bg"></div>
-
   <h1>
     <b>SpaceHunt Game Options</b>
   </h1>
@@ -18,19 +16,22 @@
       <input type="text" name="size" id="dimension" style="width: 10%;" value="128,128"><br><br>
 
       <!-- //(x,y) coordinates of where the player starts. -->
-      <label for="location"><b>Starting Location:</b></label><br><br>
-      <input type="text" name="location" id="Location" style="width: 10%;" value="50,50"><br><br>
+      <label for="location" required><b>Starting Location:</b></label><br><br>
+      <label style="padding-right: 20px; text-decoration:none;" for="location" required><b>X-Coordinate</b></label>
+      <label style="padding-left: 20px; text-decoration:none;" for="location" required><b>Y-Coordinate</b></label><br>
+      <input type="text" name="location x" id="LocationX" style="width: 10%;" value="50">
+      <input type="text" name="location y" id="LocationY" style="width: 10%;" value="50"><br><br>
 
       <!-- //Energy the ship has to start. -->
-      <label for="energy"><b>Starting Energy:</b></label><br><br>
+      <label for="energy" required><b>Starting Energy:</b></label><br><br>
       <input type="text" name="energy" id="Energy" style="width: 10%;" value="1000"><br><br>
 
       <!-- //Supplies the player starts with. -->
-      <label for="supplies"><b>Starting Supplies:</b></label><br><br>
+      <label for="supplies" required><b>Starting Supplies:</b></label><br><br>
       <input type="text" name="supplies" id="Supplies" style="width: 10%;" value="100"><br><br>
 
       <!-- //Credits the player starts with. -->
-      <label for="credits"><b>Starting Credits:</b></label><br><br>
+      <label for="credits" required><b>Starting Credits:</b></label><br><br>
       <input type="text" name="credits" id="Credits" style="width: 10%;" value="550"><br><br>
 
       <!-- //Option to place a wormhole, or have it randomly placed. Possibly implement option to place multiple? -->
