@@ -19,20 +19,19 @@
       overflow: auto;
     }
     .gameCell {
-      width: 80px;
-      height: 40px;
+      width: 100px;
+      height: 60px;
       border: 1px solid white;
     }
     table {
       border-collapse: collapse;
     }
     .playerShip {
-      height: 15% !important;
+      height: 1000% !important;
       z-index: 5;
       background-image: url("assets/Titan.png") !important;
       background-repeat: no-repeat !important;
       background-size: fill !important;
-      display: inline-flex;
     }
     ::-webkit-scrollbar {
       width: 0px;
@@ -45,10 +44,34 @@
   <head>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="map.js"></script>
+    <script>
+      //#\30 \,0 > div
+      //#\31 \,3
+      //#\30 \,0
+      //document.querySelector("#\\30 \\,0 > div")
+      //#\30 -0
+      //*[@id="0-0"]/div
+      //#mainMap > table
+      //#\30 --0
+      $(document).ready(function() {
+        $("#\\30 --0").click(function() {
+          alert(0);
+          replaceWith("<div class='playerShip'></div>");
+        });
+      });
+    </script>
     <title>SpaceHunt</title>
   </head>
+
   <body onload="renderMap(20,20)">
-    <h1 style="font-family: spaceAge; font-size: 3rem; padding-top: 1rem">
+    <embed
+      name="GoodEnough"
+      src="/assets/spaceSong.mp3"
+      loop="true"
+      hidden="true"
+      autostart="true"
+    />
+    <h1 style="font-family: spaceAge; font-size: 4rem; padding-top: 1rem">
       SpaceHunt
     </h1>
     <div style="padding-top:.5rem; text-align: center;">
