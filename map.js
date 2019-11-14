@@ -27,7 +27,6 @@ function generateMap() {
 */
 
 let coords = [0, 0];
-function updateLocation() {}
 function renderMap(X, Y) {
   coords[0] = X;
   coords[1] = Y;
@@ -82,12 +81,15 @@ document.onkeydown = function(e) {
     if (player.xcoord < coords[0] - 1) ++player.xcoord;
   } else if (e.keyCode === 38) {
     //up
+    e.preventDefault;
     player.orientation = 3;
     if (player.ycoord > 0) {
       --player.ycoord;
     }
   } else if (e.keyCode === 40) {
     //down
+    e.preventDefault;
+
     player.orientation = 4;
     if (player.ycoord < coords[1] - 1) {
       ++player.ycoord;
@@ -197,6 +199,11 @@ document.onkeydown = function(e) {
     document
       .getElementById("theMotherShip")
       .scrollIntoView({ behaviour: "smooth", block: "center" });
+  }
+  let oldHealth = parseInt(document.getElementById("energy").value);
+  document.getElementById("energy").value = --oldHealth;
+  if (oldHealth <= 0) {
+    $("#myModal").modal("show");
   }
   //window.location.hash = "#theMotherShip";
 };
