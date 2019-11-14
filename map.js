@@ -72,12 +72,14 @@ document.onkeydown = function(e) {
   var oldy = player.ycoord;
   if (e.keyCode === 37) {
     //left
+    e.preventDefault();
     player.orientation = 2;
     if (player.xcoord > 0) {
       --player.xcoord;
     }
   } else if (e.keyCode === 39) {
     //right
+    e.preventDefault();
     player.orientation = 1;
     if (player.xcoord < coords[0] - 1) ++player.xcoord;
   } else if (e.keyCode === 38) {
