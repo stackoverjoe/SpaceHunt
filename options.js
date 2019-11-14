@@ -5,21 +5,20 @@ function init(){
   if(typeof(Storage) == "undefined")
     return alert("Your browser may not support local storage!"
       + "This page will be unable to save anything you enter!");
-  else if(!localStorage.getItem(element[0]){ //it must be empty! set defaults
+  
+  if(!localStorage.getItem(form.elements[0])){ //it must be empty! set defaults
     localStorage.clear();
-    localStorage.setItem(element.name, element.value);
-    localStorage.setItem(maxX, "128");
-    localStorage.setItem(maxY, "128");
+    localStorage.setItem("maxX", "128");
+    localStorage.setItem("maxY", "128");
 
-    localStorage.setItem(startX, "63");
-    localStorage.setItem(startY, "63");
+    localStorage.setItem("startX", "63");
+    localStorage.setItem("startY", "63");
 
-    localStorage.setItem(baseEnergy, "100");
-    localStorage.setItem(baseSupplies, "100");
-    localStorage.setItem(baseCredits, "100");
-    localStorage.setItem(wormhole, "fixed");
-    localStorage.setItem(canDie, "true");
-    return;
+    localStorage.setItem("baseEnergy", "100");
+    localStorage.setItem("baseSupplies", "100");
+    localStorage.setItem("baseCredits", "100");
+    localStorage.setItem("wormhole", "fixed");
+    localStorage.setItem("canDie", "true");
   }
 
   for(element of form)
@@ -31,9 +30,8 @@ function validChange(element){
      element.type === "number" &&
      Number(element.value) === "NaN")
     return invalidChange(element);
-  element.style.color = 'black';
   localStorage.setItem(element.name, element.value);
-  element.placeholder = element.value;
+  element.style.color = 'black';
 }
 
 function invalidChange(element){
