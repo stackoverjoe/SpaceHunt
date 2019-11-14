@@ -28,6 +28,7 @@ function generateMap() {
 
 let coords = [0, 0];
 function renderMap(X, Y) {
+  document.getElementById("mainMap").focus();
   coords[0] = X;
   coords[1] = Y;
   var outer = document.querySelector("#mainMap");
@@ -81,20 +82,22 @@ document.onkeydown = function(e) {
     if (player.xcoord < coords[0] - 1) ++player.xcoord;
   } else if (e.keyCode === 38) {
     //up
-    e.preventDefault;
+    e.preventDefault();
     player.orientation = 3;
     if (player.ycoord > 0) {
       --player.ycoord;
     }
   } else if (e.keyCode === 40) {
     //down
-    e.preventDefault;
+    e.preventDefault();
 
     player.orientation = 4;
     if (player.ycoord < coords[1] - 1) {
       ++player.ycoord;
     }
   } else if (e.keyCode === 32) {
+    var snd = new Audio("/assets/ray.mp3");
+    snd.play();
     let zone = player.xcoord;
     let yz = player.ycoord;
     let laser;
@@ -111,7 +114,7 @@ document.onkeydown = function(e) {
           ).innerHTML = `<div class = "mapCell"></div>`;
           ++zone;
         }
-      }, 100);
+      }, 50);
     } else if (player.orientation === 2) {
       zone = player.xcoord - 1;
       yz = player.ycoord;
@@ -125,7 +128,7 @@ document.onkeydown = function(e) {
           ).innerHTML = `<div class = "mapCell"></div>`;
           --zone;
         }
-      }, 100);
+      }, 50);
     } else if (player.orientation === 3) {
       zone = player.xcoord;
       yz = player.ycoord - 1;
@@ -139,7 +142,7 @@ document.onkeydown = function(e) {
           ).innerHTML = `<div class = "mapCell"></div>`;
           --yz;
         }
-      }, 100);
+      }, 50);
     }
     if (player.orientation === 4) {
       zone = player.xcoord;
@@ -154,7 +157,7 @@ document.onkeydown = function(e) {
           ).innerHTML = `<div class = "mapCell"></div>`;
           ++yz;
         }
-      }, 100);
+      }, 50);
     }
     if (zone >= coords[0] && player.orientation === 1) {
       clearInterval(laser);
@@ -175,7 +178,7 @@ document.onkeydown = function(e) {
   if (update === 1) {
     document.getElementById(
       `${oldx}-${oldy}`
-    ).innerHTML = `<div class='mapCell'></div>`;
+    ).innerHTML = `<div class='gameCell' style="border: 1px solid blue; background: blue; opacity: 0.3"></div>`;
   }
   if (e.keyCode === 37) {
     document.getElementById(
@@ -192,7 +195,7 @@ document.onkeydown = function(e) {
   } else if (e.keyCode === 40) {
     document.getElementById(
       `${player.xcoord}-${player.ycoord}`
-    ).innerHTML = `<div id='theMotherShip' style='text-align: center; color: white; transform: rotate(180deg);'><img style='height: 100%' src='/assets/Titan.png'/></div>`;
+    ).innerHTML = `<div id='theMotherShip' style='text-align: center;  transform: rotate(180deg);'><img style='height: 100%' src='/assets/Titan.png'/></div>`;
   }
   //$("#theMotherShip").scrollintoview();
   if (update === 1) {
@@ -204,6 +207,14 @@ document.onkeydown = function(e) {
   document.getElementById("energy").value = --oldHealth;
   if (oldHealth <= 0) {
     $("#myModal").modal("show");
+  } else if (oldHealth < 30 && oldHealth >= 27) {
+    $("#theMotherShip").tooltip({
+      title: `<h4 style="padding-bottom: 20px"><img src='assets/PNG/8.png' alt='Smiley'> <div>You are low on energy!! ${oldHealth} remaining!</div><h4>`,
+      placement: "auto",
+      html: true
+    });
+    $("#theMotherShip").tooltip("show");
   }
-  //window.location.hash = "#theMotherShip";
+  //window.location.hash = "#mainMap";
+  //document.getElementById("#mainMap").scrollIntoView();
 };
