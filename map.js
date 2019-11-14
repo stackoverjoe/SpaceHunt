@@ -28,13 +28,18 @@ function generateMap() {
 
 let coords = [0, 0];
 function renderMap(X, Y) {
+  var snd = new Audio("/assets/spaceSong.mp3");
+  snd.play();
   document.getElementById("mainMap").focus();
   coords[0] = X;
   coords[1] = Y;
   var outer = document.querySelector("#mainMap");
-
+  var inner = document.getElementById("theBigTable");
+  if (inner) {
+    inner.remove();
+  }
   let mapContainer = document.createElement("table");
-
+  mapContainer.setAttribute("id", "theBigTable");
   outer.appendChild(mapContainer);
   mapContainer.className = "gameCell";
   for (var row = 0; row < X; ++row) {
@@ -57,6 +62,10 @@ function renderMap(X, Y) {
   document.getElementById(
     "0-0"
   ).innerHTML = `<div style='text-align: center; color: white'><img style='height: 100%' src='/assets/Titan.png'/></div>`;
+
+  player.xcoord = 0;
+  player.ycoord = 0;
+  document.getElementById("0-0").scrollIntoView();
 }
 var player = {
   xcoord: 0,
@@ -98,8 +107,8 @@ document.onkeydown = function(e) {
       ++player.ycoord;
     }
   } else if (e.keyCode === 32) {
-    var snd = new Audio("/assets/ray.mp3");
-    snd.play();
+    var laserSnd = new Audio("/assets/1laz.mp3");
+    laserSnd.play();
     let zone = player.xcoord;
     let yz = player.ycoord;
     let laser;
@@ -220,3 +229,8 @@ document.onkeydown = function(e) {
   //window.location.hash = "#mainMap";
   //document.getElementById("#mainMap").scrollIntoView();
 };
+
+function restart() {
+  renderMap(100, 100);
+  document.getElementById("energy").value = 100;
+}
