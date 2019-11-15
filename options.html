@@ -9,49 +9,55 @@
 
   </head>
   <body onload="init()">
-    
+
     <link href='https://fonts.googleapis.com/css?family=Lato:300,400,700' rel='stylesheet' type='text/css'>
     <div id='stars'></div>
     <div id='stars2'></div>
     <div id='stars3'></div>
 
-    <h1>Customize your Experience!</h2>
+      <div id="title">
+        <span>
+          Customize your Experience!
+        </span>
+      </div>
 
-    <form name="options">
+      <div align="center">
+        <form name="options">
 
-      <label for="maxX">Max Map X</label><br>
-      <input type="number" name="maxX">
-      <label for="maxY">Max Map Y</label>
-      <input type="number" name="maxY">
+          <label for="maxX">Max Map X</label>
+          <input type="number" name="maxX">
+          <label for="maxY">Max Map Y</label>
+          <input type="number" name="maxY">
 
-      <label for="startX">Starting X</label>
-      <input type="number" name="startX">
-      <label for="startY">Starting Y</label>
-      <input type="number" name="startY">
+          <label for="startX">Starting X</label>
+          <input type="number" name="startX">
+          <label for="startY">Starting Y</label>
+          <input type="number" name="startY">
 
-      <label for="baseEnergy">Starting Energy</label>
-      <input type="number" name="baseEnergy">
+          <label for="baseEnergy">Starting Energy</label>
+          <input type="number" name="baseEnergy">
 
-      <label for="baseSupplies">Starting Supplies</label>
-      <input type="number" name="baseSupplies">
+          <label for="baseSupplies">Starting Supplies</label>
+          <input type="number" name="baseSupplies">
 
-      <label for="baseCredits">Starting Credits</label>
-      <input type="number" name="baseCredits">
+          <label for="baseCredits">Starting Credits</label>
+          <input type="number" name="baseCredits">
 
-      <label for="wormhole">Wormholes</label><br>
-      <input type="radio" name="wormhole" value="random" id="Random">
-      <label for="Random">Random</label>
-      <input type="radio" name="wormhole" value="fixed"  id="Fixed">
-      <label for="Fixed" >Fixed</label>
+          <label for="wormhole">Wormholes</label><br>
+          <input type="radio" name="wormhole" value="random" id="Random">
+          <label for="Random">Random</label>
+          <input type="radio" name="wormhole" value="fixed"  id="Fixed">
+          <label for="Fixed" >Fixed</label>
 
-      <br><label for="death">Death</label><br>
-      <input type="radio" name="canDie" value="on"  id="On">
-      <label for="On" >On</label>
-      <input type="radio" name="canDie" value="off" id="Off">
-      <label for="Off">Off</label>
+          <br><label for="death">Death</label><br>
+          <input type="radio" name="canDie" value="on"  id="On">
+          <label for="On" >On</label>
+          <input type="radio" name="canDie" value="off" id="Off">
+          <label for="Off">Off</label>
 
-      <br><button type="button" onclick="save()">Submit</button>
-    </form>
+          <br><button type="button" onclick="save()">Submit</button>
+      </form>
+    </div>
   </body>
   <script src="options.js"></script>
 </html>

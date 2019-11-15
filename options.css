@@ -56,19 +56,18 @@ html {
 }
 
 #title {
-  position: absolute;
-  top: 50%;
   left: 0;
   right: 0;
   color: #FFF;
   text-align: center;
-  font-family: "lato", sans-serif;
+  font-family: "spaceAge", sans-serif;
   font-weight: 300;
   font-size: 50px;
   letter-spacing: 10px;
-  margin-top: -60px;
   padding-left: 10px;
+  padding-bottom: 50px;
 }
+
 #title span {
   background: -webkit-linear-gradient(white, #38495a);
   -webkit-background-clip: text;
@@ -84,17 +83,21 @@ html {
   }
 }
 
-input[type=number]{
-  display: block;
+@font-face {
+  font-family: "spaceAge";
+  src: url("fonts/spaceAge.ttf") format("truetype");
 }
 
-input{
+input[type=number]{
+  display: block;
   margin-bottom: 15px;
 }
 
-body {
-  font-family: "lato", sans-serif;
-  font-weight: 300;
+label {
+  font-family: "spaceAge", sans-serif;
+  font-size: 20px;
   color: #FFF;
-  letter-spacing: 1px;
+  background: -webkit-linear-gradient(white, #38495a);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
