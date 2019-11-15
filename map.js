@@ -1,33 +1,29 @@
+/*
 class tile {
   constructor() {
     this.image = null;
     this.energyLoss = 1;
   }
-}
-/*
-document.onkeydown = function(e) {
-  console.log(e);
+}*/
+//global player object that hold player location and orientation for animations.
+var player = {
+  xcoord: 0,
+  ycoord: 0,
+  orientation: 1 //1right, 2left, 3up, 4 down
 };
-function generateMap() {
-  let mapArray = new Array(25);
-  for (var i = 0; i < mapArray.length; ++i) {
-    mapArray[i] = new Array(25);
-  }
-  for (let i = 0; i < mapArray.length; ++i) {
-    document.getElementById("mainMap").innerHTML += `<div id=${i}></div>`;
-    for (let j = 0; j < mapArray.length; ++j) {
-      console.log(mapArray.length);
-      document.getElementById(
-        "mainMap"
-      ).innerHTML += `<span class='gameCell' id=${i},${j}></span>`;
-      mapArray[i][j] = new tile();
-    }
-  }
-}
-*/
-
+var counter = 0;
+var mapObjs = new Map();
+var planets = [
+  "/assets/PNG/16.png",
+  "/assets/PNG/17.png",
+  "/assets/PNG/18.png",
+  "/assets/PNG/19.png",
+  "/assets/PNG/20.png"
+];
+//global coords for reference later in program
 let coords = [0, 0];
 function renderMap(X, Y) {
+  mapObjs.clear();
   var snd = new Audio("/assets/spaceSong.mp3");
   snd.play();
   document.getElementById("mainMap").focus();
@@ -42,6 +38,7 @@ function renderMap(X, Y) {
   mapContainer.setAttribute("id", "theBigTable");
   outer.appendChild(mapContainer);
   mapContainer.className = "gameCell";
+  //create presentational table for game movement
   for (var row = 0; row < X; ++row) {
     var mapRow = document.createElement("tr");
     mapRow.className = "map-row";
@@ -62,43 +59,96 @@ function renderMap(X, Y) {
   document.getElementById(
     "0-0"
   ).innerHTML = `<div style='text-align: center; color: white'><img style='height: 100%' src='/assets/Titan.png'/></div>`;
-
+  //call function to populate map with celestial objects
+  //set player coords back to start incase reset function called.
   player.xcoord = 0;
   player.ycoord = 0;
+  //snap to start of game
+  //scroll ship back into view
   document.getElementById("0-0").scrollIntoView();
+  //make sure title is visible
+  window.location = "spaceMap.html#top";
+
+  document.getElementById("energy").value = 1000;
+  populateMap();
 }
-var player = {
-  xcoord: 0,
-  ycoord: 0,
-  orientation: 1 //1right, 2left, 3up, 4 down
+
+var mapObject = {
+  type: null,
+  resources: 0,
+  div: null
 };
 
-var counter = 0;
+//var checker = new Map();
+function populateMap() {
+  //populate planets
+  for (let i = 0; i < 100; ++i) {
+    let x = Math.floor(Math.random() * coords[0]) + 1;
+    let y = Math.floor(Math.random() * coords[1]) + 1;
+    if (!mapObjs.has(`${x}-${y}`)) {
+      let img = Math.floor(Math.random() * planets.length);
+      mapObjs.set(
+        `${x}-${y}`,
+        (mapObject = {
+          type: "planet"
+        })
+      );
+      //let tile = document.getElementById(`${x}-${y}`).innerHTML;
+      if (document.getElementById(`${x}-${y}`) != null) {
+        document.getElementById(
+          `${x}-${y}`
+        ).innerHTML = `<div><img style="height: 100%; width: 100%" src='${planets[img]}'/></div>`;
+      }
+    }
+  }
+  //wormHoles
+  for (let i = 0; i < 30; ++i) {
+    let x = Math.floor(Math.random() * coords[0]) + 1;
+    let y = Math.floor(Math.random() * coords[1]) + 1;
+    if (!mapObjs.has(`${x}-${y}`)) {
+      let img = Math.floor(Math.random() * planets.length);
+      mapObjs.set(
+        `${x}-${y}`,
+        (mapObject = {
+          type: "wormHole"
+        })
+      );
+      //let tile = document.getElementById(`${x}-${y}`).innerHTML;
+      if (document.getElementById(`${x}-${y}`) != null) {
+        document.getElementById(
+          `${x}-${y}`
+        ).innerHTML = `<div><img style="height: 100%; width: 100%" src='/assets/PNG/10.png'/></div>`;
+      }
+    }
+  }
+}
 
+//observe key presses
 document.onkeydown = function(e) {
   var update = 1;
   var oldx = player.xcoord;
   var oldy = player.ycoord;
-  if (e.keyCode === 37) {
+  //figure out what movement key was pressed
+  if (e.keyCode === 37 || e.keyCode === 65) {
     //left
     e.preventDefault();
     player.orientation = 2;
     if (player.xcoord > 0) {
       --player.xcoord;
     }
-  } else if (e.keyCode === 39) {
+  } else if (e.keyCode === 39 || e.keyCode === 68) {
     //right
     e.preventDefault();
     player.orientation = 1;
     if (player.xcoord < coords[0] - 1) ++player.xcoord;
-  } else if (e.keyCode === 38) {
+  } else if (e.keyCode === 38 || e.keyCode === 87) {
     //up
     e.preventDefault();
     player.orientation = 3;
     if (player.ycoord > 0) {
       --player.ycoord;
     }
-  } else if (e.keyCode === 40) {
+  } else if (e.keyCode === 40 || e.keyCode === 83) {
     //down
     e.preventDefault();
 
@@ -186,24 +236,33 @@ document.onkeydown = function(e) {
   } else {
     update = 0;
   }
+  if (mapObjs.has(`${player.xcoord}-${player.ycoord}`)) {
+    //alert("test");
+    current = mapObjs.get(`${player.xcoord}-${player.ycoord}`);
+
+    player.xcoord = oldx;
+    player.ycoord = oldy;
+    handleEvent(current);
+    console.log(current);
+  }
   if (update === 1) {
     document.getElementById(
       `${oldx}-${oldy}`
     ).innerHTML = `<div class='gameCell' style="border: 1px solid blue; background: blue; opacity: 0.3"></div>`;
   }
-  if (e.keyCode === 37) {
+  if (e.keyCode === 37 || e.keyCode === 65) {
     document.getElementById(
       `${player.xcoord}-${player.ycoord}`
     ).innerHTML = `<div id='theMotherShip' style='text-align: center; color: white; transform: rotate(-90deg);'><img style='height: 100%' src='/assets/Titan.png'/></div>`;
-  } else if (e.keyCode === 39) {
+  } else if (e.keyCode === 39 || e.keyCode === 68) {
     document.getElementById(
       `${player.xcoord}-${player.ycoord}`
     ).innerHTML = `<div id='theMotherShip' style='text-align: center; color: white; transform: rotate(90deg);'><img style='height: 100%' src='/assets/Titan.png'/></div>`;
-  } else if (e.keyCode === 38) {
+  } else if (e.keyCode === 38 || e.keyCode === 87) {
     document.getElementById(
       `${player.xcoord}-${player.ycoord}`
     ).innerHTML = `<div id='theMotherShip' style='text-align: center; color: white; transform: rotate(0deg);'><img style='height: 100%' src='/assets/Titan.png'/></div>`;
-  } else if (e.keyCode === 40) {
+  } else if (e.keyCode === 40 || e.keyCode === 83) {
     document.getElementById(
       `${player.xcoord}-${player.ycoord}`
     ).innerHTML = `<div id='theMotherShip' style='text-align: center;  transform: rotate(180deg);'><img style='height: 100%' src='/assets/Titan.png'/></div>`;
@@ -215,7 +274,9 @@ document.onkeydown = function(e) {
       .scrollIntoView({ behaviour: "smooth", block: "center" });
   }
   let oldHealth = parseInt(document.getElementById("energy").value);
-  document.getElementById("energy").value = --oldHealth;
+  if (update === 1) {
+    document.getElementById("energy").value = --oldHealth;
+  }
   if (oldHealth <= 0) {
     $("#myModal").modal("show");
   } else if (oldHealth < 30 && oldHealth >= 27) {
@@ -226,11 +287,28 @@ document.onkeydown = function(e) {
     });
     $("#theMotherShip").tooltip("show");
   }
+
   //window.location.hash = "#mainMap";
   //document.getElementById("#mainMap").scrollIntoView();
 };
 
+function handleEvent(mapEvent) {
+  if (mapEvent.type === "planet") {
+    $("#planetModal").modal("show");
+  } else if (mapEvent.type === "wormHole") {
+    let x = Math.floor(Math.random() * coords[0]) + 1;
+    let y = Math.floor(Math.random() * coords[1]) + 1;
+    document.getElementById(
+      `${player.xcoord}-${player.ycoord}`
+    ).innerHTML = `<div class='mapCell'></div>`;
+    player.xcoord = x;
+    player.ycoord = y;
+    document.getElementById(
+      `${x}-${y}`
+    ).innerHTML = `<div id='theMotherShip' style='text-align: center;  transform: rotate(180deg);'><img style='height: 100%' src='/assets/Titan.png'/></div>`;
+  }
+}
+
 function restart() {
   renderMap(100, 100);
-  document.getElementById("energy").value = 100;
 }
