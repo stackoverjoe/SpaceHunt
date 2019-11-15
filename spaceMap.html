@@ -20,6 +20,9 @@
       display: inline-block;
       overflow: auto;
     }
+    .tooltips {
+      position: relative;
+    }
     .gameCell {
       width: 120px;
       height: 80px;
@@ -57,7 +60,7 @@
     <a name="top"><title id="title">SpaceHunt</title></a>
   </head>
 
-  <body onload="renderMap(100,100)">
+  <body onload="renderMap(128,128)">
     <div
       id="myModal"
       class="modal fade centered-modal"
@@ -131,6 +134,12 @@
         </div>
       </div>
     </div>
+    <div
+      id="starBaseModal"
+      class="modal fade centered-modal"
+      style="align-self: center;"
+      role="dialog"
+    ></div>
     <h1 style="font-family: spaceAge; font-size: 4rem; padding-top: 1rem">
       SpaceHunt
     </h1>

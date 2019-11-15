@@ -20,10 +20,45 @@ var planets = [
   "/assets/PNG/19.png",
   "/assets/PNG/20.png"
 ];
+var astroids = [
+  "/assets/medium/a10001.png",
+  "/assets/medium/a10014.png",
+  "/assets/large/a10004.png",
+  "/assets/large/a30011.png",
+  "/assets/large/c40001.png",
+  "/assets/large/b30008.png",
+  "/assets/large/c40013.png"
+];
+var starBase = [
+  "/assets/PNG/ssb.png",
+  "/assets/PNG/ssb2.png",
+  "/assets/SS1.png"
+];
+function moon() {
+  let i = 1;
+  //for(let i = 1; i < 40; ++i){
+  setInterval(function() {
+    if (i < 10) {
+      document.getElementById(
+        "1-1"
+      ).innerHTML = `<div style="background-color:transparent"><img style="height: 100%; width: 100%"src='/assets/moon/0${i}.png'/></div>`;
+    } else {
+      document.getElementById(
+        "1-1"
+      ).innerHTML = `<div style="background-color:transparent"><img style="height: 100%; width: 100%"src='/assets/moon/${i}.png'/></div>`;
+    }
+    ++i;
+    if (i > 48) {
+      i = 1;
+    }
+  }, 50);
+  //}
+}
 //global coords for reference later in program
 let coords = [0, 0];
 function renderMap(X, Y) {
   mapObjs.clear();
+  //moon();
   var snd = new Audio("/assets/spaceSong.mp3");
   snd.play();
   document.getElementById("mainMap").focus();
@@ -90,15 +125,24 @@ function populateMap() {
       mapObjs.set(
         `${x}-${y}`,
         (mapObject = {
-          type: "planet"
+          type: "planet",
+          coords: [x, y]
         })
       );
       //let tile = document.getElementById(`${x}-${y}`).innerHTML;
       if (document.getElementById(`${x}-${y}`) != null) {
         document.getElementById(
           `${x}-${y}`
-        ).innerHTML = `<div><img style="height: 100%; width: 100%" src='${planets[img]}'/></div>`;
+        ).innerHTML = `<div style="pointer-events: none"><img style="height: 100%; width: 100%" src='${planets[img]}'/></div>`;
       }
+      $(`#${x}-${y}`).tooltip({
+        title: `<h4 class="tooltips" style="padding-bottom: 20px"><img src='${planets[img]}' alt='Smiley'> <div>You have found a planet.</div><h4>`,
+        placement: "auto",
+        html: true,
+        container: `#${x}-${y}`,
+        delay: { hide: 100 },
+        trigger: "manual"
+      });
     }
   }
   //wormHoles
@@ -106,7 +150,6 @@ function populateMap() {
     let x = Math.floor(Math.random() * coords[0]) + 1;
     let y = Math.floor(Math.random() * coords[1]) + 1;
     if (!mapObjs.has(`${x}-${y}`)) {
-      let img = Math.floor(Math.random() * planets.length);
       mapObjs.set(
         `${x}-${y}`,
         (mapObject = {
@@ -121,10 +164,58 @@ function populateMap() {
       }
     }
   }
+  //starbases
+  for (let i = 0; i < 20; ++i) {
+    let x = Math.floor(Math.random() * coords[0]) + 1;
+    let y = Math.floor(Math.random() * coords[1]) + 1;
+    let img = Math.floor(Math.random() * starBase.length);
+    if (!mapObjs.has(`${x}-${y}`)) {
+      mapObjs.set(
+        `${x}-${y}`,
+        (mapObject = {
+          type: "starBase",
+          resources: Math.floor(Math.random() * 100)
+        })
+      );
+      var images = new Array();
+      for (let i = 0; i < starBase.length; ++i) {
+        images[i] = new Image();
+        images[i].src = starBase[i];
+      }
+      //let tile = document.getElementById(`${x}-${y}`).innerHTML;
+      if (document.getElementById(`${x}-${y}`) != null) {
+        document.getElementById(
+          `${x}-${y}`
+        ).innerHTML = `<div><img style="height: 100%; width: 100%" src='${images[img].src}'/></div>`;
+      }
+    }
+  }
+  //asteroids
+  for (let i = 0; i < 350; ++i) {
+    let x = Math.floor(Math.random() * coords[0]) + 1;
+    let y = Math.floor(Math.random() * coords[1]) + 1;
+    let img = Math.floor(Math.random() * astroids.length);
+    if (!mapObjs.has(`${x}-${y}`)) {
+      mapObjs.set(
+        `${x}-${y}`,
+        (mapObject = {
+          type: "asteroid",
+          damage: Math.floor(Math.random() * 10) + 1
+        })
+      );
+      //let tile = document.getElementById(`${x}-${y}`).innerHTML;
+      if (document.getElementById(`${x}-${y}`) != null) {
+        document.getElementById(
+          `${x}-${y}`
+        ).innerHTML = `<div><img style="height: 100%; width: 100%" src='${astroids[img]}'/></div>`;
+      }
+    }
+  }
 }
 
 //observe key presses
 document.onkeydown = function(e) {
+  $(".tooltips").tooltip("hide");
   var update = 1;
   var oldx = player.xcoord;
   var oldy = player.ycoord;
@@ -239,11 +330,9 @@ document.onkeydown = function(e) {
   if (mapObjs.has(`${player.xcoord}-${player.ycoord}`)) {
     //alert("test");
     current = mapObjs.get(`${player.xcoord}-${player.ycoord}`);
-
     player.xcoord = oldx;
     player.ycoord = oldy;
     handleEvent(current);
-    console.log(current);
   }
   if (update === 1) {
     document.getElementById(
@@ -294,7 +383,12 @@ document.onkeydown = function(e) {
 
 function handleEvent(mapEvent) {
   if (mapEvent.type === "planet") {
-    $("#planetModal").modal("show");
+    //otherstuff
+    $(`#${mapEvent.coords[0]}-${mapEvent.coords[1]}`).tooltip("show");
+    setTimeout(() => {
+      $(`#${mapEvent.coords[0]}-${mapEvent.coords[1]}`).tooltip("hide");
+    }, 1000);
+    //$("#planetModal").modal("show");
   } else if (mapEvent.type === "wormHole") {
     let x = Math.floor(Math.random() * coords[0]) + 1;
     let y = Math.floor(Math.random() * coords[1]) + 1;
@@ -306,6 +400,68 @@ function handleEvent(mapEvent) {
     document.getElementById(
       `${x}-${y}`
     ).innerHTML = `<div id='theMotherShip' style='text-align: center;  transform: rotate(180deg);'><img style='height: 100%' src='/assets/Titan.png'/></div>`;
+  } else if (mapEvent.type === "starBase") {
+    document.getElementById("starBaseModal").innerHTML = `
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">
+              &times;
+            </button>
+            <h4 class="modal-title" style="font-family: spaceAge;">
+              You have found a star base.
+            </h4>
+          </div>
+          <div class="modal-body">
+            <p>This star base has ${mapEvent.resources} supplies for you.\nGood luck.</p>
+          </div>
+          <div class="modal-footer">
+            <span style="justify-content: left">
+              <button
+                type="button"
+                class="btn btn-success"
+                data-dismiss="modal"
+              >
+                Thank you.
+              </button>
+            </span>
+          </div>
+        </div>
+      </div>`;
+    $("#starBaseModal").modal("show");
+  } else if (mapEvent.type === "asteroid") {
+    document.getElementById("starBaseModal").innerHTML = `
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">
+              &times;
+            </button>
+            <h4 class="modal-title" style="font-family: spaceAge;">
+              You have hit an asteroid.
+            </h4>
+          </div>
+          <div class="modal-body">
+            <p>You have lost ${mapEvent.damage} energy.\nGood luck.</p>
+          </div>
+          <div class="modal-footer">
+            <span style="justify-content: left">
+              <button
+                type="button"
+                class="btn btn-success"
+                data-dismiss="modal"
+              >
+                Thanksssss.
+              </button>
+            </span>
+          </div>
+        </div>
+      </div>`;
+    $("#starBaseModal").modal("show");
+    let oldh = parseInt(document.getElementById("energy").value);
+    document.getElementById("energy").value = oldh - mapEvent.damage;
   }
 }
 
