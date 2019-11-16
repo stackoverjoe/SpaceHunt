@@ -20,6 +20,9 @@
       display: inline-block;
       overflow: auto;
     }
+    .tooltips {
+      position: relative;
+    }
     .gameCell {
       width: 120px;
       height: 80px;
@@ -54,10 +57,10 @@
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="map.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-    <title>SpaceHunt</title>
+    <a name="top"><title id="title">SpaceHunt</title></a>
   </head>
 
-  <body onload="renderMap(100,100)">
+  <body onload="renderMap(128,128)">
     <div
       id="myModal"
       class="modal fade centered-modal"
@@ -96,13 +99,54 @@
         </div>
       </div>
     </div>
+    <div
+      id="planetModal"
+      class="modal fade centered-modal"
+      style="align-self: center;"
+      role="dialog"
+    >
+      <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">
+              &times;
+            </button>
+            <h4 class="modal-title" style="font-family: spaceAge;">
+              You have found a planet. Maybe this will do something interesting
+              soon.
+            </h4>
+          </div>
+          <div class="modal-body">
+            <p>Some info about the planet.</p>
+          </div>
+          <div class="modal-footer">
+            <span style="justify-content: left">
+              <button
+                type="button"
+                class="btn btn-success"
+                data-dismiss="modal"
+              >
+                Ok
+              </button>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      id="starBaseModal"
+      class="modal fade centered-modal"
+      style="align-self: center;"
+      role="dialog"
+    ></div>
     <h1 style="font-family: spaceAge; font-size: 4rem; padding-top: 1rem">
       SpaceHunt
     </h1>
     <div style="padding-top:.5rem; text-align: center;">
       <div id="mainMap" class="mainMap"></div>
     </div>
-    <div class="dashBoard">
+    <div class="dashBoard" style="padding-left: 6rem;">
       <text style="font-family: spaceAge; font-size: 20px; color: black"
         >Energy</text
       >
