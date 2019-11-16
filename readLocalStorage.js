@@ -14,7 +14,7 @@ class localStoragePackage{
     this.startY = 63;
     this.baseEnergy = 100;
     this.baseSupplies = 200;
-    this.baseCredits = 100;
+    this.baseCredits = 1000;
     this.canDie = 1;
     //either "random" or an array of coords, access like coordArray[i].xcoord/ycoord
     this.wormholes = "random";
