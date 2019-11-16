@@ -137,8 +137,13 @@ input[type="checkbox"]:checked ~ .reveal-if-active {
 
 .wrapper {
   display: grid;
-  grid-template-columns: 400px 400px 400px;
-  margin: 40px;
+  grid-auto-columns: 1fr;
+  grid-auto-flow: column;
+  margin: 10px;
+}
+
+.columnA, .columnB, .columnC {
+  margin: 0 auto;
 }
 
 .parent_div {
