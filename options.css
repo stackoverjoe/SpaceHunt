@@ -1,7 +1,7 @@
 html {
   height: 100%;
   background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
-  overflow: hidden;
+  overflow:hidden;
 }
 
 #stars {
@@ -120,4 +120,33 @@ label {
   background: -webkit-linear-gradient(white, #38495a);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+}
+
+.reveal-if-active {
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+}
+
+input[type="radio"]:checked ~ .reveal-if-active,
+input[type="checkbox"]:checked ~ .reveal-if-active {
+  opacity: 1;
+  max-height: 400px;
+  overflow: visible;
+}
+
+.wrapper {
+  display: grid;
+  grid-template-columns: 400px 400px 400px;
+  margin: 40px;
+}
+
+.parent_div {
+  position: absolute;
+  text-align: center;
+  bottom: 5px;
+  width: 100%;
+}
+.parent_div button {
+  margin: 0 auto;
 }

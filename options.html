@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js"></script>
 
+    <script type="text/javascript" src="readLocalStorage.js"></script>
+
   </head>
   <body onload="init()">
 
@@ -16,48 +18,118 @@
     <div id='stars3'></div>
     <div class="clouds"></div>
 
-
       <div id="title">
         <span>
           Customize your Experience!
         </span>
       </div>
+      <form name="options">
+        <div class="wrapper">
 
-      <div align="center">
-        <form name="options">
+          <div class="box a">
+            <label for="maxX">Max Map X</label>
+            <input type="number" name="maxX">
+            <label for="maxY">Max Map Y</label>
+            <input type="number" name="maxY">
 
-          <label for="maxX">Max Map X</label>
-          <input type="number" name="maxX">
-          <label for="maxY">Max Map Y</label>
-          <input type="number" name="maxY">
+            <label for="startX">Starting X</label>
+            <input type="number" name="startX">
+            <label for="startY">Starting Y</label>
+            <input type="number" name="startY">
 
-          <label for="startX">Starting X</label>
-          <input type="number" name="startX">
-          <label for="startY">Starting Y</label>
-          <input type="number" name="startY">
+            <label for="baseEnergy">Starting Energy</label>
+            <input type="number" name="baseEnergy">
 
-          <label for="baseEnergy">Starting Energy</label>
-          <input type="number" name="baseEnergy">
+            <label for="baseSupplies">Starting Supplies</label>
+            <input type="number" name="baseSupplies">
 
-          <label for="baseSupplies">Starting Supplies</label>
-          <input type="number" name="baseSupplies">
+            <label for="baseCredits">Starting Credits</label>
+            <input type="number" name="baseCredits">
+          </div>
 
-          <label for="baseCredits">Starting Credits</label>
-          <input type="number" name="baseCredits">
+          <div class="box b">
+            <br><label for="wormhole">Wormholes</label><br>
+            <div>
+              <div>
+                <input type="radio" name="wormhole" id="wormhole-random" required>
+                <label for="wormhole-random">Random</label>
+              </div>
 
-          <label for="wormhole">Wormholes</label><br>
-          <input type="radio" name="wormhole" value="random" id="Random">
-          <label for="Random">Random</label>
-          <input type="radio" name="wormhole" value="fixed"  id="Fixed">
-          <label for="Fixed" >Fixed</label>
+              <div>
+                <input type="radio" name="wormhole" id="wormhole-fixed">
+                <label for="wormhole-fixed">Fixed</label>
 
-          <br><label for="death">Death</label><br>
-          <input type="radio" name="canDie" value="on"  id="On">
-          <label for="On" >On</label>
-          <input type="radio" name="canDie" value="off" id="Off">
-          <label for="Off">Off</label>
+                <div class="reveal-if-active">
+                  <label for="wormhole">Where would you like to place the wormholes?.</label><br>
+                  <input type="text" id="wormhole-location" name="wormhole-location" class="require-if-active">
+                </div>
+              </div>
+            </div>
 
-          <br><button type="button" onclick="save()">Submit</button>
+            <br><label for="death">Death</label><br>
+            <input type="radio" name="canDie" value="on"  id="On">
+            <label for="On" >On</label>
+            <input type="radio" name="canDie" value="off" id="Off">
+            <label for="Off">Off</label><br>
+          </div>
+
+          <div class="box c">
+            <br><label for="planets">Planets</label><br>
+
+            <!-- Placing Planets -->
+            <div>
+              <div>
+                <input type="radio" name="planets" id="planets-random" required>
+                <label for="planets-random">Random</label>
+              </div>
+
+              <div>
+                <input type="radio" name="planets" id="planets-fixed">
+                <label for="planets-fixed">Fixed</label>
+
+                <div class="reveal-if-active">
+                  <label for="planets">Xort</label><br>
+                  <input type="text" id="Xort" name="Xort" class="require-if-active"><br>
+
+                  <label for="planets">Blarg.</label><br>
+                  <input type="text" id="Blarg" name="Blarg" class="require-if-active"><br>
+
+                  <label for="planets">Irk.</label><br>
+                  <input type="text" id="Irk" name="Irk" class="require-if-active"><br>
+
+                  <label for="planets">Aether.</label><br>
+                  <input type="text" id="Aether" name="Aether" class="require-if-active"><br>
+
+                  <label for="planets">Foo.</label><br>
+                  <input type="text" id="Foo" name="Foo" class="require-if-active"><br>
+                </div>
+              </div>
+            </div>
+
+            <br><label for="stations">Space Stations</label><br>
+
+            <div>
+              <div>
+                <input type="radio" name="stations" id="station-random" required>
+                <label for="station-random">Random</label>
+              </div>
+
+              <div>
+                <input type="radio" name="stations" id="station-fixed">
+                <label for="station-fixed">Fixed</label>
+
+                <div class="reveal-if-active">
+                  <label for="stations">Where would you like to place the space stations?.</label><br>
+                  <input type="text" id="station-location" name="station-location" class="require-if-active">
+                </div>
+              </div>
+            </div>
+          </div>
+
+        <div class="parent_div">
+          <br><button type="button" onclick="readLocalStorage()">Submit</button>
+        </div>
+
       </form>
     </div>
   </body>
