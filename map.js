@@ -11,6 +11,7 @@ var player = {
   ycoord: 0,
   orientation: 1 //1right, 2left, 3up, 4 down
 };
+var ticker = 0;
 var counter = 0;
 var mapObjs = new Map();
 var planets = [
@@ -18,7 +19,25 @@ var planets = [
   "/assets/PNG/17.png",
   "/assets/PNG/18.png",
   "/assets/PNG/19.png",
-  "/assets/PNG/20.png"
+  "/assets/PNG/20.png",
+  "/assets/PNG/planet1.png",
+  "/assets/PNG/planet2.png",
+  "/assets/PNG/planet3.png",
+  "/assets/PNG/planet4.png",
+  "/assets/PNG/planet5.png",
+  "/assets/PNG/planet6.png",
+  "/assets/PNG/planet7.png",
+  "/assets/PNG/planet10.png",
+  "/assets/PNG/planet11.png",
+  "/assets/PNG/planet12.png",
+  "/assets/PNG/planet13.png",
+  "/assets/PNG/planet14.png",
+  "/assets/PNG/planet15.png",
+  "/assets/PNG/planet16.png",
+  "/assets/PNG/planet17.png",
+  "/assets/PNG/planet18_0.png",
+  "/assets/PNG/planet19.png",
+  "/assets/PNG/planet20.png"
 ];
 var astroids = [
   "/assets/medium/a10001.png",
@@ -117,7 +136,7 @@ var mapObject = {
 //var checker = new Map();
 function populateMap() {
   //populate planets
-  for (let i = 0; i < 100; ++i) {
+  for (let i = 0; i < 150; ++i) {
     let x = Math.floor(Math.random() * coords[0]) + 1;
     let y = Math.floor(Math.random() * coords[1]) + 1;
     if (!mapObjs.has(`${x}-${y}`)) {
@@ -136,11 +155,10 @@ function populateMap() {
         ).innerHTML = `<div style="pointer-events: none"><img style="height: 100%; width: 100%" src='${planets[img]}'/></div>`;
       }
       $(`#${x}-${y}`).tooltip({
-        title: `<h4 class="tooltips" style="padding-bottom: 20px"><img src='${planets[img]}' alt='Smiley'> <div>You have found a planet.</div><h4>`,
+        title: `<h4 style="object-fit: contain; padding-bottom: 20px"><img style="object-fit:contain;"src='${planets[img]}' alt='Smiley'> <div>You have found a planet.</div><h4>`,
         placement: "auto",
         html: true,
         container: `#${x}-${y}`,
-        delay: { hide: 100 },
         trigger: "manual"
       });
     }
@@ -174,7 +192,9 @@ function populateMap() {
         `${x}-${y}`,
         (mapObject = {
           type: "starBase",
-          resources: Math.floor(Math.random() * 100)
+          resources: Math.floor(Math.random() * 100),
+          visited: false,
+          coords: [x, y]
         })
       );
       var images = new Array();
@@ -211,10 +231,38 @@ function populateMap() {
       }
     }
   }
+  //energy packs
+  for (let i = 0; i < 50; ++i) {
+    let x = Math.floor(Math.random() * coords[0]) + 1;
+    let y = Math.floor(Math.random() * coords[1]) + 1;
+    if (!mapObjs.has(`${x}-${y}`)) {
+      mapObjs.set(
+        `${x}-${y}`,
+        (mapObject = {
+          type: "energyPack",
+          coords: [x, y]
+        })
+      );
+      //let tile = document.getElementById(`${x}-${y}`).innerHTML;
+      if (document.getElementById(`${x}-${y}`) != null) {
+        document.getElementById(
+          `${x}-${y}`
+        ).innerHTML = `<div><img style="height: 100%; width: 100%" src='/assets/PNG/7.png'/></div>`;
+        $(`#${x}-${y}`).tooltip({
+          title: `<h4 style="object-fit: contain; padding-bottom: 20px"><img style="object-fit:contain;"src='/assets/PNG/7.png' alt='Smiley'> <div>You have gained 10 energy!.</div><h4>`,
+          placement: "auto",
+          html: true,
+          container: `#${x}-${y}`,
+          trigger: "manual"
+        });
+      }
+    }
+  }
 }
 
 //observe key presses
 document.onkeydown = function(e) {
+  let current = null;
   $(".tooltips").tooltip("hide");
   var update = 1;
   var oldx = player.xcoord;
@@ -330,8 +378,10 @@ document.onkeydown = function(e) {
   if (mapObjs.has(`${player.xcoord}-${player.ycoord}`)) {
     //alert("test");
     current = mapObjs.get(`${player.xcoord}-${player.ycoord}`);
-    player.xcoord = oldx;
-    player.ycoord = oldy;
+    if (current.type !== "energyPack") {
+      player.xcoord = oldx;
+      player.ycoord = oldy;
+    }
     handleEvent(current);
   }
   if (update === 1) {
@@ -375,10 +425,34 @@ document.onkeydown = function(e) {
       html: true
     });
     $("#theMotherShip").tooltip("show");
+  } else if (current && current.type === "energyPack") {
+    $("#theMotherShip").tooltip({
+      title: `<h4 style="padding-bottom: 20px"><img src='assets/PNG/7.png' alt='Smiley'> <div>You have gained 10 energy!</div><h4>`,
+      placement: "auto",
+      trigger: "manual",
+      html: true
+    });
+    $("#theMotherShip").tooltip("show");
+  } else if (current && current.type === "asteroid") {
+    console.log(current.type);
+    $("#theMotherShip").tooltip({
+      title: `<h4 style="padding-bottom: 20px"><img src='assets/PNG/3.png' alt='Smiley'> <div>You have hit an astroid and lost ${current.damage} energy!</div><h4>`,
+      placement: "auto",
+      trigger: "manual",
+      html: true
+    });
+    $("#theMotherShip").tooltip("show");
+  } else if (current && current.type === "starBase") {
+    if (current.visited === true) {
+      $("#theMotherShip").tooltip({
+        title: `<h4 style="padding-bottom: 20px"><img src='assets/PNG/9.png' alt='Smiley'> <div>You have already tapped this space station's resources.</div><h4>`,
+        placement: "auto",
+        trigger: "manual",
+        html: true
+      });
+      $("#theMotherShip").tooltip("show");
+    }
   }
-
-  //window.location.hash = "#mainMap";
-  //document.getElementById("#mainMap").scrollIntoView();
 };
 
 function handleEvent(mapEvent) {
@@ -387,7 +461,7 @@ function handleEvent(mapEvent) {
     $(`#${mapEvent.coords[0]}-${mapEvent.coords[1]}`).tooltip("show");
     setTimeout(() => {
       $(`#${mapEvent.coords[0]}-${mapEvent.coords[1]}`).tooltip("hide");
-    }, 1000);
+    }, 1500);
     //$("#planetModal").modal("show");
   } else if (mapEvent.type === "wormHole") {
     let x = Math.floor(Math.random() * coords[0]) + 1;
@@ -401,7 +475,8 @@ function handleEvent(mapEvent) {
       `${x}-${y}`
     ).innerHTML = `<div id='theMotherShip' style='text-align: center;  transform: rotate(180deg);'><img style='height: 100%' src='/assets/Titan.png'/></div>`;
   } else if (mapEvent.type === "starBase") {
-    document.getElementById("starBaseModal").innerHTML = `
+    if (!mapObjs.get(`${mapEvent.coords[0]}-${mapEvent.coords[1]}`).visited) {
+      document.getElementById("starBaseModal").innerHTML = `
     <div class="modal-dialog">
         <!-- Modal content-->
         <div class="modal-content">
@@ -429,39 +504,27 @@ function handleEvent(mapEvent) {
           </div>
         </div>
       </div>`;
-    $("#starBaseModal").modal("show");
+      $("#starBaseModal").modal("show");
+      mapObjs.set(
+        `${mapEvent.coords[0]}-${mapEvent.coords[1]}`,
+        (mapObject = {
+          type: "starBase",
+          resources: 0,
+          visited: true,
+          coords: [mapEvent.coords[0], mapEvent.coords[1]]
+        })
+      );
+    } else {
+      return false;
+    }
   } else if (mapEvent.type === "asteroid") {
-    document.getElementById("starBaseModal").innerHTML = `
-    <div class="modal-dialog">
-        <!-- Modal content-->
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal">
-              &times;
-            </button>
-            <h4 class="modal-title" style="font-family: spaceAge;">
-              You have hit an asteroid.
-            </h4>
-          </div>
-          <div class="modal-body">
-            <p>You have lost ${mapEvent.damage} energy.\nGood luck.</p>
-          </div>
-          <div class="modal-footer">
-            <span style="justify-content: left">
-              <button
-                type="button"
-                class="btn btn-success"
-                data-dismiss="modal"
-              >
-                Thanksssss.
-              </button>
-            </span>
-          </div>
-        </div>
-      </div>`;
-    $("#starBaseModal").modal("show");
     let oldh = parseInt(document.getElementById("energy").value);
     document.getElementById("energy").value = oldh - mapEvent.damage;
+  } else if (mapEvent.type === "energyPack") {
+    //remove health pack from map
+    mapObjs.delete(`${mapEvent.coords[0]}-${mapEvent.coords[1]}`);
+    let oldh = parseInt(document.getElementById("energy").value);
+    document.getElementById("energy").value = oldh + 10;
   }
 }
 
