@@ -413,8 +413,10 @@ document.onkeydown = function(e) {
       .scrollIntoView({ behaviour: "smooth", block: "center" });
   }
   let oldHealth = parseInt(document.getElementById("energy").value);
+  let oldSupplies = parseInt(document.getElementById("supplies").value);
   if (update === 1) {
     document.getElementById("energy").value = --oldHealth;
+    document.getElementById("supplies").value = --oldSupplies;
   }
   if (oldHealth <= 0) {
     $("#myModal").modal("show");
@@ -525,7 +527,9 @@ function handleEvent(mapEvent) {
     mapObjs.delete(`${mapEvent.coords[0]}-${mapEvent.coords[1]}`);
     let oldh = parseInt(document.getElementById("energy").value);
     document.getElementById("energy").value = oldh + 10;
-  }
+  } else if (mapEvent.type === "starBase") {
+    let olds = parseInt(document.getElementById("supplies").value);
+    document.getElementById("supplies").value = oldh + mapEvent.resources;
 }
 
 function restart() {
