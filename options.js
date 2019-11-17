@@ -5,7 +5,7 @@ function init(){
   if(typeof(Storage) == "undefined")
     return alert("Your browser may not support local storage!"
       + "This page will be unable to save anything you enter!");
-  
+
   if(!localStorage.getItem(form.elements[0])){ //it must be empty! set defaults
     localStorage.clear();
     localStorage.setItem("maxX", "128");
@@ -26,7 +26,7 @@ function init(){
 }
 
 function validChange(element){
-  if(element.value === "" || 
+  if(element.value === "" ||
      element.type === "number" &&
      Number(element.value) === "NaN")
     return invalidChange(element);
@@ -68,7 +68,7 @@ function save(){
   validChange(baseEnergy);
   validChange(baseSupplies);
   validChange(baseCredits);
-  validChange(canDie);
+  //validChange(canDie);
 
   alert('I ran!');
 }
