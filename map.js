@@ -51,7 +51,8 @@ var astroids = [
 var starBase = [
   "/assets/PNG/ssb.png",
   "/assets/PNG/ssb2.png",
-  "/assets/SS1.png"
+  "/assets/SS1.png",
+  "/assets/tribase-u1-d0.png"
 ];
 function moon() {
   let i = 1;
@@ -123,7 +124,7 @@ function renderMap(X, Y) {
   //make sure title is visible
   window.location = "spaceMap.html#top";
 
-  document.getElementById("energy").value = 1000;
+  document.getElementById("energy").value = 100;
   populateMap();
 }
 
@@ -418,7 +419,11 @@ document.onkeydown = function(e) {
   }
   if (oldHealth <= 0) {
     $("#myModal").modal("show");
-  } else if (oldHealth < 30 && oldHealth >= 27) {
+  } else if (oldHealth <= 30 && oldHealth >= 27) {
+    if (oldHealth === 30) {
+      let snd = new Audio("/assets/alert.mp3");
+      snd.play();
+    }
     $("#theMotherShip").tooltip({
       title: `<h4 style="padding-bottom: 20px"><img src='assets/PNG/8.png' alt='Smiley'> <div>You are low on energy!! ${oldHealth} remaining!</div><h4>`,
       placement: "auto",
@@ -522,6 +527,8 @@ function handleEvent(mapEvent) {
     document.getElementById("energy").value = oldh - mapEvent.damage;
   } else if (mapEvent.type === "energyPack") {
     //remove health pack from map
+    let snd = new Audio("/assets/energyUp3.mp3");
+    snd.play();
     mapObjs.delete(`${mapEvent.coords[0]}-${mapEvent.coords[1]}`);
     let oldh = parseInt(document.getElementById("energy").value);
     document.getElementById("energy").value = oldh + 10;
