@@ -530,6 +530,7 @@ function handleEvent(mapEvent) {
   } else if (mapEvent.type === "starBase") {
     let olds = parseInt(document.getElementById("supplies").value);
     document.getElementById("supplies").value = oldh + mapEvent.resources;
+  }
 }
 
 function restart() {
