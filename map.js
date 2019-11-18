@@ -124,6 +124,7 @@ function renderMap(X, Y) {
   window.location = "spaceMap.html#top";
 
   document.getElementById("energy").value = 1000;
+  document.getElementById("supplies").value = 1000;
   populateMap();
 }
 
