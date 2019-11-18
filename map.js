@@ -418,7 +418,7 @@ document.onkeydown = function(e) {
     document.getElementById("energy").value = --oldHealth;
     document.getElementById("supplies").value = --oldSupplies;
   }
-   if (oldSupplies <= 0) {
+   if (oldSupplies === 0) {
     $("#supplyModal").modal("show");
   } else if (oldSupplies === 1) {
     $("#theMotherShip").tooltip({
