@@ -422,6 +422,7 @@ document.onkeydown = function(e) {
     document.getElementById("supplies").value = --oldSupplies;
   }
   if (oldHealth <= 0 && regularMode === 1) {
+//if (oldHealth <= 0){
     $("#myModal").modal("show");
   } else if (oldHealth < 30 && oldHealth >= 27) {
     $("#theMotherShip").tooltip({
