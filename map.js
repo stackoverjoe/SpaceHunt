@@ -13,6 +13,7 @@ var player = {
 };
 var ticker = 0;
 var counter = 0;
+var regularMode = 0;
 var mapObjs = new Map();
 var planets = [
   "/assets/PNG/16.png",
@@ -125,7 +126,6 @@ function renderMap(X, Y) {
 
   document.getElementById("energy").value = 1000;
   document.getElementById("supplies").value = 100;
-  int regularMode = 0;
   populateMap();
 }
 
@@ -414,6 +414,7 @@ document.onkeydown = function(e) {
       .getElementById("theMotherShip")
       .scrollIntoView({ behaviour: "smooth", block: "center" });
   }
+  
   let oldHealth = parseInt(document.getElementById("energy").value);
   let oldSupplies = parseInt(document.getElementById("supplies").value);
   if (update === 1) {
