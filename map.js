@@ -477,6 +477,8 @@ function handleEvent(mapEvent) {
       `${x}-${y}`
     ).innerHTML = `<div id='theMotherShip' style='text-align: center;  transform: rotate(180deg);'><img style='height: 100%' src='/assets/Titan.png'/></div>`;
   } else if (mapEvent.type === "starBase") {
+      let olds = parseInt(document.getElementById("supplies").value);
+      document.getElementById("supplies").value = olds + mapEvent.resources;
     if (!mapObjs.get(`${mapEvent.coords[0]}-${mapEvent.coords[1]}`).visited) {
       document.getElementById("starBaseModal").innerHTML = `
     <div class="modal-dialog">
@@ -516,8 +518,6 @@ function handleEvent(mapEvent) {
           visited: true,
           coords: [mapEvent.coords[0], mapEvent.coords[1]]
         })
-      let olds = parseInt(document.getElementById("supplies").value);
-      document.getElementById("supplies").value = olds + mapEvent.resources;
       );
     } else {
       return false;
