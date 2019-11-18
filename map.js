@@ -13,6 +13,7 @@ var player = {
 };
 var ticker = 0;
 var counter = 0;
+var regularMode = 0;
 var mapObjs = new Map();
 var planets = [
   "/assets/PNG/16.png",
@@ -56,7 +57,16 @@ var starBase = [
 ];
 function moon() {
   let i = 1;
-  //for(let i = 1; i < 40; ++i){
+  //for(let i = 1; i < 48; ++i){
+  let images = new Array();
+  for (let i = 1; i <= 48; ++i) {
+    images[i] = new Image();
+    if (i < 10) {
+      images[i].src = `assets/moon/0${i}.png`;
+    } else {
+      images[i].src = `assets/moon/${i}.png`;
+    }
+  }
   setInterval(function() {
     if (i < 10) {
       document.getElementById(
@@ -74,6 +84,7 @@ function moon() {
   }, 50);
   //}
 }
+
 //global coords for reference later in program
 let coords = [0, 0];
 function renderMap(X, Y) {
@@ -124,7 +135,8 @@ function renderMap(X, Y) {
   //make sure title is visible
   window.location = "spaceMap.html#top";
 
-  document.getElementById("energy").value = 100;
+  document.getElementById("energy").value = 1000;
+  document.getElementById("supplies").value = 100;
   populateMap();
 }
 
@@ -268,6 +280,9 @@ document.onkeydown = function(e) {
   var update = 1;
   var oldx = player.xcoord;
   var oldy = player.ycoord;
+  let warp = {
+    type: "wormHole"
+  };
   //figure out what movement key was pressed
   if (e.keyCode === 37 || e.keyCode === 65) {
     //left
@@ -275,18 +290,30 @@ document.onkeydown = function(e) {
     player.orientation = 2;
     if (player.xcoord > 0) {
       --player.xcoord;
+    } else {
+      //current.type = "wormHole";
+      handleEvent(warp);
+      // return;
     }
   } else if (e.keyCode === 39 || e.keyCode === 68) {
     //right
     e.preventDefault();
     player.orientation = 1;
-    if (player.xcoord < coords[0] - 1) ++player.xcoord;
+    if (player.xcoord < coords[0] - 1) {
+      ++player.xcoord;
+    } else {
+      handleEvent(warp);
+      //current.type = "wormHole";
+    }
   } else if (e.keyCode === 38 || e.keyCode === 87) {
     //up
     e.preventDefault();
     player.orientation = 3;
     if (player.ycoord > 0) {
       --player.ycoord;
+    } else {
+      handleEvent(warp);
+      //current.type = "wormHole";
     }
   } else if (e.keyCode === 40 || e.keyCode === 83) {
     //down
@@ -295,6 +322,9 @@ document.onkeydown = function(e) {
     player.orientation = 4;
     if (player.ycoord < coords[1] - 1) {
       ++player.ycoord;
+    } else {
+      handleEvent(warp);
+      //current.type = "wormHole";
     }
   } else if (e.keyCode === 32) {
     var laserSnd = new Audio("/assets/1laz.mp3");
@@ -413,13 +443,17 @@ document.onkeydown = function(e) {
       .getElementById("theMotherShip")
       .scrollIntoView({ behaviour: "smooth", block: "center" });
   }
+
   let oldHealth = parseInt(document.getElementById("energy").value);
   let oldSupplies = parseInt(document.getElementById("supplies").value);
   if (update === 1) {
-    document.getElementById("energy").value = --oldHealth;
-    document.getElementById("supplies").value = --oldSupplies;
+    document.getElementById("energy").value = oldHealth - 10;
+    document.getElementById("supplies").value =
+      oldSupplies - Math.ceil(oldSupplies * 0.02);
   }
   if (oldHealth <= 0) {
+    // && regularMode === 1) {
+    //if (oldHealth <= 0){
     $("#myModal").modal("show");
   } else if (oldHealth <= 30 && oldHealth >= 27) {
     if (oldHealth === 30) {
@@ -428,6 +462,15 @@ document.onkeydown = function(e) {
     }
     $("#theMotherShip").tooltip({
       title: `<h4 style="padding-bottom: 20px"><img src='assets/PNG/8.png' alt='Smiley'> <div>You are low on energy!! ${oldHealth} remaining!</div><h4>`,
+      placement: "auto",
+      html: true
+    });
+    $("#theMotherShip").tooltip("show");
+  } else if (oldSupplies === 0) {
+    $("#supplyModal").modal("show");
+  } else if (oldSupplies === 1) {
+    $("#theMotherShip").tooltip({
+      title: `<h4 style="padding-bottom: 20px"><img src='assets/PNG/8.png' alt='Smiley'> <div>You are low on Supplies!! ${oldSupplies} remaining!</div><h4>`,
       placement: "auto",
       html: true
     });
@@ -441,7 +484,7 @@ document.onkeydown = function(e) {
     });
     $("#theMotherShip").tooltip("show");
   } else if (current && current.type === "asteroid") {
-    console.log(current.type);
+    //console.log(current.type);
     $("#theMotherShip").tooltip({
       title: `<h4 style="padding-bottom: 20px"><img src='assets/PNG/3.png' alt='Smiley'> <div>You have hit an astroid and lost ${current.damage} energy!</div><h4>`,
       placement: "auto",
@@ -459,6 +502,14 @@ document.onkeydown = function(e) {
       });
       $("#theMotherShip").tooltip("show");
     }
+  } else if (current && current.type === "wormHole") {
+    $("#theMotherShip").tooltip({
+      title: `<h4 style="padding-bottom: 20px"><img src='assets/PNG/10.png' alt='Smiley'> <div>You have entered a wormhole and appeared at a random location!</div><h4>`,
+      placement: "auto",
+      trigger: "manual",
+      html: true
+    });
+    $("#theMotherShip").tooltip("show");
   }
 };
 
@@ -482,6 +533,8 @@ function handleEvent(mapEvent) {
       `${x}-${y}`
     ).innerHTML = `<div id='theMotherShip' style='text-align: center;  transform: rotate(180deg);'><img style='height: 100%' src='/assets/Titan.png'/></div>`;
   } else if (mapEvent.type === "starBase") {
+    let olds = parseInt(document.getElementById("supplies").value);
+    document.getElementById("supplies").value = olds + mapEvent.resources;
     if (!mapObjs.get(`${mapEvent.coords[0]}-${mapEvent.coords[1]}`).visited) {
       document.getElementById("starBaseModal").innerHTML = `
     <div class="modal-dialog">
@@ -512,6 +565,7 @@ function handleEvent(mapEvent) {
         </div>
       </div>`;
       $("#starBaseModal").modal("show");
+
       mapObjs.set(
         `${mapEvent.coords[0]}-${mapEvent.coords[1]}`,
         (mapObject = {
@@ -533,10 +587,7 @@ function handleEvent(mapEvent) {
     snd.play();
     mapObjs.delete(`${mapEvent.coords[0]}-${mapEvent.coords[1]}`);
     let oldh = parseInt(document.getElementById("energy").value);
-    document.getElementById("energy").value = oldh + 10;
-  } else if (mapEvent.type === "starBase") {
-    let olds = parseInt(document.getElementById("supplies").value);
-    document.getElementById("supplies").value = oldh + mapEvent.resources;
+    document.getElementById("energy").value = oldh + 20;
   }
 }
 
