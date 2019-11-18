@@ -124,7 +124,8 @@ function renderMap(X, Y) {
   window.location = "spaceMap.html#top";
 
   document.getElementById("energy").value = 1000;
-  document.getElementById("supplies").value = 1000;
+  document.getElementById("supplies").value = 100;
+  int regularMode = 0;
   populateMap();
 }
 
@@ -419,7 +420,7 @@ document.onkeydown = function(e) {
     document.getElementById("energy").value = --oldHealth;
     document.getElementById("supplies").value = --oldSupplies;
   }
-  if (oldHealth <= 0) {
+  if (oldHealth <= 0 && regularMode === 1) {
     $("#myModal").modal("show");
   } else if (oldHealth < 30 && oldHealth >= 27) {
     $("#theMotherShip").tooltip({
