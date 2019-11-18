@@ -418,6 +418,16 @@ document.onkeydown = function(e) {
     document.getElementById("energy").value = --oldHealth;
     document.getElementById("supplies").value = --oldSupplies;
   }
+   if (oldSupplies <= 0) {
+    $("#supplyModal").modal("show");
+  } else if (oldSupplies === 1) {
+    $("#theMotherShip").tooltip({
+      title: `<h4 style="padding-bottom: 20px"><img src='assets/PNG/8.png' alt='Smiley'> <div>You are low on Supplies!! ${oldSupplies} remaining!</div><h4>`,
+      placement: "auto",
+      html: true
+    });
+    $("#theMotherShip").tooltip("show");
+  }
   if (oldHealth <= 0) {
     $("#myModal").modal("show");
   } else if (oldHealth < 30 && oldHealth >= 27) {
