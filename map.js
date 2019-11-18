@@ -507,6 +507,7 @@ function handleEvent(mapEvent) {
         </div>
       </div>`;
       $("#starBaseModal").modal("show");
+      
       mapObjs.set(
         `${mapEvent.coords[0]}-${mapEvent.coords[1]}`,
         (mapObject = {
@@ -515,6 +516,8 @@ function handleEvent(mapEvent) {
           visited: true,
           coords: [mapEvent.coords[0], mapEvent.coords[1]]
         })
+      let olds = parseInt(document.getElementById("supplies").value);
+      document.getElementById("supplies").value = olds + mapEvent.resources;
       );
     } else {
       return false;
@@ -527,10 +530,7 @@ function handleEvent(mapEvent) {
     mapObjs.delete(`${mapEvent.coords[0]}-${mapEvent.coords[1]}`);
     let oldh = parseInt(document.getElementById("energy").value);
     document.getElementById("energy").value = oldh + 10;
-  } else if (mapEvent.type === "starBase") {
-    let olds = parseInt(document.getElementById("supplies").value);
-    document.getElementById("supplies").value = oldh + mapEvent.resources;
-  }
+  } 
 }
 
 function restart() {
