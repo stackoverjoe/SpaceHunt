@@ -13,7 +13,8 @@ var player = {
 };
 var ticker = 0;
 var counter = 0;
-var regularMode = 0;
+var supplyMessageChecked = 0;
+var energyMessageChecked = 0;
 var mapObjs = new Map();
 var planets = [
   "/assets/PNG/16.png",
@@ -88,6 +89,8 @@ function moon() {
 //global coords for reference later in program
 let coords = [0, 0];
 function renderMap(X, Y) {
+  supplyMessageChecked = 0;
+  energyMessageChecked = 0;
   mapObjs.clear();
   //moon();
   var snd = new Audio("/assets/spaceSong.mp3");
@@ -136,7 +139,7 @@ function renderMap(X, Y) {
   window.location = "spaceMap.html#top";
 
   document.getElementById("energy").value = 1000;
-  document.getElementById("supplies").value = 100;
+  document.getElementById("supplies").value = 1000;
   populateMap();
 }
 
@@ -446,17 +449,22 @@ document.onkeydown = function(e) {
 
   let oldHealth = parseInt(document.getElementById("energy").value);
   let oldSupplies = parseInt(document.getElementById("supplies").value);
+  let canDieCheck = readLocalStorage();
   if (update === 1) {
     document.getElementById("energy").value = oldHealth - 10;
     document.getElementById("supplies").value =
       oldSupplies - Math.ceil(oldSupplies * 0.02);
   }
   if (oldHealth <= 0) {
-    // && regularMode === 1) {
-    //if (oldHealth <= 0){
-    $("#myModal").modal("show");
-  } else if (oldHealth <= 30 && oldHealth >= 27) {
-    if (oldHealth === 30) {
+    if(canDieCheck.canDie.value === 1){
+		  $("#myModal").modal("show");
+		  restart();
+	} else if(energyMessageChecked === 0){
+		$("#myModal").modal("show");
+		++energyMessageChecked;
+  } 
+  }
+  if (oldHealth === 30) {
       let snd = new Audio("/assets/alert.mp3");
       snd.play();
     }
@@ -466,11 +474,18 @@ document.onkeydown = function(e) {
       html: true
     });
     $("#theMotherShip").tooltip("show");
-  } else if (oldSupplies === 0) {
-    $("#supplyModal").modal("show");
+  } if (oldSupplies <= 0) {
+	    if(canDieCheck.canDie.value === 1){
+		    $("#supplyModal").modal("show");
+		    restart();
+	}   else if(supplyMessageChecked === 0){
+		    $("#supplyModal").modal("show");
+		    ++supplyMessageChecked;
+	}
+  }
   } else if (oldSupplies === 1) {
     $("#theMotherShip").tooltip({
-      title: `<h4 style="padding-bottom: 20px"><img src='assets/PNG/8.png' alt='Smiley'> <div>You are low on Supplies!! ${oldSupplies} remaining!</div><h4>`,
+      title: `<h4 style="padding-bottom: 20px"><img src='assets/PNG/8.png' alt='Smiley'> <div>You are low on Supplies ${oldSupplies} remaining!</div><h4>`,
       placement: "auto",
       html: true
     });
