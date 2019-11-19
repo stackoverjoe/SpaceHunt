@@ -456,13 +456,13 @@ document.onkeydown = function(e) {
       oldSupplies - Math.ceil(oldSupplies * 0.02);
   }
   if (oldHealth <= 0) {
-    if(canDieCheck.canDie.value === 1){
+    if(canDieCheck.canDie === 1){
 		  $("#myModal").modal("show");
 		  restart();
-	} else if(energyMessageChecked === 0){
+    } else if(energyMessageChecked === 0){
 		$("#myModal").modal("show");
 		++energyMessageChecked;
-  } 
+    } 
   }
   if (oldHealth === 30) {
       let snd = new Audio("/assets/alert.mp3");
@@ -475,7 +475,7 @@ document.onkeydown = function(e) {
     });
     $("#theMotherShip").tooltip("show");
   } if (oldSupplies <= 0) {
-	    if(canDieCheck.canDie.value === 1){
+	    if(canDieCheck.canDie === 1){
 		    $("#supplyModal").modal("show");
 		    restart();
 	}   else if(supplyMessageChecked === 0){
