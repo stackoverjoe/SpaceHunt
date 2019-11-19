@@ -81,14 +81,16 @@ function isNotCustomArray(val){
     return true;
   val = val.split(",");
   if(Number(val[0]) >= Number(localStorage.getItem("maxX")) ||
-     Number(val[1]) >= Number(localStorage.getItem("maxY"))) return true;
+     Number(val[1]) >= Number(localStorage.getItem("maxY")))
+    return true;
   return false;
 }
 
 function validSpecialSyntaxChange(name, input){
   const customArrays = input.value.split(" ");
-  for(const customArray in customArrays)
-    if(isNotCustomArray(customArray)) return invalidChange(input);
+  const customArraysLength = customArrays.length;
+  for(var i = 0; i < customArraysLength; ++i)
+    if(isNotCustomArray(customArrays[i])) return invalidChange(input);
   localStorage.setItem(name, input.value);
   input.style.color = 'black';
 }
