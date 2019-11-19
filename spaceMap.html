@@ -19,6 +19,7 @@
       margin: 1rem;
       display: inline-block;
       overflow: auto;
+      pointer-events: none;
     }
     .tooltips {
       position: relative;
@@ -57,6 +58,8 @@
     />
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="map.js"></script>
+    <script src="options.js"></script>
+    <script src="readLocalStorage.js"></script>
     <script src="sensors.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
     <a name="top"><title id="title">SpaceHunt</title></a>
@@ -186,6 +189,7 @@
     <div style="padding-top:.5rem; text-align: center;">
       <div id="mainMap" class="mainMap"></div>
     </div>
+    <!--
     <div class="dashBoard" style="padding-left: 6rem;">
       <text style="font-family: spaceAge; font-size: 20px; color: black"
         >Energy</text
@@ -198,9 +202,9 @@
         >
  100</textarea
          >
-    <div class="dashBoard" style="padding-left: 6rem;">
+         
       <text style="font-family: spaceAge; font-size: 20px; color: black"
-        >Supplies</text
+        ><br>Supplies</text
       >
      <div style="padding-top: 10px">
         <textarea
@@ -211,7 +215,32 @@
 100</textarea
         >
       </div>
+    
     </div>
+  -->
+  <form>
+    <div class="form-row">
+      <div class="form-group col-md-6">
+        <label for="energy">Energy</label>
+        <textarea disabled="true" class="form-control text-center" id="energy" style="width: 50%; height: 35px"></textarea>
+      </div>
+      <div class="form-group col-md-6">
+        <label for="supplies">Supplies</label>
+        <textarea disabled="true "class="form-control text-center" id="supplies" style="width: 50%; height:35px" ></textarea>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group col-md-6">
+        <label for="coords">Coordinates</label>
+        <textarea disabled="true" class="form-control text-center" style="width:50%; height: 35px" id="coords">(0,0)</textarea>
+      </div>
+      <div class="form-group col-md-4">
+        <label for="history">History</label>
+        <textarea id="history" class="form-control">
+        </textarea>
+      </div>
+    </div>
+  </form>
     <div class="button">
       <element id = deploy onclick="sensors()"
       >Deploy Sensors</button
