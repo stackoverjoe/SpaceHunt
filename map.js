@@ -481,7 +481,6 @@ document.onkeydown = function(e) {
 		    $("#supplyModal").modal("show");
 		    ++supplyMessageChecked;
 	}
-  }
   } else if (oldSupplies === 1) {
     $("#theMotherShip").tooltip({
       title: `<h4 style="padding-bottom: 20px"><img src='assets/PNG/8.png' alt='Smiley'> <div>You are low on Supplies ${oldSupplies} remaining!</div><h4>`,
