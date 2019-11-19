@@ -4,9 +4,41 @@
       font-family: "spaceAge";
       src: url("fonts/spaceAge.ttf") format("truetype");
     }
-    body {
-      background: grey !important;
-    }
+
+    @keyframes move-twink-back {
+    from {background-position:0 0;}
+    to {background-position:-10000px 5000px;}
+}
+@-webkit-keyframes move-twink-back {
+    from {background-position:0 0;}
+    to {background-position:-10000px 5000px;}
+}
+@-moz-keyframes move-twink-back {
+    from {background-position:0 0;}
+    to {background-position:-10000px 5000px;}
+}
+@-ms-keyframes move-twink-back {
+    from {background-position:0 0;}
+    to {background-position:-10000px 5000px;}
+}
+
+@keyframes move-clouds-back {
+    from {background-position:0 0;}
+    to {background-position:10000px 0;}
+}
+@-webkit-keyframes move-clouds-back {
+    from {background-position:0 0;}
+    to {background-position:10000px 0;}
+}
+@-moz-keyframes move-clouds-back {
+    from {background-position:0 0;}
+    to {background-position:10000px 0;}
+}
+@-ms-keyframes move-clouds-back {
+    from {background-position: 0;}
+    to {background-position:10000px 0;}
+}
+    
     .mainMap {
       text-align: center;
       align-content: center;
@@ -27,7 +59,7 @@
     .gameCell {
       width: 120px;
       height: 80px;
-      border: 1px solid silver;
+      border: 1px solid black;
     }
     table {
       border-collapse: collapse;
@@ -49,9 +81,9 @@
     padding: 15px 15px;
     text-align: center;
     text-decoration: none;
-    display: inline-block;
+    display:inline-block;
     font-size: 20px;
-    font-family: "spaceAge"
+    font-family: "spaceAge";
   }
   #hidden .sensorOutput {
     background-color: #45bbd6;
@@ -71,6 +103,33 @@
     h1 {
       text-align: center;
     }
+    .stars, .twinkling{
+  position:absolute;
+  top:0;
+  left:0;
+  right:0;
+  bottom:0;
+  width:100%;
+  height:100%;
+  display:block;
+}
+
+.stars {
+  background:#000 url(http://www.script-tutorials.com/demos/360/images/stars.png) repeat top center;
+  z-index:0;
+}
+
+.twinkling{
+  background:transparent url(http://www.script-tutorials.com/demos/360/images/twinkling.png) repeat top center;
+  z-index:1;
+
+  -moz-animation:move-twink-back 200s linear infinite;
+  -ms-animation:move-twink-back 200s linear infinite;
+  -o-animation:move-twink-back 200s linear infinite;
+  -webkit-animation:move-twink-back 200s linear infinite;
+  animation:move-twink-back 200s linear infinite;
+}
+
   </style>
   <head>
     <link
@@ -85,9 +144,8 @@
     <a name="top"><title id="title">SpaceHunt</title></a>
   </head>
 
-  <body onload="renderMap(128,128)">
-    <div
-      id="myModal"
+  <body class="stars" onload="renderMap(128,128)">
+    <div id="myModal"
       class="modal fade centered-modal"
       style="align-self: center;"
       role="dialog"
@@ -127,7 +185,7 @@
     <div
       id="supplyModal"
       class="modal fade centered-modal"
-      style="align-self: center;"
+      style="align-self: center; background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('/assets/swbg.jpg'); background-repeat: no-repeat; background-size: 100% 100%; "
       role="dialog"
     >
       <div class="modal-dialog">
@@ -203,7 +261,8 @@
       style="align-self: center;"
       role="dialog"
     ></div>
-    <h1 style="font-family: spaceAge; font-size: 4rem; padding-top: 1rem">
+    <div class="twinkling">
+    <h1 style="font-family: spaceAge; font-size: 4.5rem; padding-top: 1rem; color:white">
       SpaceHunt
     </h1>
     <div style="padding-top:.5rem; text-align: center;">
@@ -241,32 +300,35 @@
   <form>
     <div class="form-row">
       <div class="form-group col-md-6">
-        <label for="energy">Energy</label>
-        <textarea disabled="true" class="form-control text-center" id="energy" style="width: 50%; height: 35px"></textarea>
+        <label style="color:white"for="energy">Energy</label>
+        <textarea  class="form-control text-center" id="energy" style="font-weight: 800; resize: none; width: 50%; height: 35px"></textarea>
       </div>
       <div class="form-group col-md-6">
-        <label for="supplies">Supplies</label>
-        <textarea disabled="true "class="form-control text-center" id="supplies" style="width: 50%; height:35px" ></textarea>
+        <label style="color:white" for="supplies">Supplies</label>
+        <textarea disabled="true "class="form-control text-center" id="supplies" style="font-weight: 800; resize: none; width: 50%; height:35px" ></textarea>
       </div>
     </div>
     <div class="form-row">
       <div class="form-group col-md-6">
-        <label for="coords">Coordinates</label>
-        <textarea disabled="true" class="form-control text-center" style="width:50%; height: 35px" id="coords">(0,0)</textarea>
+        <label style="color:white" for="coords">Coordinates</label>
+        <textarea disabled="true" class="form-control text-center" style="font-weight: 800; resize: none; width:50%; height: 35px" id="coords">(0,0)</textarea>
       </div>
       <div class="form-group col-md-4">
-        <label for="history">History</label>
-        <textarea id="history" class="form-control">
+        <label style="color:white" for="history">History</label>
+        <textarea style="font-weight: 800; resize: none; height: 15%; overflow-y: scroll" disabled="true" id="history" class="text-center form-control">
         </textarea>
       </div>
     </div>
   </form>
+  <br>
     <div class="button">
       <element id = deploy onclick="sensors()"
       >Deploy Sensors</button
       >
     </div>
     <div id = "hidden">
+
+    </div>
 
     </div>
   </body>

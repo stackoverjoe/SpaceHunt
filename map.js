@@ -11,6 +11,7 @@ var player = {
   ycoord: 0,
   orientation: 1 //1right, 2left, 3up, 4 down
 };
+var start = 0;
 var ticker = 0;
 var counter = 0;
 var regularMode = 0;
@@ -87,9 +88,14 @@ function moon() {
 
 //global coords for reference later in program
 let coords = [0, 0];
+let snd = null;
 function renderMap(X, Y) {
   mapObjs.clear();
   //moon();
+  if (snd) {
+    snd.pause();
+    snd.currentTime = 0;
+  }
   var snd = new Audio("/assets/spaceSong.mp3");
   snd.play();
   document.getElementById("mainMap").focus();
@@ -137,6 +143,9 @@ function renderMap(X, Y) {
 
   document.getElementById("energy").value = 1000;
   document.getElementById("supplies").value = 100;
+  document.getElementById("coords").value = "(0,0)";
+  start = 0;
+  document.getElementById("history").value = "";
   populateMap();
 }
 
@@ -276,6 +285,7 @@ function populateMap() {
 //observe key presses
 document.onkeydown = function(e) {
   let current = null;
+  let historyMes = null;
   $(".tooltips").tooltip("hide");
   var update = 1;
   var oldx = player.xcoord;
@@ -450,10 +460,11 @@ document.onkeydown = function(e) {
     document.getElementById("energy").value = oldHealth - 10;
     document.getElementById("supplies").value =
       oldSupplies - Math.ceil(oldSupplies * 0.02);
+    document.getElementById(
+      "coords"
+    ).value = `(${player.xcoord},${player.ycoord})`;
   }
   if (oldHealth <= 0) {
-    // && regularMode === 1) {
-    //if (oldHealth <= 0){
     $("#myModal").modal("show");
   } else if (oldHealth <= 30 && oldHealth >= 27) {
     if (oldHealth === 30) {
@@ -476,6 +487,7 @@ document.onkeydown = function(e) {
     });
     $("#theMotherShip").tooltip("show");
   } else if (current && current.type === "energyPack") {
+    historyMes = "You discovered an energy pack at this location.";
     $("#theMotherShip").tooltip({
       title: `<h4 style="padding-bottom: 20px"><img src='assets/PNG/7.png' alt='Smiley'> <div>You have gained 10 energy!</div><h4>`,
       placement: "auto",
@@ -485,6 +497,7 @@ document.onkeydown = function(e) {
     $("#theMotherShip").tooltip("show");
   } else if (current && current.type === "asteroid") {
     //console.log(current.type);
+    historyMes = "You hit an asteroid at this location.";
     $("#theMotherShip").tooltip({
       title: `<h4 style="padding-bottom: 20px"><img src='assets/PNG/3.png' alt='Smiley'> <div>You have hit an astroid and lost ${current.damage} energy!</div><h4>`,
       placement: "auto",
@@ -494,6 +507,7 @@ document.onkeydown = function(e) {
     $("#theMotherShip").tooltip("show");
   } else if (current && current.type === "starBase") {
     if (current.visited === true) {
+      historyMes = "You discovered a star base at this location.";
       $("#theMotherShip").tooltip({
         title: `<h4 style="padding-bottom: 20px"><img src='assets/PNG/9.png' alt='Smiley'> <div>You have already tapped this space station's resources.</div><h4>`,
         placement: "auto",
@@ -503,6 +517,7 @@ document.onkeydown = function(e) {
       $("#theMotherShip").tooltip("show");
     }
   } else if (current && current.type === "wormHole") {
+    historyMes = "You discovered a worm hole at this location.";
     $("#theMotherShip").tooltip({
       title: `<h4 style="padding-bottom: 20px"><img src='assets/PNG/10.png' alt='Smiley'> <div>You have entered a wormhole and appeared at a random location!</div><h4>`,
       placement: "auto",
@@ -510,7 +525,33 @@ document.onkeydown = function(e) {
       html: true
     });
     $("#theMotherShip").tooltip("show");
+  } else if (current && current.type === "planet") {
+    historyMes = "You discovered a planet at this location.";
   }
+  $("#history").val(function(index, old) {
+    if (historyMes) {
+      return (
+        `You visited location (${player.xcoord},${player.ycoord}). ${historyMes}\n` +
+        old
+      );
+    } else {
+      return (
+        `You visited location (${player.xcoord},${player.ycoord}).\n` + old
+      );
+    }
+  });
+  /*
+  if (start === 0) {
+    start = 1;
+    document.getElementById(
+      "history"
+    ).value = `You visited location (${player.xcoord},${player.ycoord})\n`;
+  } else {
+    document.getElementById(
+      "history"
+    ).value += `You visited location (${player.xcoord},${player.ycoord})\n`;
+  }
+  */
 };
 
 function handleEvent(mapEvent) {
