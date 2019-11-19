@@ -467,8 +467,7 @@ document.onkeydown = function(e) {
   if (oldHealth === 30) {
       let snd = new Audio("/assets/alert.mp3");
       snd.play();
-    }
-    $("#theMotherShip").tooltip({
+      $("#theMotherShip").tooltip({
       title: `<h4 style="padding-bottom: 20px"><img src='assets/PNG/8.png' alt='Smiley'> <div>You are low on energy!! ${oldHealth} remaining!</div><h4>`,
       placement: "auto",
       html: true
