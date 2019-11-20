@@ -1,5 +1,5 @@
 .button {
-    background: -webkit-linear-gradient(#580070, #5c5c5c)
+    background-color: ##580070;
     border: none;
     color:silver;
     padding: 15px 15px;
@@ -19,5 +19,5 @@
     font-family: "spaceAge"
 
   }
-  #hidden {display: none;}
+  
   

@@ -50,6 +50,31 @@
     h1 {
       text-align: center;
     }
+    .button {
+    background-color: #580070;
+    border: none;
+    color:silver;
+    padding: 10px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 20px;
+    font-family: "spaceAge";
+    margin: 1rem;
+
+    
+  }
+  #hidden .sensorOutput {
+    background-color: #580070;
+    border: none;
+    color:silver;
+    padding: 15px 15px;
+    text-align: left;
+    font-size: 16px;
+    font-family: "spaceAge"
+  }
+  #hidden {display: none;}
+  
   </style>
   <head>
     <link
@@ -60,7 +85,7 @@
     <script src="map.js"></script>
     <script src="options.js"></script>
     <script src="readLocalStorage.js"></script>
-    <script src="sensors.js"></script>
+   <script src="sensors.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
     <a name="top"><title id="title">SpaceHunt</title></a>
   </head>
@@ -93,7 +118,6 @@
                 class="btn btn-success"
                 data-dismiss="modal"
                 onclick="restart()"
-              >
                 Start Over
               </button>
             </span>
@@ -247,7 +271,7 @@
       >
     </div>
     <div class = "sensorOutput" id = "hidden">
-      <ul title:>
+      <ul>
 
       </ul>
 
