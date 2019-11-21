@@ -6,20 +6,22 @@ class coord{
 }
 
 class localStoragePackage{
+  //the values seen here are default values to be overwritten by
+  //readLocalStorage() if localStorage is properly set
   constructor(){
-    //plain ol integers
+    //integers, access like returnVal.varName
     this.maxX = 128;
     this.maxY = 128;
-    this.startX = 63;
-    this.startY = 63;
+    this.startX = 0;
+    this.startY = 0;
     this.baseEnergy = 100;
     this.baseSupplies = 200;
     this.baseCredits = 1000;
     this.canDie = 1;
-    //either "random" or an array of coords, access like variableName[i].xcoord/ycoord
+    //either "random" or an array of coords, access like returnVal.varName[i].xcoord/ycoord
     this.wormholes = "random";
     this.spaceStations = "random";
-    //planets, either "random" or a coord, access like variableName.xcoord/ycoord
+    //planets, either "random" or a coord, access like returnVal.varName.xcoord/ycoord
     this.xort = "random";
     this.blarg = "random";
     this.irk = "random";
@@ -32,202 +34,147 @@ class localStoragePackage{
 
 function debugAlert(pkg){
   var alertMessage = 
-    "DEBUG ALERT" +
-    "\nTo turn me off, comment me out at the bottom of the file." +
-    "\n\nlocalStorage" +
-    "\nmaxX\t\t"        + localStorage.maxX +
-    "\nmaxY\t\t"        + localStorage.maxY +
-    "\nstartX\t\t"      + localStorage.startX +
-    "\nstartY\t\t"      + localStorage.startY +
-    "\nbaseEnergy\t"    + localStorage.baseEnergy +
-    "\nbaseSupplies\t"  + localStorage.baseSupplies +
-    "\nbaseCredits\t"   + localStorage.baseCredits +
-    "\ncanDie\t\t"      + localStorage.canDie +
-    "\nwormholes\t"     + localStorage.wormholes +
-    "\nspaceStations\t" + localStorage.spaceStations +
-    "\nxort\t\t\t"      + localStorage.xort +
-    "\nblarg\t\t"       + localStorage.blarg +
-    "\nirk\t\t\t"       + localStorage.irk +
-    "\naether\t\t"      + localStorage.aether +
-    "\nfoo\t\t\t"       + localStorage.foo +
+`DEBUG ALERT
+To turn me off, comment me out at the bottom of the file. See options.html to set and know your localStorage.
 
-    "\n\nlocalStoragePackage" +
-    "\nmaxX\t\t"       + pkg.maxX +
-    "\nmaxY\t\t"       + pkg.maxY +
-    "\nstartX\t\t"     + pkg.startX +
-    "\nstartY\t\t"     + pkg.startY +
-    "\nbaseEnergy\t"   + pkg.baseEnergy +
-    "\nbaseSupplies\t" + pkg.baseSupplies +
-    "\nbaseCredits\t"  + pkg.baseCredits
-    "\ncanDie\t\t"     + localStorage.canDie;
+localStoragePackage
+maxX\t\t${pkg.maxX}
+maxY\t\t${pkg.maxY}
+startX\t\t${pkg.startX}
+startY\t\t${pkg.startY}
+baseEnergy\t${pkg.baseEnergy}
+baseSupplies\t${pkg.baseSupplies}
+baseCredits\t${pkg.baseCredits}
+canDie\t\t${pkg.canDie}`;
 
   alertMessage += "\nwormholes\t";
   if(pkg.wormholes === "random") alertMessage += "random";
-  else
-    for(i in pkg.wormholes)
-      alertMessage += " " + i.xcoord + "," + i.ycoord;
+  else for(i of pkg.wormholes) alertMessage += i.xcoord + "," + i.ycoord + " ";
 
   alertMessage += "\nspaceStations\t";
   if(pkg.spaceStations === "random") alertMessage += "random";
-  else
-    for(i in pkg.spaceStations)
-      alertMessage += " " + i.xcoord + "," + i.ycoord;
+  else for(i of pkg.spaceStations) alertMessage += i.xcoord + "," + i.ycoord + " ";
 
-  alertMessage +=
-    "\nxort\t\t\t" + pkg.xort.xcoord   + "," + pkg.xort.ycoord +
-    "\nblarg\t\t"  + pkg.blarg.xcoord  + "," + pkg.blarg.ycoord +
-    "\nirk\t\t\t"  + pkg.irk.xcoord    + "," + pkg.irk.ycoord +
-    "\naether\t\t" + pkg.aether.xcoord + "," + pkg.aether.ycoord +
-    "\nfoo\t\t\t"  + pkg.foo.xcoord    + "," + pkg.foo.ycoord;
+  alertMessage += "\nxort\t\t\t";
+  if(pkg.xort === "random") alertMessage += "random";
+  else alertMessage += pkg.xort.xcoord + "," + pkg.xort.ycoord;
+  
+  alertMessage += "\nblarg\t\t";
+  if(pkg.blarg === "random") alertMessage += "random";
+  else alertMessage += pkg.blarg.xcoord + "," + pkg.blarg.ycoord;
+  
+  alertMessage += "\nirk\t\t\t";
+  if(pkg.irk === "random") alertMessage += "random";
+  else alertMessage += pkg.irk.xcoord + "," + pkg.irk.ycoord;
+  
+  alertMessage += "\naether\t\t";
+  if(pkg.aether === "random") alertMessage += "random";
+  else alertMessage += pkg.aether.xcoord + "," + pkg.aether.ycoord;
+  
+  alertMessage += "\nfoo\t\t\t";
+  if(pkg.foo === "random") alertMessage += "random";
+  else alertMessage += pkg.foo.xcoord + "," + pkg.foo.ycoord;
 
   alert(alertMessage);
+}
+
+function toNumber(name){
+  var dummy = localStorage.getItem(name);
+  if(!dummy) return "NaN";
+  //NULL, an empty entry, will evaluate to number 0 if I convert it to a number first
+  return Number(dummy);
+}
+
+function toCoordArray(name, maxX, maxY){
+  var x, y, dummyLength, dummy = localStorage.getItem(name);
+
+  if(dummy && dummy != "random"){
+    dummy = dummy.split(" ");
+    var dummyLength = dummy.length;
+
+    for(var i = 0; i < dummyLength; ++i){ //for( of ) loops uses pass by value for each index :(
+      dummy[i] = dummy[i].split(",", 2);
+
+      x = Number(dummy[i][0]);
+      y = Number(dummy[i][1]);
+      if(x != "NaN" && x >= 0 && x < maxX &&
+         y != "NaN" && y >= 0 && y < maxY)
+        dummy[i] = new coord(x, y);
+      else{
+        dummy = 0;
+        break;
+      }
+    }
+  }
+  return dummy;
+}
+
+function toCoord(name, maxX, maxY){
+  var dummy = localStorage.getItem(name);
+  if(dummy){
+    dummy = dummy.split(",", 2);
+    
+    x = Number(dummy[0]);
+    y = Number(dummy[1]);
+    if(x != "NaN" && x >= 0 && x < maxX &&
+       y != "NaN" && y >= 0 && y < maxY)
+      dummy = new coord(x, y);
+  }
+  return dummy;
 }
 
 //returns the results packaged in a class of the above, changing any non-default values
 function readLocalStorage(){
   var pkg = new localStoragePackage();
   //no pass by reference mean a lot of code duplication :/
-  var dummy, x, y;
 
-  //maxX
-  dummy = Number(localStorage.getItem("maxX"));
+  //integer
+  dummy = toNumber("maxX");                                                 //maxX
   if(dummy != "NaN" && dummy > 0) pkg.maxX = dummy;
 
-  //maxY
-  dummy = Number(localStorage.getItem("maxY"));
+  dummy = toNumber("maxY");                                                 //maxY
   if(dummy != "NaN" && dummy > 0) pkg.maxY = dummy;
 
-  //startX
-  dummy = Number(localStorage.getItem("startX"));
+  dummy = toNumber("startX");                                               //startX
   if(dummy != "NaN" && dummy > 0 && dummy < pkg.maxX) pkg.startX = dummy;
   else pkg.startX = 0;
 
-  //startY
-  dummy = Number(localStorage.getItem("startY"));
+  dummy = toNumber("startY");                                               //startY
   if(dummy != "NaN" && dummy > 0 && dummy < pkg.maxY) pkg.startY = dummy;
   else pkg.startY = 0;
-  
-  //baseEnergy
-  dummy = Number(localStorage.getItem("baseEnergy"));
+
+  dummy = toNumber("baseEnergy");                                           //baseEnergy
   if(dummy != "NaN") pkg.baseEnergy = dummy;
-  
-  //baseSupplies
-  dummy = Number(localStorage.getItem("baseSupplies"));
+
+  dummy = toNumber("baseSupplies");                                         //baseSupplies
   if(dummy != "NaN") pkg.baseSupplies = dummy;
   
-  //baseCredits
-  dummy = Number(localStorage.getItem("baseCredits"));
+  dummy = toNumber("baseCredits");                                          //baseCredits
   if(dummy != "NaN") pkg.baseCredits = dummy;
-  
-  //canDie
-  dummy = Number(localStorage.getItem("canDie"));
+
+  dummy = toNumber("canDie");                                               //canDie
   if(dummy === 0 || dummy === 1) pkg.canDie = dummy;
 
-  //wormholes
-  dummy = localStorage.getItem("wormholes");
-  if(dummy && dummy != "random"){
-    dummy = dummy.split(" ");
-    const dummyLength = dummy.length;
-    for(var i = 0; i < dummyLength; ++i)
-      dummy[i] = dummy[i].split(",");
 
-    pkg.wormholes = new Array(dummyLength);
-
-    for(var i = 0; i < dummyLength; ++i){
-      x = Number(dummy[i][0]);
-      y = Number(dummy[i][1]);
-      if(x != "NaN" && x >= 0 && x < pkg.maxX &&
-         y != "NaN" && y >= 0 && y < pkg.maxY)
-        pkg.wormholes[i] = new coord(x, y);
-      else{
-        pkg.wormholes = "random";
-        break;
-      }
-    }
-  }
-
-  //spaceStations
-  dummy = localStorage.getItem("spaceStations");
-  if(dummy && dummy != "random"){
-    dummy = dummy.split(" ");
-    const dummyLength = dummy.length;
-    for(var i = 0; i < dummyLength; ++i)
-      dummy[i] = dummy[i].split(",");
-
-    pkg.spaceStations = new Array(dummyLength);
-
-    for(var i = 0; i < dummyLength; ++i){
-      x = Number(dummy[i][0]);
-      y = Number(dummy[i][1]);
-      if(x != "NaN" && x >= 0 && x < pkg.maxX &&
-         y != "NaN" && y >= 0 && y < pkg.maxY)
-        pkg.spaceStations[i] = new coord(x, y);
-      else{
-        pkg.wormholes = "random";
-        break;
-      }
-    }
-  }
-
-  //xort
-  dummy = localStorage.getItem("xort");
-  if(dummy){
-    dummy = dummy.split(",");
-    
-    x = Number(dummy[0]);
-    y = Number(dummy[1]);
-    if(x != "NaN" && x >= 0 && x < pkg.maxX &&
-       y != "NaN" && y >= 0 && y < pkg.maxY)
-      pkg.xort = new coord(x, y);
-  }
-
-  //blarg
-  dummy = localStorage.getItem("blarg");
-  if(dummy){
-    dummy = dummy.split(",");
-
-    x = Number(dummy[0]);
-    y = Number(dummy[1]);
-    if(x != "NaN" && x >= 0 && x < pkg.maxX &&
-       y != "NaN" && y >= 0 && y < pkg.maxY)
-      pkg.blarg = new coord(x, y);
-  }
-
-  //irk
-  dummy = localStorage.getItem("irk");
-  if(dummy){
-    dummy = dummy.split(",");
-
-    x = Number(dummy[0]);
-    y = Number(dummy[1]);
-    if(x != "NaN" && x >= 0 && x < pkg.maxX &&
-       y != "NaN" && y >= 0 && y < pkg.maxY)
-      pkg.irk = new coord(x, y);
-  }
-
-  //aether
-  dummy = localStorage.getItem("aether");
-  if(dummy){
-    dummy = dummy.split(",");
-
-    x = Number(dummy[0]);
-    y = Number(dummy[1]);
-    if(x != "NaN" && x >= 0 && x < pkg.maxX &&
-       y != "NaN" && y >= 0 && y < pkg.maxY)
-      pkg.aether = new coord(x, y);
-  }
-
-  //foo
-  dummy = localStorage.getItem("foo");
-  if(dummy){
-    dummy = dummy.split(",");
-
-    x = Number(dummy[0]);
-    y = Number(dummy[1]);
-    if(x != "NaN" && x >= 0 && x < pkg.maxX &&
-       y != "NaN" && y >= 0 && y < pkg.maxY)
-      pkg.foo = new coord(x, y);
-  }
+  //coord[]
+  const maxX = pkg.maxX;
+  const maxY = pkg.maxY;
+  dummy = toCoordArray("wormholes", maxX, maxY);                            //wormholes
+  if(dummy) pkg.wormholes = dummy;
+  dummy = toCoordArray("spaceStations", maxX, maxY);                        //spaceStations
+  if(dummy) pkg.spaceStations = dummy;
+  
+  //coord
+  dummy = toCoord("xort", maxX, maxY);                                      //xort
+  if(dummy) pkg.xort = dummy;
+  dummy = toCoord("blarg", maxX, maxY);                                     //blarg
+  if(dummy) pkg.blarg = dummy;
+  dummy = toCoord("irk", maxX, maxY);                                       //irk
+  if(dummy) pkg.irk = dummy;
+  dummy = toCoord("aether", maxX, maxY);                                    //aether
+  if(dummy) pkg.aether = dummy;
+  dummy = toCoord("foo", maxX, maxY);                                       //foo
+  if(dummy) pkg.foo = dummy;
   
   debugAlert(pkg);
   return pkg;
