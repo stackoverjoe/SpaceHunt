@@ -14,9 +14,11 @@ var player = {
 var start = 0;
 var ticker = 0;
 var counter = 0;
-var supplyMessageChecked = 0;
-var energyMessageChecked = 0;
+var regularMode = 0;
+var dead = false;
 var mapObjs = new Map();
+var planetSndChoice = 0;
+var discover = ["/assets/disocvery.mp3", "/assets/discovery2.mp3"];
 var planets = [
   "/assets/PNG/16.png",
   "/assets/PNG/17.png",
@@ -90,17 +92,21 @@ function moon() {
 //global coords for reference later in program
 let coords = [0, 0];
 let snd = null;
+let jet = null;
 function renderMap(X, Y) {
-  supplyMessageChecked = 0;
-  energyMessageChecked = 0;
+  dead = false;
   mapObjs.clear();
   //moon();
   if (snd) {
     snd.pause();
     snd.currentTime = 0;
+    snd.play();
+  } else {
+    snd = new Audio("/assets/spaceSong.mp3");
+    snd.volume = 0.7;
+    snd.play();
   }
-  var snd = new Audio("/assets/spaceSong.mp3");
-  snd.play();
+  //snd.play();
   document.getElementById("mainMap").focus();
   coords[0] = X;
   coords[1] = Y;
@@ -145,11 +151,11 @@ function renderMap(X, Y) {
   window.location = "spaceMap.html#top";
 
   document.getElementById("energy").value = 1000;
-  document.getElementById("supplies").value = 1000;
   document.getElementById("supplies").value = 100;
   document.getElementById("coords").value = "(0,0)";
   start = 0;
   document.getElementById("history").value = "";
+
   populateMap();
 }
 
@@ -460,7 +466,6 @@ document.onkeydown = function(e) {
 
   let oldHealth = parseInt(document.getElementById("energy").value);
   let oldSupplies = parseInt(document.getElementById("supplies").value);
-  let canDieCheck = readLocalStorage();
   if (update === 1) {
     document.getElementById("energy").value = oldHealth - 10;
     document.getElementById("supplies").value =
@@ -470,37 +475,50 @@ document.onkeydown = function(e) {
     ).value = `(${player.xcoord},${player.ycoord})`;
   }
   if (oldHealth <= 0) {
-    if(canDieCheck.canDie === 1){
-		  $("#myModal").modal("show");
-		  restart();
-    } else if(energyMessageChecked === 0){
-		$("#myModal").modal("show");
-		++energyMessageChecked;
-    } 
-  }
-  if (oldHealth === 30) {
+    if (snd) {
+      snd.pause();
+      snd.currentTime = 0;
+    }
+    if (jet) {
+      jet.pause();
+      jet.currentTime = 0;
+    }
+    let snd2 = new Audio("/assets/endGame.mp3");
+    if (!dead) {
+      snd2.play();
+    }
+    dead = true;
     $("#myModal").modal("show");
   } else if (oldHealth <= 30 && oldHealth >= 27) {
     if (oldHealth === 30) {
       let snd = new Audio("/assets/alert.mp3");
+      snd.volume = 0.8;
       snd.play();
-      $("#theMotherShip").tooltip({
+    }
+    $("#theMotherShip").tooltip({
       title: `<h4 style="padding-bottom: 20px"><img src='assets/PNG/8.png' alt='Smiley'> <div>You are low on energy!! ${oldHealth} remaining!</div><h4>`,
       placement: "auto",
       html: true
     });
     $("#theMotherShip").tooltip("show");
-  } if (oldSupplies <= 0) {
-	    if(canDieCheck.canDie === 1){
-		    $("#supplyModal").modal("show");
-		    restart();
-	}   else if(supplyMessageChecked === 0){
-		    $("#supplyModal").modal("show");
-		    ++supplyMessageChecked;
-	}
+  } else if (oldSupplies === 0) {
+    if (jet) {
+      jet.pause();
+      jet.currentTime = 0;
+    }
+    if (snd) {
+      snd.pause();
+      snd.currentTime = 0;
+    }
+    let snd2 = new Audio("/assets/endGame.mp3");
+    if (!dead) {
+      snd2.play();
+    }
+    dead = true;
+    $("#supplyModal").modal("show");
   } else if (oldSupplies === 1) {
     $("#theMotherShip").tooltip({
-      title: `<h4 style="padding-bottom: 20px"><img src='assets/PNG/8.png' alt='Smiley'> <div>You are low on Supplies ${oldSupplies} remaining!</div><h4>`,
+      title: `<h4 style="padding-bottom: 20px"><img src='assets/PNG/8.png' alt='Smiley'> <div>You are low on Supplies!! ${oldSupplies} remaining!</div><h4>`,
       placement: "auto",
       html: true
     });
@@ -536,6 +554,9 @@ document.onkeydown = function(e) {
       $("#theMotherShip").tooltip("show");
     }
   } else if (current && current.type === "wormHole") {
+    var warpsnd = new Audio("/assets/warp.mp3");
+    warpsnd.volume = 0.8;
+    warpsnd.play();
     historyMes = "You discovered a worm hole at this location.";
     $("#theMotherShip").tooltip({
       title: `<h4 style="padding-bottom: 20px"><img src='assets/PNG/10.png' alt='Smiley'> <div>You have entered a wormhole and appeared at a random location!</div><h4>`,
@@ -545,7 +566,17 @@ document.onkeydown = function(e) {
     });
     $("#theMotherShip").tooltip("show");
   } else if (current && current.type === "planet") {
+    //let x = Math.floor(Math.random() * coords[0]);
+    planetSndChoice = planetSndChoice === 1 ? 0 : 1;
+    var planetsnd = new Audio(discover[planetSndChoice]);
+    planetsnd.volume = 0.6;
+    planetsnd.play();
     historyMes = "You discovered a planet at this location.";
+  }
+  jet = new Audio("/assets/jets.mp3");
+  jet.volume = 0.6;
+  if (!dead) {
+    jet.play();
   }
   $("#history").val(function(index, old) {
     if (historyMes) {
@@ -596,6 +627,8 @@ function handleEvent(mapEvent) {
     let olds = parseInt(document.getElementById("supplies").value);
     document.getElementById("supplies").value = olds + mapEvent.resources;
     if (!mapObjs.get(`${mapEvent.coords[0]}-${mapEvent.coords[1]}`).visited) {
+      var base = new Audio("/assets/sapceb.mp3");
+      base.play();
       document.getElementById("starBaseModal").innerHTML = `
     <div class="modal-dialog">
         <!-- Modal content-->
@@ -644,6 +677,7 @@ function handleEvent(mapEvent) {
   } else if (mapEvent.type === "energyPack") {
     //remove health pack from map
     let snd = new Audio("/assets/energyUp3.mp3");
+    snd.volume = 0.4;
     snd.play();
     mapObjs.delete(`${mapEvent.coords[0]}-${mapEvent.coords[1]}`);
     let oldh = parseInt(document.getElementById("energy").value);
