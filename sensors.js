@@ -1,8 +1,9 @@
 function sensors()
 {
-    document.getElementById("deploy").innerHTML = "Turn sensors off"; //will eventually go between this and "deploy sensors"
+    let x = document.getElementById("sensorlog")
+    x = "";
     Reveal();
-/*
+
     var aroundMe = new Array(12);
     aroundMe[0] = [player.xcoord+1, player.ycoord]
     aroundMe[1] = [player.xcoord+2, player.ycoord]
@@ -16,11 +17,7 @@ function sensors()
     aroundMe[9] = [player.xcoord-2, player.ycoord]
     aroundMe[10] = [player.xcoord-1, player.ycoord+1]
     aroundMe[11] = [player.xcoord-1, player.ycoord-1]
-    */
-   
-   // document.getElementById("hidden").style.display.innerHTML = "block"; //reveal div that will hold information about surroundings
-
- 
+    
     var vals = mapObjs.values()
     for(tile in vals)
     {
@@ -40,7 +37,7 @@ mapObjs.forEach(logMapElements);
 }
 
 function Reveal() {
-    var x = document.getElementById("hidden");
+    let x = document.getElementById("sensorlog");
     if (x.style.display === "none") {
       x.style.display = "block";
       document.getElementById("deploy").innerHTML = "Turn sensors off";
