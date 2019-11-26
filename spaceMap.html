@@ -183,6 +183,44 @@
         </div>
       </div>
     </div>
+  <body class="stars" onload="renderMap(128,128)">
+    <div id="death"
+      class="modal fade centered-modal"
+      style="align-self: center; background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.2)), url('/assets/badMaxx.jpg'); background-repeat: no-repeat; background-size: 100% 100%; "
+      role="dialog"
+    >
+      <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content" style="background-color:#424242;">
+          <div class="modal-header" style="border-color:#212121;">
+            <button type="button" class="close" data-dismiss="modal">
+              &times;
+            </button>
+            <h4 class="modal-title" style="font-family: spaceAge; color: #FAFAFA; text-align: center;">
+              Bad Max has destroyed you.
+            </h4>
+          </div>
+          <div class="modal-body" style="text-align: center; font-weight: 800;">
+            <p style="color:#FAFAFA">Great shame.</p>
+          </div>
+          <div class="modal-footer" style="border-color: #212121">
+            <span style="justify-content: left">
+              <button
+                type="button"
+                class="btn btn-success"
+                data-dismiss="modal"
+                onclick="restart()"
+              >
+                Start Over
+              </button>
+            </span>
+            <button type="button" class="btn btn-danger" data-dismiss="modal">
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
     <div
       id="supplyModal"
       class="modal fade centered-modal"
