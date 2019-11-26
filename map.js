@@ -11,6 +11,14 @@ var player = {
   ycoord: 0,
   orientation: 1 //1right, 2left, 3up, 4 down
 };
+
+let deathSound = new Audio("/assets/endGame.mp3");
+var badMax = {
+  xcoord: null,
+  ycoord: null,
+  orientation: 1
+};
+
 var start = 0;
 var ticker = 0;
 var counter = 0;
@@ -54,11 +62,11 @@ var astroids = [
   "/assets/large/c40013.png"
 ];
 var starBase = [
-  "/assets/PNG/ssb.png",
   "/assets/PNG/ssb2.png",
   "/assets/SS1.png",
   "/assets/tribase-u1-d0.png"
 ];
+
 function moon() {
   let i = 1;
   //for(let i = 1; i < 48; ++i){
@@ -91,8 +99,12 @@ function moon() {
 
 //global coords for reference later in program
 let coords = [0, 0];
+//snd is global background music
 let snd = null;
+//global jet audio object for spacecraft movement noise
 let jet = null;
+
+//renderMap generates the html table for the map
 function renderMap(X, Y) {
   dead = false;
   mapObjs.clear();
@@ -106,6 +118,10 @@ function renderMap(X, Y) {
     snd.volume = 0.7;
     snd.play();
   }
+  /*
+  let snd2 = new Audio("/assets/bruhh.mp3");
+  snd2.play();
+  */
   //snd.play();
   document.getElementById("mainMap").focus();
   coords[0] = X;
@@ -144,19 +160,82 @@ function renderMap(X, Y) {
   //set player coords back to start incase reset function called.
   player.xcoord = 0;
   player.ycoord = 0;
+  badMax.xcoord = 10;
+  badMax.ycoord = 10;
   //snap to start of game
   //scroll ship back into view
   document.getElementById("0-0").scrollIntoView();
   //make sure title is visible
   window.location = "spaceMap.html#top";
 
-  document.getElementById("energy").value = 1000;
-  document.getElementById("supplies").value = 100;
+  document.getElementById("energy").value = 10000;
+  document.getElementById("supplies").value = 10000;
   document.getElementById("coords").value = "(0,0)";
   start = 0;
   document.getElementById("history").value = "";
-
   populateMap();
+  //spawn bad max
+  badMaxFunc();
+}
+
+let zone1 = null;
+let yz1 = null;
+function badMaxFunc() {
+  let ship = setInterval(function() {
+    if (mapObjs.has(`${badMax.xcoord}-${badMax.ycoord}`)) {
+      mapObjs.delete(`${badMax.xcoord}-${badMax.ycoord}`);
+    }
+    let oldx = badMax.xcoord;
+    let oldy = badMax.ycoord;
+    if (badMax.xcoord < player.xcoord) {
+      badMax.orientation = 1;
+      ++badMax.xcoord;
+    } else if (badMax.xcoord > player.xcoord) {
+      badMax.orientation = 2;
+      --badMax.xcoord;
+    } else if (badMax.ycoord < player.ycoord) {
+      badMax.orientation = 3;
+      ++badMax.ycoord;
+    } else if (badMax.ycoord > player.ycoord) {
+      badMax.orientation = 4;
+      --badMax.ycoord;
+    }
+    if (badMax.xcoord === player.xcoord && badMax.ycoord === player.ycoord) {
+      if (snd) {
+        snd.pause();
+        snd.currentTime = 0;
+      }
+      deathSound.play();
+      $("#death").modal("show");
+      return;
+    }
+
+    //Check if laser made all the way to the edge and clear the interval
+    //if it did
+    document.getElementById(
+      `${oldx}-${oldy}`
+    ).innerHTML = `<div class='gameCell' style="border: 1px solid red; background: red; opacity: 0.3"></div>`;
+    if (badMax.orientation === 1) {
+      document.getElementById(
+        `${badMax.xcoord}-${badMax.ycoord}`
+      ).innerHTML = `<div style="text-align: center"><img style='height:100%; transform: rotate(90deg)' src='/assets/badMax.png'/></div>`;
+    }
+    if (badMax.orientation === 2) {
+      document.getElementById(
+        `${badMax.xcoord}-${badMax.ycoord}`
+      ).innerHTML = `<div style="text-align: center;"><img style='height:100%; transform: rotate(-90deg)' src='/assets/badMax.png'/></div>`;
+    }
+    if (badMax.orientation === 3) {
+      document.getElementById(
+        `${badMax.xcoord}-${badMax.ycoord}`
+      ).innerHTML = `<div style="text-align: center;"><img style='height:100%; transform: rotate(0deg)' src='/assets/badMax.png'/></div>`;
+    }
+    if (badMax.orientation === 4) {
+      document.getElementById(
+        `${badMax.xcoord}-${badMax.ycoord}`
+      ).innerHTML = `<div style="text-align: center;"><img style='height:100%; transform: rotate(180deg)' src='/assets/badMax.png'/></div>`;
+    }
+  }, 400);
 }
 
 var mapObject = {
@@ -215,7 +294,7 @@ function populateMap() {
     }
   }
   //starbases
-  for (let i = 0; i < 20; ++i) {
+  for (let i = 0; i < 50; ++i) {
     let x = Math.floor(Math.random() * coords[0]) + 1;
     let y = Math.floor(Math.random() * coords[1]) + 1;
     let img = Math.floor(Math.random() * starBase.length);
@@ -347,6 +426,7 @@ document.onkeydown = function(e) {
       //current.type = "wormHole";
     }
   } else if (e.keyCode === 32) {
+    e.preventDefault();
     var laserSnd = new Audio("/assets/1laz.mp3");
     laserSnd.play();
     let zone = player.xcoord;
@@ -356,6 +436,18 @@ document.onkeydown = function(e) {
       zone = player.xcoord + 1;
       yz = player.ycoord;
       laser = setInterval(() => {
+        //check if laser has met an object on the map
+        if (mapObjs.has(`${zone}-${yz}`)) {
+          mapObjs.delete(`${zone}-${yz}`);
+          //if it has  remove the item from the map
+          //and clear the interval
+          clearInterval(laser);
+          //remove the laser image from the cell
+          document.getElementById(
+            `${zone}-${yz}`
+          ).innerHTML = `<div class = "mapCell"></div>`;
+          return;
+        }
         if (zone < coords[0] - 1) {
           document.getElementById(
             `${zone + 1}-${yz}`
@@ -370,6 +462,15 @@ document.onkeydown = function(e) {
       zone = player.xcoord - 1;
       yz = player.ycoord;
       laser = setInterval(() => {
+        if (mapObjs.has(`${zone}-${yz}`)) {
+          mapObjs.delete(`${zone}-${yz}`);
+          clearInterval(laser);
+          //remove the laser image from the cell
+          document.getElementById(
+            `${zone}-${yz}`
+          ).innerHTML = `<div class = "mapCell"></div>`;
+          return;
+        }
         if (zone > 0) {
           document.getElementById(
             `${zone - 1}-${yz}`
@@ -384,6 +485,15 @@ document.onkeydown = function(e) {
       zone = player.xcoord;
       yz = player.ycoord - 1;
       laser = setInterval(() => {
+        if (mapObjs.has(`${zone}-${yz}`)) {
+          mapObjs.delete(`${zone}-${yz}`);
+          clearInterval(laser);
+          //remove the laser image from the cell
+          document.getElementById(
+            `${zone}-${yz}`
+          ).innerHTML = `<div class = "mapCell"></div>`;
+          return;
+        }
         if (yz > 0) {
           document.getElementById(
             `${zone}-${yz - 1}`
@@ -398,7 +508,25 @@ document.onkeydown = function(e) {
     if (player.orientation === 4) {
       zone = player.xcoord;
       yz = player.ycoord + 1;
+      if (mapObjs.has(`${zone}-${yz}`)) {
+        mapObjs.delete(`${zone}-${yz}`);
+        clearInterval(laser);
+        //remove the laser image from the cell
+        document.getElementById(
+          `${zone}-${yz}`
+        ).innerHTML = `<div class = "mapCell"></div>`;
+        return;
+      }
       laser = setInterval(() => {
+        if (mapObjs.has(`${zone}-${yz}`)) {
+          mapObjs.delete(`${zone}-${yz}`);
+          clearInterval(laser);
+          //remove the laser image from the cell
+          document.getElementById(
+            `${zone}-${yz}`
+          ).innerHTML = `<div class = "mapCell"></div>`;
+          return;
+        }
         if (yz < coords[1] - 1) {
           document.getElementById(
             `${zone}-${yz + 1}`
@@ -410,6 +538,8 @@ document.onkeydown = function(e) {
         }
       }, 50);
     }
+    //Check if laser made all the way to the edge and clear the interval
+    //if it did
     if (zone >= coords[0] && player.orientation === 1) {
       clearInterval(laser);
     }
@@ -629,22 +759,25 @@ function handleEvent(mapEvent) {
     if (!mapObjs.get(`${mapEvent.coords[0]}-${mapEvent.coords[1]}`).visited) {
       var base = new Audio("/assets/sapceb.mp3");
       base.play();
+      setInterval(function() {
+        base.volume -= 0.1;
+      }, 250);
       document.getElementById("starBaseModal").innerHTML = `
     <div class="modal-dialog">
         <!-- Modal content-->
-        <div class="modal-content">
+        <div class="modal-content" style="background: linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.1)),url('/assets/spaceStation1.jpg'); height: 95%">
           <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal">
+            <button type="button" class="close" data-dismiss="modal" style="text-align: center">
               &times;
             </button>
-            <h4 class="modal-title" style="font-family: spaceAge;">
+            <h4 class="modal-title" style="font-family: spaceAge; font-weight: 800; text-align: center">
               You have found a star base.
             </h4>
           </div>
-          <div class="modal-body">
-            <p>This star base has ${mapEvent.resources} supplies for you.\nGood luck.</p>
+          <div class="modal-body" style="text-align: center">
+            <p style="font-weight: 800">This star base has ${mapEvent.resources} supplies for you.\nGood luck.</p>
           </div>
-          <div class="modal-footer">
+          <div class="modal-footer" style="text-align: center">
             <span style="justify-content: left">
               <button
                 type="button"
