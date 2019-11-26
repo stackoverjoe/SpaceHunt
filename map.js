@@ -12,20 +12,30 @@ var player = {
   orientation: 1 //1right, 2left, 3up, 4 down
 };
 
-let deathSound = new Audio("/assets/endGame.mp3");
+//badMax object that has the information regarding where badMax is on the screen
 var badMax = {
   xcoord: null,
   ycoord: null,
-  orientation: 1
+  orientation: 1,
+  distanceFromPlayer: null
 };
 
+//global audio object for the death sound effect
+let deathSound = new Audio("/assets/endGame.mp3");
 var start = 0;
 var ticker = 0;
 var counter = 0;
 var regularMode = 0;
 var dead = false;
+
+//create a Map object that stores all of the celestial objects in the game
 var mapObjs = new Map();
+
+//this variable is used as a switch to alternate which sound plays when you discover planets
 var planetSndChoice = 0;
+var pirateSnd = new Audio("/assets/bruhh.mp3");
+//All arrays of assets allow for random generation of celestial artifacts to allow
+//more unique map experiences
 var discover = ["/assets/disocvery.mp3", "/assets/discovery2.mp3"];
 var planets = [
   "/assets/PNG/16.png",
@@ -67,6 +77,7 @@ var starBase = [
   "/assets/tribase-u1-d0.png"
 ];
 
+//Function to replicate a gif of a rotating moon, currently clips too much and not in use
 function moon() {
   let i = 1;
   //for(let i = 1; i < 48; ++i){
@@ -106,33 +117,39 @@ let jet = null;
 
 //renderMap generates the html table for the map
 function renderMap(X, Y) {
+  //dead variable used to control sound output and represents current life status
   dead = false;
+  pirateSnd.pause();
+  pirateSnd.currentTime = 0;
+  //clear the entire map every time the game starts so we can generate a new one
   mapObjs.clear();
-  //moon();
+  //background music is played from here
   if (snd) {
     snd.pause();
     snd.currentTime = 0;
     snd.play();
   } else {
     snd = new Audio("/assets/spaceSong.mp3");
-    snd.volume = 0.7;
+    snd.volume = 0.5;
     snd.play();
   }
-  /*
-  let snd2 = new Audio("/assets/bruhh.mp3");
-  snd2.play();
-  */
-  //snd.play();
+
+  //focus the mainMap on the screen
   document.getElementById("mainMap").focus();
+  //Global coords that keep track of the max X and Y value of the table
   coords[0] = X;
   coords[1] = Y;
   var outer = document.querySelector("#mainMap");
   var inner = document.getElementById("theBigTable");
+  //If in inner already exists we destroy it so that we can rebuild. This allows us to reset the game easier
   if (inner) {
     inner.remove();
   }
+
+  //create a table element for the game board
   let mapContainer = document.createElement("table");
   mapContainer.setAttribute("id", "theBigTable");
+  //append to the main map
   outer.appendChild(mapContainer);
   mapContainer.className = "gameCell";
   //create presentational table for game movement
@@ -153,26 +170,28 @@ function renderMap(X, Y) {
     mapContainer.appendChild(mapRow);
   }
 
+  //set the player ship at the 0,0 coords of the map
   document.getElementById(
     "0-0"
   ).innerHTML = `<div style='text-align: center; color: white'><img style='height: 100%' src='/assets/Titan.png'/></div>`;
-  //call function to populate map with celestial objects
   //set player coords back to start incase reset function called.
   player.xcoord = 0;
   player.ycoord = 0;
-  badMax.xcoord = 10;
-  badMax.ycoord = 10;
+  badMax.xcoord = Math.floor(Math.random() * 127) + 1;
+  badMax.ycoord = Math.floor(Math.random() * 127) + 1;
   //snap to start of game
   //scroll ship back into view
   document.getElementById("0-0").scrollIntoView();
   //make sure title is visible
   window.location = "spaceMap.html#top";
 
+  //set all starting values for game
   document.getElementById("energy").value = 10000;
   document.getElementById("supplies").value = 10000;
   document.getElementById("coords").value = "(0,0)";
   start = 0;
   document.getElementById("history").value = "";
+  //populate the map with celestial objects
   populateMap();
   //spawn bad max
   badMaxFunc();
@@ -180,13 +199,50 @@ function renderMap(X, Y) {
 
 let zone1 = null;
 let yz1 = null;
+//badMax interval variable
+let ship = null;
+//this function summons bad max
 function badMaxFunc() {
-  let ship = setInterval(function() {
+  //set interval function allows max to move every x milliseconds, by reducing the second argument to this function
+  //you will make him faster
+  pirateSnd.play();
+  pirateSnd.volume = 0;
+  ship = setInterval(function() {
+    //calculate the hypotenuse to determine how far bad max is from player
+    badMax.distance = Math.floor(
+      Math.sqrt(
+        Math.abs(
+          (player.xcoord - badMax.xcoord) * (player.xcoord - badMax.xcoord)
+        ) +
+          Math.abs(
+            (player.ycoord - badMax.ycoord) * (player.ycoord - badMax.ycoord)
+          )
+      )
+    );
+    if (badMax.distance > 70) {
+      pirateSnd.volume = 0;
+    } else {
+      if (pirateSnd.pause) {
+        pirateSnd.play();
+      }
+      let sndVal = Math.abs(badMax.distance - 100) * 0.004;
+      //console.log(badMax.distance);
+      //console.log(sndVal);
+      if (sndVal > 1) {
+        sndVal = 1;
+      }
+      if (badMax.distance < 8) {
+        sndVal = 1;
+      }
+      pirateSnd.volume = sndVal;
+    }
+    //bad max destroys every thing he runs over
     if (mapObjs.has(`${badMax.xcoord}-${badMax.ycoord}`)) {
       mapObjs.delete(`${badMax.xcoord}-${badMax.ycoord}`);
     }
     let oldx = badMax.xcoord;
     let oldy = badMax.ycoord;
+    //check where player is and make one step toward them
     if (badMax.xcoord < player.xcoord) {
       badMax.orientation = 1;
       ++badMax.xcoord;
@@ -194,57 +250,176 @@ function badMaxFunc() {
       badMax.orientation = 2;
       --badMax.xcoord;
     } else if (badMax.ycoord < player.ycoord) {
-      badMax.orientation = 3;
+      badMax.orientation = 4;
       ++badMax.ycoord;
     } else if (badMax.ycoord > player.ycoord) {
-      badMax.orientation = 4;
+      badMax.orientation = 3;
       --badMax.ycoord;
     }
+
+    //If coords match up, bad max found the player and killed them
     if (badMax.xcoord === player.xcoord && badMax.ycoord === player.ycoord) {
       if (snd) {
         snd.pause();
         snd.currentTime = 0;
       }
+      pirateSnd.pause();
+      pirateSnd.currentTime = 0;
       deathSound.play();
+      //stop the interval from running
+      clearInterval(ship);
+      //show the death screen
+      if (!pirateSnd.pause) {
+        pirateSnd.pause();
+        pirateSnd.currentTime = 0;
+      }
       $("#death").modal("show");
       return;
     }
+
+    //laser for badMax possibly
+    /*
+    if (badMax.distance < 7) {
+      if (badMax.orientation === 1) {
+        zone1 = badMax.xcoord + 1;
+        yz1 = badMax.ycoord;
+        laser = setInterval(() => {
+          if (zone1 < coords[0] - 1) {
+            document.getElementById(
+              `${zone1 + 1}-${yz1}`
+            ).innerHTML = `<div><img style='height:100%; transform: rotate(90deg)' src='/assets/PNG/beams22.png'/></div>`;
+            document.getElementById(
+              `${zone1}-${yz1}`
+            ).innerHTML = `<div class = "mapCell"></div>`;
+            ++zone1;
+          }
+        }, 50);
+      } else if (badMax.orientation === 2) {
+        zone1 = badMax.xcoord - 1;
+        yz1 = badMax.ycoord;
+        laser = setInterval(() => {
+          
+          if (mapObjs.has(`${zone1}-${yz1}`)) {
+            mapObjs.delete(`${zone1}-${yz1}`);
+            clearInterval(laser);
+            //remove the laser image from the cell
+            document.getElementById(
+              `${zone1}-${yz1}`
+            ).innerHTML = `<div class = "mapCell"></div>`;
+            return;
+          }
+          if (zone1 > 0) {
+            document.getElementById(
+              `${zone1 - 1}-${yz1}`
+            ).innerHTML = `<div><img style='height:100%; transform: rotate(-90deg)' src='/assets/PNG/beams22.png'/></div>`;
+            document.getElementById(
+              `${zone1}-${yz1}`).innerHTML = `<div class = "mapCell"></div>`;
+            --zone1;
+          }
+        }, 50);
+      } else if (badMax.orientation === 3) {
+        zone1 = badMax.xcoord;
+        yz1 = badMax.ycoord - 1;
+        laser = setInterval(() => {
+          if (mapObjs.has(`${zone1}-${yz1}`)) {
+            mapObjs.delete(`${zone1}-${yz1}`);
+            clearInterval(laser);
+            //remove the laser image from the cell
+            document.getElementById(
+              `${zone1}-${yz1}`
+            ).innerHTML = `<div class = "mapCell"></div>`;
+            //return;
+          }
+          if (yz1 > 0) {
+            document.getElementById(
+              `${zone1}-${yz1 - 1}`
+            ).innerHTML = `<div style='text-align:center'><img style='height:100%; transform: rotate(0deg)' src='/assets/PNG/beams22.png'/></div>`;
+            document.getElementById(
+              `${zone1}-${yz1}`
+            ).innerHTML = `<div class = "mapCell"></div>`;
+            --yz1;
+          }
+        }, 50);
+      }
+      if (badMax.orientation === 4) {
+        zone1 = badMax.xcoord;
+        yz1 = badMax.ycoord + 1;
+        if (mapObjs.has(`${zone1}-${yz1}`)) {
+          mapObjs.delete(`${zone1}-${yz1}`);
+          clearInterval(laser);
+          //remove the laser image from the cell
+          document.getElementById(
+            `${zone1}-${yz1}`
+          ).innerHTML = `<div class = "mapCell"></div>`;
+          //return;
+        }
+        laser = setInterval(() => {
+          
+          if (mapObjs.has(`${zone1}-${yz1}`)) {
+            mapObjs.delete(`${zone1}-${yz1}`);
+            clearInterval(laser);
+            //remove the laser image from the cell
+            document.getElementById(
+              `${zone1}-${yz1}`
+            ).innerHTML = `<div class = "mapCell"></div>`;
+            //return;
+          }
+          if (yz1 < coords[1] - 1) {
+            document.getElementById(
+              `${zone1}-${yz1 + 1}`
+            ).innerHTML = `<div style='text-align:center'><img style='height:100%; transform: rotate(180deg)' src='/assets/PNG/beams22.png'/></div>`;
+            document.getElementById(
+              `${zone1}-${yz1}`
+            ).innerHTML = `<div class = "mapCell"></div>`;
+            ++yz1;
+          }
+        }, 50);
+      }
+      //Check if laser made all the way to the edge and clear the interval
+      //if it did
+      if (zone1 >= coords[0] && badMax.orientation === 1) {
+        clearInterval(laser);
+      }
+      if (zone1 <= 0 && badMax.orientation === 2) {
+        clearInterval(laser);
+      }
+      if (yz1 >= coords[1] && badMax.orientation === 3) {
+        clearInterval(laser);
+      }
+      if (yz1 < 0 && badMax.orientation === 4) {
+        clearInterval(laser);
+      }
+    }
+    */
 
     //Check if laser made all the way to the edge and clear the interval
     //if it did
     document.getElementById(
       `${oldx}-${oldy}`
-    ).innerHTML = `<div class='gameCell' style="border: 1px solid red; background: red; opacity: 0.3"></div>`;
+    ).innerHTML = `<div id="badMax" class='gameCell' style="border: 1px solid red; background: red; opacity: 0.3"></div>`;
     if (badMax.orientation === 1) {
       document.getElementById(
         `${badMax.xcoord}-${badMax.ycoord}`
-      ).innerHTML = `<div style="text-align: center"><img style='height:100%; transform: rotate(90deg)' src='/assets/badMax.png'/></div>`;
+      ).innerHTML = `<div id="badMax" style="text-align: center"><img style='height:100%; transform: rotate(90deg)' src='/assets/9B.png'/></div>`;
     }
     if (badMax.orientation === 2) {
       document.getElementById(
         `${badMax.xcoord}-${badMax.ycoord}`
-      ).innerHTML = `<div style="text-align: center;"><img style='height:100%; transform: rotate(-90deg)' src='/assets/badMax.png'/></div>`;
+      ).innerHTML = `<div id="badMax" style="text-align: center;"><img style='height:100%; transform: rotate(-90deg)' src='/assets/9B.png'/></div>`;
     }
     if (badMax.orientation === 3) {
       document.getElementById(
         `${badMax.xcoord}-${badMax.ycoord}`
-      ).innerHTML = `<div style="text-align: center;"><img style='height:100%; transform: rotate(0deg)' src='/assets/badMax.png'/></div>`;
+      ).innerHTML = `<div id="badMax" style="text-align: center;"><img style='height:100%; transform: rotate(0deg)' src='/assets/9B.png'/></div>`;
     }
     if (badMax.orientation === 4) {
       document.getElementById(
         `${badMax.xcoord}-${badMax.ycoord}`
-      ).innerHTML = `<div style="text-align: center;"><img style='height:100%; transform: rotate(180deg)' src='/assets/badMax.png'/></div>`;
+      ).innerHTML = `<div id="badMax" style="text-align: center;"><img style='height:100%; transform: rotate(180deg)' src='/assets/9B.png'/></div>`;
     }
-  }, 400);
+  }, 300); //this number dictates how fast bad max is
 }
 
-var mapObject = {
-  type: null,
-  resources: 0,
-  div: null
-};
-
-//var checker = new Map();
 function populateMap() {
   //populate planets
   for (let i = 0; i < 150; ++i) {
@@ -303,7 +478,7 @@ function populateMap() {
         `${x}-${y}`,
         (mapObject = {
           type: "starBase",
-          resources: Math.floor(Math.random() * 100),
+          resources: Math.floor(Math.random() * 400) + 50,
           visited: false,
           coords: [x, y]
         })
@@ -351,7 +526,8 @@ function populateMap() {
         `${x}-${y}`,
         (mapObject = {
           type: "energyPack",
-          coords: [x, y]
+          coords: [x, y],
+          energyV: Math.floor(Math.random() * 300) + 50
         })
       );
       //let tile = document.getElementById(`${x}-${y}`).innerHTML;
@@ -552,6 +728,8 @@ document.onkeydown = function(e) {
     if (yz < 0 && player.orientation === 4) {
       clearInterval(laser);
     }
+    let h = parseInt(document.getElementById("energy").value);
+    document.getElementById("energy").value -= 500;
     return false;
   } else {
     update = 0;
@@ -605,6 +783,7 @@ document.onkeydown = function(e) {
     ).value = `(${player.xcoord},${player.ycoord})`;
   }
   if (oldHealth <= 0) {
+    clearInterval(ship);
     if (snd) {
       snd.pause();
       snd.currentTime = 0;
@@ -613,6 +792,8 @@ document.onkeydown = function(e) {
       jet.pause();
       jet.currentTime = 0;
     }
+    pirateSnd.pause();
+    pirateSnd.currentTime = 0;
     let snd2 = new Audio("/assets/endGame.mp3");
     if (!dead) {
       snd2.play();
@@ -631,7 +812,10 @@ document.onkeydown = function(e) {
       html: true
     });
     $("#theMotherShip").tooltip("show");
-  } else if (oldSupplies === 0) {
+  } else if (oldSupplies <= 0) {
+    clearInterval(ship);
+    pirateSnd.pause();
+    pirateSnd.currentTime = 0;
     if (jet) {
       jet.pause();
       jet.currentTime = 0;
@@ -656,7 +840,7 @@ document.onkeydown = function(e) {
   } else if (current && current.type === "energyPack") {
     historyMes = "You discovered an energy pack at this location.";
     $("#theMotherShip").tooltip({
-      title: `<h4 style="padding-bottom: 20px"><img src='assets/PNG/7.png' alt='Smiley'> <div>You have gained 10 energy!</div><h4>`,
+      title: `<h4 style="padding-bottom: 20px"><img src='assets/PNG/7.png' alt='Smiley'> <div>You have gained ${current.energyV} energy!</div><h4>`,
       placement: "auto",
       trigger: "manual",
       html: true
@@ -685,7 +869,7 @@ document.onkeydown = function(e) {
     }
   } else if (current && current.type === "wormHole") {
     var warpsnd = new Audio("/assets/warp.mp3");
-    warpsnd.volume = 0.8;
+    warpsnd.volume = 0.7;
     warpsnd.play();
     historyMes = "You discovered a worm hole at this location.";
     $("#theMotherShip").tooltip({
@@ -699,12 +883,12 @@ document.onkeydown = function(e) {
     //let x = Math.floor(Math.random() * coords[0]);
     planetSndChoice = planetSndChoice === 1 ? 0 : 1;
     var planetsnd = new Audio(discover[planetSndChoice]);
-    planetsnd.volume = 0.6;
+    planetsnd.volume = 0.4;
     planetsnd.play();
     historyMes = "You discovered a planet at this location.";
   }
   jet = new Audio("/assets/jets.mp3");
-  jet.volume = 0.6;
+  jet.volume = 0.5;
   if (!dead) {
     jet.play();
   }
@@ -753,6 +937,9 @@ function handleEvent(mapEvent) {
     document.getElementById(
       `${x}-${y}`
     ).innerHTML = `<div id='theMotherShip' style='text-align: center;  transform: rotate(180deg);'><img style='height: 100%' src='/assets/Titan.png'/></div>`;
+    document
+      .getElementById("theMotherShip")
+      .scrollIntoView({ behaviour: "smooth", block: "center" });
   } else if (mapEvent.type === "starBase") {
     let olds = parseInt(document.getElementById("supplies").value);
     document.getElementById("supplies").value = olds + mapEvent.resources;
@@ -814,7 +1001,7 @@ function handleEvent(mapEvent) {
     snd.play();
     mapObjs.delete(`${mapEvent.coords[0]}-${mapEvent.coords[1]}`);
     let oldh = parseInt(document.getElementById("energy").value);
-    document.getElementById("energy").value = oldh + 20;
+    document.getElementById("energy").value = oldh + mapEvent.energyV;
   }
 }
 
