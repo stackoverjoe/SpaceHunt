@@ -85,7 +85,7 @@
     font-size: 20px;
     font-family: "spaceAge";
   }
-  #hidden .sensorOutput {
+  /* #hidden .sensorOutput { 
     background-color: #45bbd6;
     border: none;
     color:silver;
@@ -94,6 +94,7 @@
     font-size: 16px;
     font-family: "spaceAge"
   }
+  */
   #hidden {display: none;}
 
     ::-webkit-scrollbar {
@@ -359,15 +360,19 @@
     </div>
   </form>
   <br>
-    <div class="button">
-      <element id = deploy onclick="sensors()"
-      >Deploy Sensors</button
-      >
-    </div>
-    <div id = "hidden">
 
+  <div class="button">
+      <element id = deploy onclick="sensors()">Deploy Sensors</button>
     </div>
 
-    </div>
+    <div class = "form-group col-md-2";>
+      <label style="color:white"for="sensorlog">Celestial Objects Nearby</label>
+      <textarea id = "sensorlog" style="margin-bottom: 20px; display: none; font-weight: 800; resize: none; height: 15%; overflow-y: scroll" disabled="true" class="text-center form-control">
+      </textarea>
+      </div>  
+    
+
+
+    
   </body>
 </html>
