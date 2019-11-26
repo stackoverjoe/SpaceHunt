@@ -1,7 +1,7 @@
 
 function sensors()
 {
-    let x = document.getElementById("sensorlog")
+    var x = document.getElementById("sensorlog")
     x = "";
     reveal();
 
@@ -34,23 +34,7 @@ function sensors()
       document.getElementById("sensorlog").value += "\n";
      }
    }
-    /*
-    var vals = mapObjs.values()
-    for(tile in vals)
-    {
-        console.log(tile)
-    }
-    mapObjs.keys().forEach(function(key) {
-        console.log(key)
-    })
-    
-  function logMapElements(value, key, map){
-      console.log(`m[${key}] = ${value.type}`)
-  }
-mapObjs.forEach(logMapElements);
-    
-*/
-//modify energy consumption (*2 while sensors are on)
+
 }
 
 function reveal() {
@@ -65,8 +49,3 @@ function reveal() {
       
     }
 }
-
-function fill_log(){
-  
-  
-  }
