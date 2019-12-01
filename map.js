@@ -75,6 +75,11 @@ var starBase = [
   "/assets/PNG/ssb2.png",
   "/assets/SS1.png",
   "/assets/tribase-u1-d0.png"
+
+var freighters = [
+  "assets/freighter1.png",
+  "assets/freighter2.png",
+  "assets/freighter3.png"
 ];
 
 //Function to replicate a gif of a rotating moon, currently clips too much and not in use
@@ -518,6 +523,30 @@ function populateMap() {
       }
     }
   }
+  //Abandoned Freighters
+  for (let i = 0; i < 60; ++i) {
+    let x = Math.floor(Math.random() * coords[0]) + 1;
+    let y = Math.floor(Math.random() * coords[1]) + 1;
+    let img = Math.floor(Math.random() * freighters.length);
+    if (!mapObjs.has(`${x}-${y}`)) {
+      mapObjs.set(
+        `${x}-${y}`,
+        (mapObject = {
+          type: "freighter",
+          supplies: Math.floor(Math.random() * 400) + 50,
+          energy: Math.floor(Math.random() * 400) + 50,
+          visited: false,
+          coords: [x, y]
+        })
+      );
+      //let tile = document.getElementById(`${x}-${y}`).innerHTML;
+      if (document.getElementById(`${x}-${y}`) != null) {
+        document.getElementById(
+          `${x}-${y}`
+        ).innerHTML = `<div><img style="height: 100%; width: 100%" src='${freighters[img]}'/></div>`;
+      }
+    }
+  }
   //energy packs
   for (let i = 0; i < 50; ++i) {
     let x = Math.floor(Math.random() * coords[0]) + 1;
@@ -868,6 +897,17 @@ document.onkeydown = function(e) {
       });
       $("#theMotherShip").tooltip("show");
     }
+  } else if (current && current.type === "freighter") {
+    if (current.visited === true) {
+      historyMes = "You discovered an abandoned freighter at this location.";
+      $("#theMotherShip").tooltip({
+        title: `<h4 style="padding-bottom: 20px"><img src='assets/PNG/9.png' alt='Smiley'> <div>You have already tapped this freighter's resources.</div><h4>`,
+        placement: "auto",
+        trigger: "manual",
+        html: true
+      });
+      $("#theMotherShip").tooltip("show");
+    }
   } else if (current && current.type === "wormHole") {
     var warpsnd = new Audio("/assets/warp.mp3");
     warpsnd.volume = 0.7;
@@ -942,15 +982,12 @@ function handleEvent(mapEvent) {
       .getElementById("theMotherShip")
       .scrollIntoView({ behaviour: "smooth", block: "center" });
   } else if (mapEvent.type === "starBase") {
-    let olds = parseInt(document.getElementById("supplies").value);
-    document.getElementById("supplies").value = olds + mapEvent.resources;
-    if (!mapObjs.get(`${mapEvent.coords[0]}-${mapEvent.coords[1]}`).visited) {
-      var base = new Audio("/assets/sapceb.mp3");
-      base.play();
-      setInterval(function() {
-        base.volume -= 0.1;
-      }, 250);
-      document.getElementById("starBaseModal").innerHTML = `
+    var base = new Audio("assets/sapceb.mp3");
+    base.play();
+    setInterval(function() {
+      base.volume -= 0.1;
+    }, 250);
+    document.getElementById("starBaseModal").innerHTML = `
     <div class="modal-dialog">
         <!-- Modal content-->
         <div class="modal-content" style="background: linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.1)),url('/assets/spaceStation1.jpg'); height: 95%">
@@ -996,11 +1033,23 @@ function handleEvent(mapEvent) {
       </div>`;
       $("#starBaseModal").modal("show");
 
+  } else if (mapEvent.type === "freighter") {
+    let olds = parseInt(document.getElementById("supplies").value);
+    let olde = parseInt(document.getElementById("energy").value);
+    document.getElementById("supplies").value = olds + mapEvent.supplies;
+    document.getElementById("energy").value = olde + mapEvent.energy;
+    if (!mapObjs.get(`${mapEvent.coords[0]}-${mapEvent.coords[1]}`).visited) {
+      var base = new Audio("assets/sapceb.mp3");
+      base.play();
+      setInterval(function() {
+        base.volume -= 0.1;
+      }, 250);
       mapObjs.set(
         `${mapEvent.coords[0]}-${mapEvent.coords[1]}`,
         (mapObject = {
-          type: "starBase",
-          resources: 0,
+          type: "freighter",
+          supplies: 0,
+          energy: 0,
           visited: true,
           coords: [mapEvent.coords[0], mapEvent.coords[1]]
         })
