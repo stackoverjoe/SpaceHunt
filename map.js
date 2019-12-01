@@ -188,6 +188,7 @@ function renderMap(X, Y) {
   //set all starting values for game
   document.getElementById("energy").value = 10000;
   document.getElementById("supplies").value = 10000;
+  document.getElementById("credits").value = 10000;
   document.getElementById("coords").value = "(0,0)";
   start = 0;
   document.getElementById("history").value = "";
@@ -962,7 +963,23 @@ function handleEvent(mapEvent) {
             </h4>
           </div>
           <div class="modal-body" style="text-align: center">
-            <p style="font-weight: 800">This star base has ${mapEvent.resources} supplies for you.\nGood luck.</p>
+            <p style="font-weight: 800">Welcome, Traveler!</p>
+          </div>
+          <div class="storeWrapper" style="display: grid; grid-auto-columns: 1fr; grid-auto-flow: column; margin: 10px; margin-bottom: 30px;">
+            <div class="columnA" style="margin: 0 auto; text-align: center;">
+              <p style="font-weight: 800; text-decoration: underline;">Buy Supplies!</p>
+              <button type="button" class="btn btn-success" onclick="purchaseSupplies()">Buy 100</button>
+              <button type="button" class="btn btn-success" onclick="sellSupplies()">Sell 100</button>
+            </div>
+            <div class="columnB" style="margin: 0 auto; text-align: center;">
+              <p style="font-weight: 800; text-decoration: underline;">Buy Energy!</p>
+              <button type="button" class="btn btn-success" onclick="purchaseEnergy()">Buy 10</button>
+              <button type="button" class="btn btn-success" onclick="sellEnergy()">Sell 10</button>
+            </div>
+          </div>
+          <div class="blackjackGame" style="text-align: center;">
+            <p style="font-weight: 800">Gamble for more credits?</p>
+            <button type="button" class="btn btn-success" onclick="purchaseEnergy()">Play Blackjack</button>
           </div>
           <div class="modal-footer" style="text-align: center">
             <span style="justify-content: left">
@@ -1007,4 +1024,44 @@ function handleEvent(mapEvent) {
 
 function restart() {
   renderMap(100, 100);
+}
+
+function purchaseSupplies()
+{
+  let oldSupplies = parseInt(document.getElementById("supplies").value);
+  let oldCredits = parseInt(document.getElementById("credits").value);
+  if (oldCredits >= 100) {
+    document.getElementById("credits").value = oldCredits - 100;
+    document.getElementById("supplies").value = oldSupplies + 100;
+  }
+}
+
+function sellSupplies()
+{
+  let oldSupplies = parseInt(document.getElementById("supplies").value);
+  let oldCredits = parseInt(document.getElementById("credits").value);
+  if (oldSupplies >= 100) {
+    document.getElementById("credits").value = oldSupplies - 100;
+    document.getElementById("supplies").value = oldCredits + 100;
+  }
+}
+
+function purchaseEnergy()
+{
+  let oldEnergy = parseInt(document.getElementById("energy").value);
+  let oldCredits = parseInt(document.getElementById("credits").value);
+  if (oldCredits >= 10) {
+    document.getElementById("credits").value = oldCredits - 10;
+    document.getElementById("energy").value = oldEnergy + 10;
+  }
+}
+
+function sellEnergy()
+{
+  let oldEnergy = parseInt(document.getElementById("energy").value);
+  let oldCredits = parseInt(document.getElementById("credits").value);
+  if (oldEnergy >= 10) {
+    document.getElementById("energy").value = oldEnergy - 10;
+    document.getElementById("credits").value = oldCredits + 10;
+  }
 }
