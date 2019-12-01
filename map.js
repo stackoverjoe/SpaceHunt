@@ -75,6 +75,7 @@ var starBase = [
   "/assets/PNG/ssb2.png",
   "/assets/SS1.png",
   "/assets/tribase-u1-d0.png"
+];
 
 var freighters = [
   "assets/freighter1.png",
