@@ -18,6 +18,8 @@ class localStoragePackage{
     this.baseSupplies = 200;
     this.baseCredits = 1000;
     this.canDie = 1;
+    this.badMaxSpeed = 2;
+    this.numBadMaxs = 1;
     //either "random" or an array of coords, access like returnVal.varName[i].xcoord/ycoord
     this.wormholes = "random";
     this.spaceStations = "random";
@@ -39,20 +41,30 @@ To turn me off, comment me out at the bottom of the file. See options.html to se
 localStoragePackage
 maxX\t\t${pkg.maxX}
 maxY\t\t${pkg.maxY}
+
 startX\t\t${pkg.startX}
 startY\t\t${pkg.startY}
+
+badMaxSpeed\t${pkg.badMaxSpeed}
+numBadMaxs\t${pkg.numBadMaxs}
+
 baseEnergy\t${pkg.baseEnergy}
 baseSupplies\t${pkg.baseSupplies}
 baseCredits\t${pkg.baseCredits}
+
 canDie\t\t${pkg.canDie}`;
 
-  alertMessage += "\nwormholes\t";
+  alertMessage += "\n\nwormholes\t";
   if(pkg.wormholes === "random") alertMessage += "random";
   else for(i of pkg.wormholes) alertMessage += i.xcoord + "," + i.ycoord + " ";
 
   alertMessage += "\nspaceStations\t";
   if(pkg.spaceStations === "random") alertMessage += "random";
   else for(i of pkg.spaceStations) alertMessage += i.xcoord + "," + i.ycoord + " ";
+  
+  alertMessage += "\n\npentium\t\t";
+  if(pkg.spaceStations === "random") alertMessage += "random";
+  else for(i of pkg.pentium) alertMessage += i.xcoord + "," + i.ycoord + " ";
 
   alertMessage += "\nceleron\t\t";
   if(pkg.xort === "random") alertMessage += "random";
@@ -65,10 +77,6 @@ canDie\t\t${pkg.canDie}`;
   alertMessage += "\nxeon\t\t";
   if(pkg.irk === "random") alertMessage += "random";
   else alertMessage += pkg.irk.xcoord + "," + pkg.irk.ycoord;
-  
-  alertMessage += "\npentium\t\t";
-  if(pkg.spaceStations === "random") alertMessage += "random";
-  else for(i of pkg.pentium) alertMessage += i.xcoord + "," + i.ycoord + " ";
 
   alert(alertMessage);
 }
@@ -126,26 +134,29 @@ function readLocalStorage(){
   //integer
   dummy = toNumber("maxX");                                                 //maxX
   if(dummy != "NaN" && dummy > 0) pkg.maxX = dummy;
-
   dummy = toNumber("maxY");                                                 //maxY
   if(dummy != "NaN" && dummy > 0) pkg.maxY = dummy;
 
   dummy = toNumber("startX");                                               //startX
   if(dummy != "NaN" && dummy > 0 && dummy < pkg.maxX) pkg.startX = dummy;
   else pkg.startX = 0;
-
   dummy = toNumber("startY");                                               //startY
   if(dummy != "NaN" && dummy > 0 && dummy < pkg.maxY) pkg.startY = dummy;
   else pkg.startY = 0;
 
   dummy = toNumber("baseEnergy");                                           //baseEnergy
   if(dummy != "NaN") pkg.baseEnergy = dummy;
-
   dummy = toNumber("baseSupplies");                                         //baseSupplies
   if(dummy != "NaN") pkg.baseSupplies = dummy;
-  
   dummy = toNumber("baseCredits");                                          //baseCredits
   if(dummy != "NaN") pkg.baseCredits = dummy;
+  dummy = toNumber("baseCredits");                                          //baseCredits
+  if(dummy != "NaN") pkg.baseCredits = dummy;
+
+  dummy = toNumber("badMaxSpeed");                                          //badMaxSpeed
+  if(dummy != "NaN" && dummy >= 0) pkg.badMaxSpeed = dummy;
+  dummy = toNumber("numBadMaxs");                                           //numBadMaxs
+  if(dummy != "NaN" && dummy >= 0) pkg.numBadMaxs = dummy;
 
   dummy = toNumber("canDie");                                               //canDie
   if(dummy === 0 || dummy === 1) pkg.canDie = dummy;

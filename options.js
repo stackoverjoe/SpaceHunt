@@ -11,18 +11,26 @@ function debugAlert(){
   alert(`This is what is in localStorage.
 maxX\t\t${localStorage.maxX}
 maxY\t\t${localStorage.maxY}
+
 startX\t\t${localStorage.startX}
 startY\t\t${localStorage.startY}
+
 baseEnergy\t${localStorage.baseEnergy}
 baseSupplies\t${localStorage.baseSupplies}
 baseCredits\t${localStorage.baseCredits}
-wormholes\t${localStorage.wormholes}
+
+badMaxSpeed\t${localStorage.badMaxSpeed}
+numBadMaxs\t${localStorage.numBadMaxs}
+
 canDie\t\t${localStorage.canDie}
+
+wormholes\t${localStorage.wormholes}
+spaceStations\t${localStorage.spaceStations}
+
+pentium\t\t${localStorage.pentium}
 celeron\t\t${localStorage.celeron}
 rhyzen\t\t${localStorage.rhyzen}
-xeon\t\t${localStorage.xeon}
-pentium\t\t${localStorage.pentium}
-spaceStations\t${localStorage.spaceStations}`);
+xeon\t\t${localStorage.xeon}`);
 }
 
 //=============================max_=================================
@@ -72,6 +80,25 @@ function baseSuppliesCheck(){
 }
 function baseCreditsCheck(){
   validNumChange(form.baseCredits);
+}
+
+
+//=============================badMax===============================
+function badMaxCheck(){
+  badMaxSpeedCheck();
+  numBadMaxsCheck();
+}
+function badMaxSpeedCheck(){
+  var badMaxSpeed = form.badMaxSpeed;
+  if(Number(badMaxSpeed.value) < 0)
+    invalidChange(badMaxSpeed);
+  else validNumChange(badMaxSpeed);
+}
+function numBadMaxsCheck(){
+  var numBadMaxs = form.numBadMaxs;
+  if(Number(numBadMaxs.value) < 0)
+    invalidChange(numBadMaxs);
+  else validNumChange(numBadMaxs);
 }
 
 //=================specific format _,_ _,_ _,_...===================
@@ -171,6 +198,7 @@ function save(){
 
   wormholesCheck();
   spaceStationsCheck();
+  badMaxCheck();
 
   canDieCheck();
 
