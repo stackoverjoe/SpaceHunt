@@ -999,9 +999,9 @@ function handleEvent(mapEvent) {
     document.getElementById("starBaseModal").innerHTML = `
     <div class="modal-dialog">
         <!-- Modal content-->
-        <div class="modal-content" style="background: linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.1)), url('/assets/spaceStation1.jpg'); opacity: 0.9; height: 95%; font-family: Lato; font-size: 17px; font-style: normal; font-variant: normal; font-weight: 400; line-height: 19px;">
+        <div class="modal-content" style="background: linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.1)), url('/assets/spaceStation1.jpg'); opacity: 0.9; height: 95%; font-family: Helvetica; font-size: 17px; font-style: normal; font-variant: normal; font-weight: 400; line-height: 19px; color: #C0C0C0; text-shadow: 1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000, -1px 0 0 #000; letter-spacing: 0.05em;">
           <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" style="text-align: center">
+            <button type="button" class="close" data-dismiss="modal" style="text-align: center; color: #000">
               &times;
             </button>
             <h4 class="modal-title" style="font-family: spaceAge; font-weight: 800; text-align: center">
@@ -1009,23 +1009,23 @@ function handleEvent(mapEvent) {
             </h4>
           </div>
           <div class="modal-body" style="text-align: center">
-            <p style="font-weight: 900">Welcome, Traveler!</p>
+            <p style="font-weight: 800">Welcome, Traveler!</p>
           </div>
           <div class="storeWrapper" style="display: grid; grid-auto-columns: 1fr; grid-auto-flow: column; height: 30%">
             <div class="columnA" style="margin: 0 auto; text-align: center;">
-              <p style="font-weight: 900; text-decoration: underline;">Buy Supplies!</p>
+              <p style="font-weight: 800;">Buy Supplies!</p>
               <button type="button" class="btn btn-success" onclick="purchaseSupplies()">Buy 500</button>
               <button type="button" class="btn btn-success" onclick="sellSupplies()">Sell 500</button>
             </div>
             <div class="columnB" style="margin: 0 auto; text-align: center;">
-              <p style="font-weight: 900; text-decoration: underline;">Buy Energy!</p>
+              <p style="font-weight: 800;">Buy Energy!</p>
               <button type="button" class="btn btn-success" onclick="purchaseEnergy()">Buy 100</button>
               <button type="button" class="btn btn-success" onclick="sellEnergy()">Sell 100</button>
             </div>
           </div>
-          <div class="blackjackGame" style="text-align: center; height: 40%; margin: auto; width: 80%; ">
-            <p style="font-weight: 900; margin-right: 5%; text-decoration: underline;">Need Credits? Place Your Bet!</p>
-            <input type="number" id="bet" min="1" max="1000" value="500">
+          <div class="blackjackGame" style="text-align: center; height: 40%; margin: auto; width: 80%;">
+            <p style="font-weight: 800; margin-right: 5%;">Need Credits? Place Your Bet!</p>
+            <input type="number" style="color: #000;" id="bet" min="1" max="1000" value="500">
             <button type="button" id="beginGame" class="btn btn-success" onclick="play()">Play Blackjack</button><br><br>
             <button type="button" style="display: none;" id="hitMe" class="btn btn-success" onclick="deal()">Hit</button>
             <button type="button" style="display: none;" id="stay" class="btn btn-success" onclick="stay()">Stay</button>
