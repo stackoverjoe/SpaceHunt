@@ -8,22 +8,21 @@ function init(){
 }
 
 function debugAlert(){
-  alert("This is what is in localStorage.\n" +
-    "\nmaxX\t\t"        + localStorage.maxX +
-    "\nmaxY\t\t"        + localStorage.maxY +
-    "\nstartX\t\t"      + localStorage.startX +
-    "\nstartY\t\t"      + localStorage.startY +
-    "\nbaseEnergy\t"    + localStorage.baseEnergy +
-    "\nbaseSupplies\t"  + localStorage.baseSupplies +
-    "\nbaseCredits\t"   + localStorage.baseCredits +
-    "\nwormholes\t"     + localStorage.wormholes +
-    "\ncanDie\t\t"      + localStorage.canDie +
-    "\nxort\t\t\t"      + localStorage.xort +
-    "\nblarg\t\t"       + localStorage.blarg +
-    "\nirk\t\t\t"       + localStorage.irk +
-    "\naether\t\t"      + localStorage.aether +
-    "\nfoo\t\t\t"       + localStorage.foo +
-    "\nspaceStations\t" + localStorage.spaceStations);
+  alert(`This is what is in localStorage.
+maxX\t\t${localStorage.maxX}
+maxY\t\t${localStorage.maxY}
+startX\t\t${localStorage.startX}
+startY\t\t${localStorage.startY}
+baseEnergy\t${localStorage.baseEnergy}
+baseSupplies\t${localStorage.baseSupplies}
+baseCredits\t${localStorage.baseCredits}
+wormholes\t${localStorage.wormholes}
+canDie\t\t${localStorage.canDie}
+celeron\t\t${localStorage.celeron}
+rhyzen\t\t${localStorage.rhyzen}
+xeon\t\t${localStorage.xeon}
+pentium\t\t${localStorage.pentium}
+spaceStations\t${localStorage.spaceStations}`);
 }
 
 //=============================max_=================================
@@ -128,32 +127,34 @@ function validArrayChange(name, input){
 
 function planetCheck(){
   if(document.getElementById("planets-random").checked){
-    localStorage.setItem("xort",   "random");
-    localStorage.setItem("blarg",  "random");
-    localStorage.setItem("irk",    "random");
-    localStorage.setItem("aether", "random");
-    return localStorage.setItem("foo",    "random");
+    localStorage.setItem("celeron", "random");
+    localStorage.setItem("rhyzen",  "random");
+    localStorage.setItem("xeon",    "random");
+    return localStorage.setItem("pentium", "random");
   }
-  xortCheck();
-  blargCheck();
-  irkCheck();
-  aetherCheck();
-  fooCheck();
+  celeronCheck();
+  rhyzenCheck();
+  xeonCheck();
+  pentiumCheck();
 }
-function xortCheck(){
-  validArrayChange("xort", document.getElementById("Xort"));
+function celeronCheck(){
+  validArrayChange("celeron", document.getElementById("Celeron"));
 }
-function blargCheck(){
-  validArrayChange("blarg", document.getElementById("Blarg"));
+function rhyzenCheck(){
+  validArrayChange("rhyzen", document.getElementById("Rhyzen"));
 }
-function irkCheck(){
-  validArrayChange("irk", document.getElementById("Irk"));
+function xeonCheck(){
+  validArrayChange("xeon", document.getElementById("Xeon"));
 }
-function aetherCheck(){
-  validArrayChange("aether", document.getElementById("Aether"));
-}
-function fooCheck(){
-  validArrayChange("foo", document.getElementById("Foo"));
+function pentiumCheck(){
+  var pentium = document.getElementById("Pentium");
+  const customArrays = pentium.value.split(" ");
+  if(customArrays.length != 7) return invalidChange(pentium);
+
+  for(var i = 0; i < 7; ++i)
+    if(isNotCustomArray(customArrays[i])) return invalidChange(pentium);
+  localStorage.setItem("pentium", pentium.value);
+  pentium.style.color = 'black';
 }
 
 //=====================it all comes together!========================

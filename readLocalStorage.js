@@ -21,12 +21,11 @@ class localStoragePackage{
     //either "random" or an array of coords, access like returnVal.varName[i].xcoord/ycoord
     this.wormholes = "random";
     this.spaceStations = "random";
+    this.pentium = "random";
     //planets, either "random" or a coord, access like returnVal.varName.xcoord/ycoord
-    this.xort = "random";
-    this.blarg = "random";
-    this.irk = "random";
-    this.aether = "random";
-    this.foo = "random";
+    this.celeron = "random";
+    this.rhyzen = "random";
+    this.xeon = "random";
   }
 }
 
@@ -55,25 +54,21 @@ canDie\t\t${pkg.canDie}`;
   if(pkg.spaceStations === "random") alertMessage += "random";
   else for(i of pkg.spaceStations) alertMessage += i.xcoord + "," + i.ycoord + " ";
 
-  alertMessage += "\nxort\t\t\t";
+  alertMessage += "\nceleron\t\t";
   if(pkg.xort === "random") alertMessage += "random";
   else alertMessage += pkg.xort.xcoord + "," + pkg.xort.ycoord;
   
-  alertMessage += "\nblarg\t\t";
+  alertMessage += "\nrhyzen\t\t";
   if(pkg.blarg === "random") alertMessage += "random";
   else alertMessage += pkg.blarg.xcoord + "," + pkg.blarg.ycoord;
   
-  alertMessage += "\nirk\t\t\t";
+  alertMessage += "\nxeon\t\t";
   if(pkg.irk === "random") alertMessage += "random";
   else alertMessage += pkg.irk.xcoord + "," + pkg.irk.ycoord;
   
-  alertMessage += "\naether\t\t";
-  if(pkg.aether === "random") alertMessage += "random";
-  else alertMessage += pkg.aether.xcoord + "," + pkg.aether.ycoord;
-  
-  alertMessage += "\nfoo\t\t\t";
-  if(pkg.foo === "random") alertMessage += "random";
-  else alertMessage += pkg.foo.xcoord + "," + pkg.foo.ycoord;
+  alertMessage += "\npentium\t\t";
+  if(pkg.spaceStations === "random") alertMessage += "random";
+  else for(i of pkg.pentium) alertMessage += i.xcoord + "," + i.ycoord + " ";
 
   alert(alertMessage);
 }
@@ -163,18 +158,16 @@ function readLocalStorage(){
   if(dummy) pkg.wormholes = dummy;
   dummy = toCoordArray("spaceStations", maxX, maxY);                        //spaceStations
   if(dummy) pkg.spaceStations = dummy;
+  dummy = toCoordArray("pentium", maxX, maxY);                              //pentium
+  if(dummy && dummy.length == 7) pkg.pentium = dummy;
   
   //coord
-  dummy = toCoord("xort", maxX, maxY);                                      //xort
+  dummy = toCoord("celeron", maxX, maxY);                                   //xort
   if(dummy) pkg.xort = dummy;
-  dummy = toCoord("blarg", maxX, maxY);                                     //blarg
+  dummy = toCoord("rhyzen", maxX, maxY);                                    //blarg
   if(dummy) pkg.blarg = dummy;
-  dummy = toCoord("irk", maxX, maxY);                                       //irk
+  dummy = toCoord("xeon", maxX, maxY);                                      //irk
   if(dummy) pkg.irk = dummy;
-  dummy = toCoord("aether", maxX, maxY);                                    //aether
-  if(dummy) pkg.aether = dummy;
-  dummy = toCoord("foo", maxX, maxY);                                       //foo
-  if(dummy) pkg.foo = dummy;
   
   debugAlert(pkg);
   return pkg;
