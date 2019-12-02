@@ -21,7 +21,7 @@ var badMax = {
 };
 
 //global audio object for the death sound effect
-let deathSound = new Audio("assets/endGame.mp3");
+let deathSound = new Audio("/assets/endGame.mp3");
 var start = 0;
 var ticker = 0;
 var counter = 0;
@@ -33,54 +33,54 @@ var mapObjs = new Map();
 
 //this variable is used as a switch to alternate which sound plays when you discover planets
 var planetSndChoice = 0;
-var pirateSnd = new Audio("assets/bruhh.mp3");
+var pirateSnd = new Audio("/assets/bruhh.mp3");
 //All arrays of assets allow for random generation of celestial artifacts to allow
 //more unique map experiences
-var discover = ["assets/disocvery.mp3", "assets/discovery2.mp3"];
+var discover = ["/assets/disocvery.mp3", "/assets/discovery2.mp3"];
 var planets = [
-  "assets/PNG/16.png",
-  "assets/PNG/17.png",
-  "assets/PNG/18.png",
-  "assets/PNG/19.png",
-  "assets/PNG/20.png",
-  "assets/PNG/planet1.png",
-  "assets/PNG/planet2.png",
-  "assets/PNG/planet3.png",
-  "assets/PNG/planet4.png",
-  "assets/PNG/planet5.png",
-  "assets/PNG/planet6.png",
-  "assets/PNG/planet7.png",
-  "assets/PNG/planet10.png",
-  "assets/PNG/planet11.png",
-  "assets/PNG/planet12.png",
-  "assets/PNG/planet13.png",
-  "assets/PNG/planet14.png",
-  "assets/PNG/planet15.png",
-  "assets/PNG/planet16.png",
-  "assets/PNG/planet17.png",
-  "assets/PNG/planet18_0.png",
-  "assets/PNG/planet19.png",
-  "assets/PNG/planet20.png"
+  "/assets/PNG/16.png",
+  "/assets/PNG/17.png",
+  "/assets/PNG/18.png",
+  "/assets/PNG/19.png",
+  "/assets/PNG/20.png",
+  "/assets/PNG/planet1.png",
+  "/assets/PNG/planet2.png",
+  "/assets/PNG/planet3.png",
+  "/assets/PNG/planet4.png",
+  "/assets/PNG/planet5.png",
+  "/assets/PNG/planet6.png",
+  "/assets/PNG/planet7.png",
+  "/assets/PNG/planet10.png",
+  "/assets/PNG/planet11.png",
+  "/assets/PNG/planet12.png",
+  "/assets/PNG/planet13.png",
+  "/assets/PNG/planet14.png",
+  "/assets/PNG/planet15.png",
+  "/assets/PNG/planet16.png",
+  "/assets/PNG/planet17.png",
+  "/assets/PNG/planet18_0.png",
+  "/assets/PNG/planet19.png",
+  "/assets/PNG/planet20.png"
 ];
 var astroids = [
-  "assets/medium/a10001.png",
-  "assets/medium/a10014.png",
-  "assets/large/a10004.png",
-  "assets/large/a30011.png",
-  "assets/large/c40001.png",
-  "assets/large/b30008.png",
-  "assets/large/c40013.png"
+  "/assets/medium/a10001.png",
+  "/assets/medium/a10014.png",
+  "/assets/large/a10004.png",
+  "/assets/large/a30011.png",
+  "/assets/large/c40001.png",
+  "/assets/large/b30008.png",
+  "/assets/large/c40013.png"
 ];
 var starBase = [
-  "assets/PNG/ssb2.png",
-  "assets/SS1.png",
-  "assets/tribase-u1-d0.png"
+  "/assets/PNG/ssb2.png",
+  "/assets/SS1.png",
+  "/assets/tribase-u1-d0.png"
 ];
 
 var freighters = [
-  "assets/freighter1.png",
-  "assets/freighter2.png",
-  "assets/freighter3.png"
+  "/assets/freighter1.png",
+  "/assets/freighter2.png",
+  "/assets/freighter3.png"
 ];
 
 //Function to replicate a gif of a rotating moon, currently clips too much and not in use
@@ -100,11 +100,11 @@ function moon() {
     if (i < 10) {
       document.getElementById(
         "1-1"
-      ).innerHTML = `<div style="background-color:transparent"><img style="height: 100%; width: 100%"src='assets/moon/0${i}.png'/></div>`;
+      ).innerHTML = `<div style="background-color:transparent"><img style="height: 100%; width: 100%"src='/assets/moon/0${i}.png'/></div>`;
     } else {
       document.getElementById(
         "1-1"
-      ).innerHTML = `<div style="background-color:transparent"><img style="height: 100%; width: 100%"src='assets/moon/${i}.png'/></div>`;
+      ).innerHTML = `<div style="background-color:transparent"><img style="height: 100%; width: 100%"src='/assets/moon/${i}.png'/></div>`;
     }
     ++i;
     if (i > 48) {
@@ -135,7 +135,7 @@ function renderMap(X, Y) {
     snd.currentTime = 0;
     snd.play();
   } else {
-    snd = new Audio("assets/spaceSong.mp3");
+    snd = new Audio("/assets/spaceSong.mp3");
     snd.volume = 0.5;
     snd.play();
   }
@@ -179,7 +179,7 @@ function renderMap(X, Y) {
   //set the player ship at the 0,0 coords of the map
   document.getElementById(
     "0-0"
-  ).innerHTML = `<div style='text-align: center; color: white'><img style='height: 100%' src='assets/Titan.png'/></div>`;
+  ).innerHTML = `<div style='text-align: center; color: white'><img style='height: 100%' src='/assets/Titan.png'/></div>`;
   //set player coords back to start incase reset function called.
   player.xcoord = 0;
   player.ycoord = 0;
@@ -294,7 +294,7 @@ function badMaxFunc() {
           if (zone1 < coords[0] - 1) {
             document.getElementById(
               `${zone1 + 1}-${yz1}`
-            ).innerHTML = `<div><img style='height:100%; transform: rotate(90deg)' src='assets/PNG/beams22.png'/></div>`;
+            ).innerHTML = `<div><img style='height:100%; transform: rotate(90deg)' src='/assets/PNG/beams22.png'/></div>`;
             document.getElementById(
               `${zone1}-${yz1}`
             ).innerHTML = `<div class = "mapCell"></div>`;
@@ -318,7 +318,7 @@ function badMaxFunc() {
           if (zone1 > 0) {
             document.getElementById(
               `${zone1 - 1}-${yz1}`
-            ).innerHTML = `<div><img style='height:100%; transform: rotate(-90deg)' src='assets/PNG/beams22.png'/></div>`;
+            ).innerHTML = `<div><img style='height:100%; transform: rotate(-90deg)' src='/assets/PNG/beams22.png'/></div>`;
             document.getElementById(
               `${zone1}-${yz1}`).innerHTML = `<div class = "mapCell"></div>`;
             --zone1;
@@ -340,7 +340,7 @@ function badMaxFunc() {
           if (yz1 > 0) {
             document.getElementById(
               `${zone1}-${yz1 - 1}`
-            ).innerHTML = `<div style='text-align:center'><img style='height:100%; transform: rotate(0deg)' src='assets/PNG/beams22.png'/></div>`;
+            ).innerHTML = `<div style='text-align:center'><img style='height:100%; transform: rotate(0deg)' src='/assets/PNG/beams22.png'/></div>`;
             document.getElementById(
               `${zone1}-${yz1}`
             ).innerHTML = `<div class = "mapCell"></div>`;
@@ -374,7 +374,7 @@ function badMaxFunc() {
           if (yz1 < coords[1] - 1) {
             document.getElementById(
               `${zone1}-${yz1 + 1}`
-            ).innerHTML = `<div style='text-align:center'><img style='height:100%; transform: rotate(180deg)' src='assets/PNG/beams22.png'/></div>`;
+            ).innerHTML = `<div style='text-align:center'><img style='height:100%; transform: rotate(180deg)' src='/assets/PNG/beams22.png'/></div>`;
             document.getElementById(
               `${zone1}-${yz1}`
             ).innerHTML = `<div class = "mapCell"></div>`;
@@ -407,22 +407,22 @@ function badMaxFunc() {
     if (badMax.orientation === 1) {
       document.getElementById(
         `${badMax.xcoord}-${badMax.ycoord}`
-      ).innerHTML = `<div id="badMax" style="text-align: center"><img style='height:100%; transform: rotate(90deg)' src='assets/9B.png'/></div>`;
+      ).innerHTML = `<div id="badMax" style="text-align: center"><img style='height:100%; transform: rotate(90deg)' src='/assets/9B.png'/></div>`;
     }
     if (badMax.orientation === 2) {
       document.getElementById(
         `${badMax.xcoord}-${badMax.ycoord}`
-      ).innerHTML = `<div id="badMax" style="text-align: center;"><img style='height:100%; transform: rotate(-90deg)' src='assets/9B.png'/></div>`;
+      ).innerHTML = `<div id="badMax" style="text-align: center;"><img style='height:100%; transform: rotate(-90deg)' src='/assets/9B.png'/></div>`;
     }
     if (badMax.orientation === 3) {
       document.getElementById(
         `${badMax.xcoord}-${badMax.ycoord}`
-      ).innerHTML = `<div id="badMax" style="text-align: center;"><img style='height:100%; transform: rotate(0deg)' src='assets/9B.png'/></div>`;
+      ).innerHTML = `<div id="badMax" style="text-align: center;"><img style='height:100%; transform: rotate(0deg)' src='/assets/9B.png'/></div>`;
     }
     if (badMax.orientation === 4) {
       document.getElementById(
         `${badMax.xcoord}-${badMax.ycoord}`
-      ).innerHTML = `<div id="badMax" style="text-align: center;"><img style='height:100%; transform: rotate(180deg)' src='assets/9B.png'/></div>`;
+      ).innerHTML = `<div id="badMax" style="text-align: center;"><img style='height:100%; transform: rotate(180deg)' src='/assets/9B.png'/></div>`;
     }
   }, 300); //this number dictates how fast bad max is
 }
@@ -471,7 +471,7 @@ function populateMap() {
       if (document.getElementById(`${x}-${y}`) != null) {
         document.getElementById(
           `${x}-${y}`
-        ).innerHTML = `<div><img style="height: 100%; width: 100%" src='assets/PNG/10.png'/></div>`;
+        ).innerHTML = `<div><img style="height: 100%; width: 100%" src='/assets/PNG/10.png'/></div>`;
       }
     }
   }
@@ -525,7 +525,7 @@ function populateMap() {
     }
   }
   //Abandoned Freighters
-  for (let i = 0; i < 150; ++i) {
+  for (let i = 0; i < 60; ++i) {
     let x = Math.floor(Math.random() * coords[0]) + 1;
     let y = Math.floor(Math.random() * coords[1]) + 1;
     let img = Math.floor(Math.random() * freighters.length);
@@ -565,9 +565,9 @@ function populateMap() {
       if (document.getElementById(`${x}-${y}`) != null) {
         document.getElementById(
           `${x}-${y}`
-        ).innerHTML = `<div><img style="height: 100%; width: 100%" src='assets/PNG/7.png'/></div>`;
+        ).innerHTML = `<div><img style="height: 100%; width: 100%" src='/assets/PNG/7.png'/></div>`;
         $(`#${x}-${y}`).tooltip({
-          title: `<h4 style="object-fit: contain; padding-bottom: 20px"><img style="object-fit:contain;"src='assets/PNG/7.png' alt='Smiley'> <div>You have gained 10 energy!.</div><h4>`,
+          title: `<h4 style="object-fit: contain; padding-bottom: 20px"><img style="object-fit:contain;"src='/assets/PNG/7.png' alt='Smiley'> <div>You have gained 10 energy!.</div><h4>`,
           placement: "auto",
           html: true,
           container: `#${x}-${y}`,
@@ -634,7 +634,7 @@ document.onkeydown = function(e) {
     }
   } else if (e.keyCode === 32) {
     e.preventDefault();
-    var laserSnd = new Audio("assets/1laz.mp3");
+    var laserSnd = new Audio("/assets/1laz.mp3");
     laserSnd.play();
     let zone = player.xcoord;
     let yz = player.ycoord;
@@ -658,7 +658,7 @@ document.onkeydown = function(e) {
         if (zone < coords[0] - 1) {
           document.getElementById(
             `${zone + 1}-${yz}`
-          ).innerHTML = `<div><img style='height:100%; transform: rotate(90deg)' src='assets/PNG/beams22.png'/></div>`;
+          ).innerHTML = `<div><img style='height:100%; transform: rotate(90deg)' src='/assets/PNG/beams22.png'/></div>`;
           document.getElementById(
             `${zone}-${yz}`
           ).innerHTML = `<div class = "mapCell"></div>`;
@@ -681,7 +681,7 @@ document.onkeydown = function(e) {
         if (zone > 0) {
           document.getElementById(
             `${zone - 1}-${yz}`
-          ).innerHTML = `<div><img style='height:100%; transform: rotate(-90deg)' src='assets/PNG/beams22.png'/></div>`;
+          ).innerHTML = `<div><img style='height:100%; transform: rotate(-90deg)' src='/assets/PNG/beams22.png'/></div>`;
           document.getElementById(
             `${zone}-${yz}`
           ).innerHTML = `<div class = "mapCell"></div>`;
@@ -704,7 +704,7 @@ document.onkeydown = function(e) {
         if (yz > 0) {
           document.getElementById(
             `${zone}-${yz - 1}`
-          ).innerHTML = `<div style='text-align:center'><img style='height:100%; transform: rotate(0deg)' src='assets/PNG/beams22.png'/></div>`;
+          ).innerHTML = `<div style='text-align:center'><img style='height:100%; transform: rotate(0deg)' src='/assets/PNG/beams22.png'/></div>`;
           document.getElementById(
             `${zone}-${yz}`
           ).innerHTML = `<div class = "mapCell"></div>`;
@@ -737,7 +737,7 @@ document.onkeydown = function(e) {
         if (yz < coords[1] - 1) {
           document.getElementById(
             `${zone}-${yz + 1}`
-          ).innerHTML = `<div style='text-align:center'><img style='height:100%; transform: rotate(180deg)' src='assets/PNG/beams22.png'/></div>`;
+          ).innerHTML = `<div style='text-align:center'><img style='height:100%; transform: rotate(180deg)' src='/assets/PNG/beams22.png'/></div>`;
           document.getElementById(
             `${zone}-${yz}`
           ).innerHTML = `<div class = "mapCell"></div>`;
@@ -782,19 +782,19 @@ document.onkeydown = function(e) {
   if (e.keyCode === 37 || e.keyCode === 65) {
     document.getElementById(
       `${player.xcoord}-${player.ycoord}`
-    ).innerHTML = `<div id='theMotherShip' style='text-align: center; color: white; transform: rotate(-90deg);'><img style='height: 100%' src='assets/Titan.png'/></div>`;
+    ).innerHTML = `<div id='theMotherShip' style='text-align: center; color: white; transform: rotate(-90deg);'><img style='height: 100%' src='/assets/Titan.png'/></div>`;
   } else if (e.keyCode === 39 || e.keyCode === 68) {
     document.getElementById(
       `${player.xcoord}-${player.ycoord}`
-    ).innerHTML = `<div id='theMotherShip' style='text-align: center; color: white; transform: rotate(90deg);'><img style='height: 100%' src='assets/Titan.png'/></div>`;
+    ).innerHTML = `<div id='theMotherShip' style='text-align: center; color: white; transform: rotate(90deg);'><img style='height: 100%' src='/assets/Titan.png'/></div>`;
   } else if (e.keyCode === 38 || e.keyCode === 87) {
     document.getElementById(
       `${player.xcoord}-${player.ycoord}`
-    ).innerHTML = `<div id='theMotherShip' style='text-align: center; color: white; transform: rotate(0deg);'><img style='height: 100%' src='assets/Titan.png'/></div>`;
+    ).innerHTML = `<div id='theMotherShip' style='text-align: center; color: white; transform: rotate(0deg);'><img style='height: 100%' src='/assets/Titan.png'/></div>`;
   } else if (e.keyCode === 40 || e.keyCode === 83) {
     document.getElementById(
       `${player.xcoord}-${player.ycoord}`
-    ).innerHTML = `<div id='theMotherShip' style='text-align: center;  transform: rotate(180deg);'><img style='height: 100%' src='assets/Titan.png'/></div>`;
+    ).innerHTML = `<div id='theMotherShip' style='text-align: center;  transform: rotate(180deg);'><img style='height: 100%' src='/assets/Titan.png'/></div>`;
   }
   //$("#theMotherShip").scrollintoview();
   if (update === 1) {
@@ -825,7 +825,7 @@ document.onkeydown = function(e) {
     }
     pirateSnd.pause();
     pirateSnd.currentTime = 0;
-    let snd2 = new Audio("assets/endGame.mp3");
+    let snd2 = new Audio("/assets/endGame.mp3");
     if (!dead) {
       snd2.play();
     }
@@ -833,12 +833,12 @@ document.onkeydown = function(e) {
     $("#myModal").modal("show");
   } else if (oldHealth <= 30 && oldHealth >= 27) {
     if (oldHealth === 30) {
-      let snd = new Audio("assets/alert.mp3");
+      let snd = new Audio("/assets/alert.mp3");
       snd.volume = 0.8;
       snd.play();
     }
     $("#theMotherShip").tooltip({
-      title: `<h4 style="padding-bottom: 20px"><img src='assets/PNG/8.png' alt='Smiley'> <div>You are low on energy!! ${oldHealth} remaining!</div><h4>`,
+      title: `<h4 style="padding-bottom: 20px"><img src='/assets/PNG/8.png' alt='Smiley'> <div>You are low on energy!! ${oldHealth} remaining!</div><h4>`,
       placement: "auto",
       html: true
     });
@@ -855,7 +855,7 @@ document.onkeydown = function(e) {
       snd.pause();
       snd.currentTime = 0;
     }
-    let snd2 = new Audio("assets/endGame.mp3");
+    let snd2 = new Audio("/assets/endGame.mp3");
     if (!dead) {
       snd2.play();
     }
@@ -863,7 +863,7 @@ document.onkeydown = function(e) {
     $("#supplyModal").modal("show");
   } else if (oldSupplies === 1) {
     $("#theMotherShip").tooltip({
-      title: `<h4 style="padding-bottom: 20px"><img src='assets/PNG/8.png' alt='Smiley'> <div>You are low on Supplies!! ${oldSupplies} remaining!</div><h4>`,
+      title: `<h4 style="padding-bottom: 20px"><img src='/assets/PNG/8.png' alt='Smiley'> <div>You are low on Supplies!! ${oldSupplies} remaining!</div><h4>`,
       placement: "auto",
       html: true
     });
@@ -871,7 +871,7 @@ document.onkeydown = function(e) {
   } else if (current && current.type === "energyPack") {
     historyMes = "You discovered an energy pack at this location.";
     $("#theMotherShip").tooltip({
-      title: `<h4 style="padding-bottom: 20px"><img src='assets/PNG/7.png' alt='Smiley'> <div>You have gained ${current.energyV} energy!</div><h4>`,
+      title: `<h4 style="padding-bottom: 20px"><img src='/assets/PNG/7.png' alt='Smiley'> <div>You have gained ${current.energyV} energy!</div><h4>`,
       placement: "auto",
       trigger: "manual",
       html: true
@@ -881,7 +881,7 @@ document.onkeydown = function(e) {
     //console.log(current.type);
     historyMes = "You hit an asteroid at this location.";
     $("#theMotherShip").tooltip({
-      title: `<h4 style="padding-bottom: 20px"><img src='assets/PNG/3.png' alt='Smiley'> <div>You have hit an astroid and lost ${current.damage} energy!</div><h4>`,
+      title: `<h4 style="padding-bottom: 20px"><img src='/assets/PNG/3.png' alt='Smiley'> <div>You have hit an astroid and lost ${current.damage} energy!</div><h4>`,
       placement: "auto",
       trigger: "manual",
       html: true
@@ -891,7 +891,7 @@ document.onkeydown = function(e) {
     if (current.visited === true) {
       historyMes = "You discovered a star base at this location.";
       $("#theMotherShip").tooltip({
-        title: `<h4 style="padding-bottom: 20px"><img src='assets/PNG/9.png' alt='Smiley'> <div>You have already tapped this space station's resources.</div><h4>`,
+        title: `<h4 style="padding-bottom: 20px"><img src='/assets/PNG/9.png' alt='Smiley'> <div>You have already tapped this space station's resources.</div><h4>`,
         placement: "auto",
         trigger: "manual",
         html: true
@@ -899,10 +899,18 @@ document.onkeydown = function(e) {
       $("#theMotherShip").tooltip("show");
     }
   } else if (current && current.type === "freighter") {
-    if (current.visited === true) {
+    if (current.visited != true)
+    {
+      $("#theMotherShip").tooltip({
+        title: `<h4 style="padding-bottom: 20px"><img src='/assets/PNG/8.png' alt='Smiley'> <div>You have salvaged ${current.supplies} supplies, and ${current.energy} energy!</div><h4>`,
+        placement: "auto",
+        html: true
+      });
+      $("#theMotherShip").tooltip("show");
+    } else if (current.visited === true) {
       historyMes = "You discovered an abandoned freighter at this location.";
       $("#theMotherShip").tooltip({
-        title: `<h4 style="padding-bottom: 20px"><img src='assets/PNG/9.png' alt='Smiley'> <div>You have already tapped this freighter's resources.</div><h4>`,
+        title: `<h4 style="padding-bottom: 20px"><img src='/assets/PNG/9.png' alt='Smiley'> <div>You have already tapped this freighter's resources.</div><h4>`,
         placement: "auto",
         trigger: "manual",
         html: true
@@ -910,12 +918,12 @@ document.onkeydown = function(e) {
       $("#theMotherShip").tooltip("show");
     }
   } else if (current && current.type === "wormHole") {
-    var warpsnd = new Audio("assets/warp.mp3");
+    var warpsnd = new Audio("/assets/warp.mp3");
     warpsnd.volume = 0.7;
     warpsnd.play();
     historyMes = "You discovered a worm hole at this location.";
     $("#theMotherShip").tooltip({
-      title: `<h4 style="padding-bottom: 20px"><img src='assets/PNG/10.png' alt='Smiley'> <div>You have entered a wormhole and appeared at a random location!</div><h4>`,
+      title: `<h4 style="padding-bottom: 20px"><img src='/assets/PNG/10.png' alt='Smiley'> <div>You have entered a wormhole and appeared at a random location!</div><h4>`,
       placement: "auto",
       trigger: "manual",
       html: true
@@ -929,7 +937,7 @@ document.onkeydown = function(e) {
     planetsnd.play();
     historyMes = "You discovered a planet at this location.";
   }
-  jet = new Audio("assets/jets.mp3");
+  jet = new Audio("/assets/jets.mp3");
   jet.volume = 0.5;
   if (!dead) {
     jet.play();
@@ -978,12 +986,12 @@ function handleEvent(mapEvent) {
     player.ycoord = y;
     document.getElementById(
       `${x}-${y}`
-    ).innerHTML = `<div id='theMotherShip' style='text-align: center;  transform: rotate(180deg);'><img style='height: 100%' src='assets/Titan.png'/></div>`;
+    ).innerHTML = `<div id='theMotherShip' style='text-align: center;  transform: rotate(180deg);'><img style='height: 100%' src='/assets/Titan.png'/></div>`;
     document
       .getElementById("theMotherShip")
       .scrollIntoView({ behaviour: "smooth", block: "center" });
   } else if (mapEvent.type === "starBase") {
-    var base = new Audio("assets/sapceb.mp3");
+    var base = new Audio("/assets/sapceb.mp3");
     base.play();
     setInterval(function() {
       base.volume -= 0.1;
@@ -991,7 +999,7 @@ function handleEvent(mapEvent) {
     document.getElementById("starBaseModal").innerHTML = `
     <div class="modal-dialog">
         <!-- Modal content-->
-        <div class="modal-content" style="background: linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.1)),url('/assets/spaceStation1.jpg'); height: 95%">
+        <div class="modal-content" style="background: linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.1)), url('/assets/spaceStation1.jpg'); opacity: 0.9; height: 95%; font-family: Lato; font-size: 17px; font-style: normal; font-variant: normal; font-weight: 400; line-height: 19px;">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" style="text-align: center">
               &times;
@@ -1001,23 +1009,28 @@ function handleEvent(mapEvent) {
             </h4>
           </div>
           <div class="modal-body" style="text-align: center">
-            <p style="font-weight: 800">Welcome, Traveler!</p>
+            <p style="font-weight: 900">Welcome, Traveler!</p>
           </div>
-          <div class="storeWrapper" style="display: grid; grid-auto-columns: 1fr; grid-auto-flow: column; margin: 10px; margin-bottom: 30px;">
+          <div class="storeWrapper" style="display: grid; grid-auto-columns: 1fr; grid-auto-flow: column; height: 30%">
             <div class="columnA" style="margin: 0 auto; text-align: center;">
-              <p style="font-weight: 800; text-decoration: underline;">Buy Supplies!</p>
-              <button type="button" class="btn btn-success" onclick="purchaseSupplies()">Buy 100</button>
-              <button type="button" class="btn btn-success" onclick="sellSupplies()">Sell 100</button>
+              <p style="font-weight: 900; text-decoration: underline;">Buy Supplies!</p>
+              <button type="button" class="btn btn-success" onclick="purchaseSupplies()">Buy 500</button>
+              <button type="button" class="btn btn-success" onclick="sellSupplies()">Sell 500</button>
             </div>
             <div class="columnB" style="margin: 0 auto; text-align: center;">
-              <p style="font-weight: 800; text-decoration: underline;">Buy Energy!</p>
-              <button type="button" class="btn btn-success" onclick="purchaseEnergy()">Buy 10</button>
-              <button type="button" class="btn btn-success" onclick="sellEnergy()">Sell 10</button>
+              <p style="font-weight: 900; text-decoration: underline;">Buy Energy!</p>
+              <button type="button" class="btn btn-success" onclick="purchaseEnergy()">Buy 100</button>
+              <button type="button" class="btn btn-success" onclick="sellEnergy()">Sell 100</button>
             </div>
           </div>
-          <div class="blackjackGame" style="text-align: center;">
-            <p style="font-weight: 800">Gamble for more credits?</p>
-            <button type="button" class="btn btn-success" onclick="purchaseEnergy()">Play Blackjack</button>
+          <div class="blackjackGame" style="text-align: center; height: 40%; margin: auto; width: 80%; ">
+            <p style="font-weight: 900; margin-right: 5%; text-decoration: underline;">Need Credits? Place Your Bet!</p>
+            <input type="number" id="bet" min="1" max="1000" value="500">
+            <button type="button" id="beginGame" class="btn btn-success" onclick="play()">Play Blackjack</button><br><br>
+            <button type="button" style="display: none;" id="hitMe" class="btn btn-success" onclick="deal()">Hit</button>
+            <button type="button" style="display: none;" id="stay" class="btn btn-success" onclick="stay()">Stay</button>
+            <p id="player" style="font-weight: 900; margin-top: 10px;"></p><br>
+            <p id="outcome" style="font-weight: 900; margin-top: 10px;"></p><br>
           </div>
           <div class="modal-footer" style="text-align: center">
             <span style="justify-content: left">
@@ -1040,7 +1053,7 @@ function handleEvent(mapEvent) {
     document.getElementById("supplies").value = olds + mapEvent.supplies;
     document.getElementById("energy").value = olde + mapEvent.energy;
     if (!mapObjs.get(`${mapEvent.coords[0]}-${mapEvent.coords[1]}`).visited) {
-      var base = new Audio("assets/sapceb.mp3");
+      var base = new Audio("/assets/sapceb.mp3");
       base.play();
       setInterval(function() {
         base.volume -= 0.1;
@@ -1063,7 +1076,7 @@ function handleEvent(mapEvent) {
     document.getElementById("energy").value = oldh - mapEvent.damage;
   } else if (mapEvent.type === "energyPack") {
     //remove health pack from map
-    let snd = new Audio("assets/energyUp3.mp3");
+    let snd = new Audio("/assets/energyUp3.mp3");
     snd.volume = 0.4;
     snd.play();
     mapObjs.delete(`${mapEvent.coords[0]}-${mapEvent.coords[1]}`);
@@ -1080,9 +1093,9 @@ function purchaseSupplies()
 {
   let oldSupplies = parseInt(document.getElementById("supplies").value);
   let oldCredits = parseInt(document.getElementById("credits").value);
-  if (oldCredits >= 100) {
-    document.getElementById("credits").value = oldCredits - 100;
-    document.getElementById("supplies").value = oldSupplies + 100;
+  if (oldCredits >= 500) {
+    document.getElementById("credits").value = oldCredits - 500;
+    document.getElementById("supplies").value = oldSupplies + 500;
   }
 }
 
@@ -1090,9 +1103,9 @@ function sellSupplies()
 {
   let oldSupplies = parseInt(document.getElementById("supplies").value);
   let oldCredits = parseInt(document.getElementById("credits").value);
-  if (oldSupplies >= 100) {
-    document.getElementById("credits").value = oldSupplies - 100;
-    document.getElementById("supplies").value = oldCredits + 100;
+  if (oldSupplies >= 500) {
+    document.getElementById("credits").value = oldSupplies - 500;
+    document.getElementById("supplies").value = oldCredits + 500;
   }
 }
 
@@ -1100,9 +1113,9 @@ function purchaseEnergy()
 {
   let oldEnergy = parseInt(document.getElementById("energy").value);
   let oldCredits = parseInt(document.getElementById("credits").value);
-  if (oldCredits >= 10) {
-    document.getElementById("credits").value = oldCredits - 10;
-    document.getElementById("energy").value = oldEnergy + 10;
+  if (oldCredits >= 100) {
+    document.getElementById("credits").value = oldCredits - 100;
+    document.getElementById("energy").value = oldEnergy + 100;
   }
 }
 
@@ -1110,8 +1123,8 @@ function sellEnergy()
 {
   let oldEnergy = parseInt(document.getElementById("energy").value);
   let oldCredits = parseInt(document.getElementById("credits").value);
-  if (oldEnergy >= 10) {
-    document.getElementById("energy").value = oldEnergy - 10;
-    document.getElementById("credits").value = oldCredits + 10;
+  if (oldEnergy >= 100) {
+    document.getElementById("energy").value = oldEnergy - 100;
+    document.getElementById("credits").value = oldCredits + 100;
   }
 }
