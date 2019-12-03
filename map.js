@@ -314,7 +314,7 @@ function renderMap(X, Y) {
   localS = readLocalStorage();
   X = localS.maxX;
   Y = localS.maxY;
-  console.log(localS);
+  //console.log(localS);
   //dead variable used to control sound output and represents current life status
   dead = false;
   pirateSnd.pause();
@@ -955,7 +955,7 @@ document.onkeydown = function(e) {
       clearInterval(laser);
     }
     let h = parseInt(document.getElementById("energy").value);
-    document.getElementById("energy").value -= 500;
+    document.getElementById("energy").value -= 100;
     return false;
   } else {
     update = 0;
@@ -1149,7 +1149,7 @@ document.onkeydown = function(e) {
       );
     }
   });
-  
+
   /*
   if (start === 0) {
     start = 1;
@@ -1162,7 +1162,7 @@ document.onkeydown = function(e) {
     ).value += `You visited location (${player.xcoord},${player.ycoord})\n`;
   }
   */
- 
+
   //add to sensor log whenever I move
   //if(deployed == 1){fillLog();}
 
@@ -1175,12 +1175,16 @@ document.onkeydown = function(e) {
       html: true
     });*/
     //$("#theMotherShip").tooltip("show");
+    clearInterval(ship);
+    pirateSnd.pause();
+    pirateSnd.volume = 0;
+    pirateSnd.currentTime = 0;
+
     $("#win").modal("show");
     recipeFound = 0;
-    restart();
+    //restart();
   }
 };
-
 
 function handleEvent(mapEvent) {
   if (mapEvent.type === "planet") {
@@ -1305,6 +1309,7 @@ function restart() {
 //victory screen check for every planet visited
 function didIWin() {
   let random = Math.floor(Math.random() * 100);
+  //recipeFound = 1;
   if (globalRandom === random) recipeFound = 1;
 }
 function purchaseSupplies() {
