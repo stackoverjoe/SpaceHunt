@@ -19,9 +19,14 @@ var badMax = {
   orientation: 1,
   distanceFromPlayer: null
 };
+//victory screen variables
+var globalRandom = Math.floor(Math.random() * 100);
+var recipeFound = 0;
 
 //global audio object for the death sound effect
 let deathSound = new Audio("/assets/endGame.mp3");
+var max = 100;
+var min = 1;
 var start = 0;
 var ticker = 0;
 var counter = 0;
@@ -36,6 +41,7 @@ var planetSndChoice = 0;
 var pirateSnd = new Audio("/assets/bruhh.mp3");
 //All arrays of assets allow for random generation of celestial artifacts to allow
 //more unique map experiences
+var victory = ["/assets/VictoryScreen.png"];
 var discover = ["/assets/disocvery.mp3", "/assets/discovery2.mp3"];
 var planets = [
   "/assets/PNG/16.png",
@@ -976,6 +982,7 @@ function handleEvent(mapEvent) {
       $(`#${mapEvent.coords[0]}-${mapEvent.coords[1]}`).tooltip("hide");
     }, 1500);
     //$("#planetModal").modal("show");
+    didIWin();
   } else if (mapEvent.type === "wormHole") {
     let x = Math.floor(Math.random() * coords[0]) + 1;
     let y = Math.floor(Math.random() * coords[1]) + 1;
@@ -1082,13 +1089,20 @@ function handleEvent(mapEvent) {
     mapObjs.delete(`${mapEvent.coords[0]}-${mapEvent.coords[1]}`);
     let oldh = parseInt(document.getElementById("energy").value);
     document.getElementById("energy").value = oldh + mapEvent.energyV;
+  } else if (recipeFound === 1) {
+    //recipe was found, victory screen restart the game.
   }
 }
 
 function restart() {
   renderMap(100, 100);
 }
-
+//victory screen check for every planet visited
+function didIWin() {
+  let random = Math.floor(Math.random() * 100);
+  if(globalRandom === random)
+    recipeFound = 1;
+}
 function purchaseSupplies()
 {
   let oldSupplies = parseInt(document.getElementById("supplies").value);
