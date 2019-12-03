@@ -367,12 +367,15 @@
   </form>
   <br>
 
+  <div class = "button">
+    <element id = gazeteer onclick = "godmode()">Celestial Gazeteer</button>
+  </div>
   <div class="button">
-      <element id = deploy onclick="sensors()">Deploy Sensors</button>
-    </div>
-
+    <element id = deploy onclick="sensors()">Deploy Sensors</button>
+  </div>
+    
     <div class = "form-group col-md-2">
-      <label style="color:white"for="sensorlog">Celestial Objects Nearby</label>
+      <label style="color:white"for="sensorlog">Celestial Objects</label>
       <textarea id = "sensorlog" style="margin-bottom: 20px; display: none; font-weight: 800; resize: none; height: 15%; overflow-y: scroll" disabled="true" class="text-center form-control">
       </textarea>
       </div>
