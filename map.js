@@ -1149,6 +1149,7 @@ document.onkeydown = function(e) {
       );
     }
   });
+  
   /*
   if (start === 0) {
     start = 1;
@@ -1161,18 +1162,25 @@ document.onkeydown = function(e) {
     ).value += `You visited location (${player.xcoord},${player.ycoord})\n`;
   }
   */
+ 
+  //add to sensor log whenever I move
+  //if(deployed == 1){fillLog();}
+
   //checking to see if this planet has the koka kola recipe
   if (recipeFound === 1) {
-    $("#theMotherShip").tooltip({
+    /*$("#theMotherShip").tooltip({
       title: `<h4 style="padding-bottom: 20px"><img src='/assets/VictoryScreen.png' alt='Smiley'> <div>You have found the Koka Kola recipe and won the game!</div><h4>`,
       placement: "auto",
       trigger: "manual",
       html: true
-    });
-    $("#theMotherShip").tooltip("show");
+    });*/
+    //$("#theMotherShip").tooltip("show");
+    $("#win").modal("show");
+    recipeFound = 0;
     restart();
   }
 };
+
 
 function handleEvent(mapEvent) {
   if (mapEvent.type === "planet") {

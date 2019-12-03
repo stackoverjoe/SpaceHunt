@@ -6,6 +6,7 @@ var computerPoints = 0;
 var bet = 0;
 var oldCredits = 0;
 
+//Create array of cards, each card with a rank, suit and point value.
 function createDeck()
 {
     var value;
@@ -47,6 +48,7 @@ function shuffle()
   }
 }
 
+//Place two cards in each hand.
 function initializeHands()
 {
   playerHand.push(deck.pop());
@@ -55,6 +57,7 @@ function initializeHands()
   computerHand.push(deck.pop());
 }
 
+//Loop through hand and add up point value of each card.
 function calculatePoints(hand)
 {
   var points = 0;
@@ -72,10 +75,12 @@ function play()
   bet = parseInt(document.getElementById("bet").value);
   oldCredits = parseInt(document.getElementById("credits").value);
   document.getElementById("credits").value = oldCredits - bet;
+  //Enable hit/stay buttons
   $('#hitMe, #stay').show();
   $('#hitMe').attr("disabled", false);
   $('#stay').attr("disabled", false);
   document.getElementById("outcome").innerHTML = "";
+  //re-initialize arrays.
   deck = new Array();
   playerHand = new Array();
   computerHand = new Array();
@@ -97,6 +102,7 @@ function deal()
   playerHand.push(deck.pop());
   playerPoints = calculatePoints(playerHand);
 
+  //Lose if player hand goes over 21 points.
   if (playerPoints > 21)
   {
     document.getElementById("player").innerHTML = "Your hand value is " + playerPoints + ".";
@@ -112,13 +118,14 @@ function deal()
 
 function stay()
 {
+  //Keep pulling cards for computer until hand has at least 17 points.
   if (computerPoints <= 17)
   {
     computerHand.push(deck.pop());
     computerPoints = calculatePoints(computerHand);
     stay();
   }
-
+  
   else if (computerPoints > 21)
   {
     document.getElementById("player").innerHTML = "Your hand value is " + playerPoints + " and your opponent's hand value is " + computerPoints + ".";
