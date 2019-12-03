@@ -41,7 +41,7 @@ var planetSndChoice = 0;
 var pirateSnd = new Audio("/assets/bruhh.mp3");
 //All arrays of assets allow for random generation of celestial artifacts to allow
 //more unique map experiences
-var victory = ["/assets/VictoryScreen.png"];
+//var victory = ["/assets/VictoryScreen.png"];
 var discover = ["/assets/disocvery.mp3", "/assets/discovery2.mp3"];
 var planets = [
   "/assets/PNG/16.png",
@@ -937,6 +937,7 @@ document.onkeydown = function(e) {
     $("#theMotherShip").tooltip("show");
   } else if (current && current.type === "planet") {
     //let x = Math.floor(Math.random() * coords[0]);
+    didIWin(); //check to see if the planet holds the koka kola recipe
     planetSndChoice = planetSndChoice === 1 ? 0 : 1;
     var planetsnd = new Audio(discover[planetSndChoice]);
     planetsnd.volume = 0.4;
@@ -972,6 +973,16 @@ document.onkeydown = function(e) {
     ).value += `You visited location (${player.xcoord},${player.ycoord})\n`;
   }
   */
+  //checking to see if this planet has the koka kola recipe
+  if(recipeFound === 1) {
+    $("#theMotherShip").tooltip({
+      title: `<h4 style="padding-bottom: 20px"><img src='/assets/VictoryScreen.png' alt='Smiley'> <div>You have found the Koka Kola recipe and won the game!</div><h4>`,
+      placement: "auto",
+      trigger: "manual",
+      html: true
+    });
+    $("#theMotherShip").tooltip("show")
+    restart();
 };
 
 function handleEvent(mapEvent) {
@@ -1089,8 +1100,6 @@ function handleEvent(mapEvent) {
     mapObjs.delete(`${mapEvent.coords[0]}-${mapEvent.coords[1]}`);
     let oldh = parseInt(document.getElementById("energy").value);
     document.getElementById("energy").value = oldh + mapEvent.energyV;
-  } else if (recipeFound === 1) {
-    //recipe was found, victory screen restart the game.
   }
 }
 
