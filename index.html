@@ -1,0 +1,140 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="options.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+
+    <script type="text/javascript" src="options.js"></script>
+
+  </head>
+  <body onload="init()">
+
+    <link href='https://fonts.googleapis.com/css?family=Lato:300,400,700' rel='stylesheet' type='text/css'>
+    <div id='stars'></div>
+    <div id='stars2'></div>
+    <div id='stars3'></div>
+    <div class="galaxy"></div>
+
+    <div id="title">
+      <span>
+        Customize your Experience!
+      </span>
+    </div>
+
+    <form name="options">
+      <div class="wrapper">
+
+        <div class="columnA">
+          <label for="maxX">Max Map X</label>
+          <input type="number" name="maxX" placeholder="positive number">
+          <label for="maxY">Max Map Y</label>
+          <input type="number" name="maxY" placeholder="positive number">
+
+          <label for="startX">Starting X</label>
+          <input type="number" name="startX" placeholder="positive number">
+          <label for="startY">Starting Y</label>
+          <input type="number" name="startY" placeholder="positive number">
+
+          <label for="baseEnergy">Energy</label>
+          <input type="number" name="baseEnergy" placeholder="positive number">
+
+          <label for="baseSupplies">Supplies</label>
+          <input type="number" name="baseSupplies" placeholder="positive number">
+
+          <label for="baseCredits">Credits</label>
+          <input type="number" name="baseCredits" placeholder="positive number">
+        </div>
+
+        <div class="columnB">
+          <br><label for="wormhole">Wormholes</label><br>
+          <div>
+            <div>
+              <input type="radio" name="wormhole" id="wormhole-random" value="random" required>
+              <label for="wormhole-random">Random</label>
+            </div>
+
+            <div>
+              <input type="radio" name="wormhole" id="wormhole-fixed" value="fixed">
+              <label for="wormhole-fixed">Fixed</label>
+
+              <div class="reveal-if-active">
+                <label for="wormhole">Where would you like to place the wormholes?.</label><br>
+                <input type="text" id="wormhole-location" name="wormhole-location" class="require-if-active" placeholder="x1,y1 x2,y2 x3,y3 ...">
+              </div>
+            </div>
+          </div>
+
+          <br><label for="death">Regular Mode</label><br>
+          <input type="radio" name="canDie" value="on"  id="canDie-on">
+          <label for="canDie-on" >On</label><br>
+          <input type="radio" name="canDie" value="off" id="canDie-off">
+          <label for="canDie-off">Off</label>
+          
+          <br><br><label for="badMax">BadMax</label>
+          <br><label for="badMaxSpeed">Speed (tiles/sec)</label>
+          <input type="number" id="badMaxSpeed" name="badMaxSpeed" placeholder="positive number">
+          <label for="numBadMaxs">Number</label>
+          <input type="number" id="numBadMaxs" name="numBadMaxs" placeholder="positive number">
+        </div>
+
+        <div class="columnC">
+          <br><label for="planets">Planets</label><br>
+
+          <!-- Placing Planets -->
+          <div>
+            <div>
+              <input type="radio" name="planets" id="planets-random" required>
+              <label for="planets-random">Random</label>
+            </div>
+
+            <div>
+              <input type="radio" name="planets" id="planets-fixed">
+              <label for="planets-fixed">Fixed</label>
+
+              <div class="reveal-if-active">
+                <label for="planets">Celeron</label><br>
+                <input type="text" id="Celeron" name="Celeron" class="require-if-active" placeholder="x,y"><br>
+
+                <label for="planets">Rhyzen</label><br>
+                <input type="text" id="Rhyzen" name="Rhyzen" class="require-if-active" placeholder="x,y"><br>
+
+                <label for="planets">Xeon</label><br>
+                <input type="text" id="Xeon" name="Xeon" class="require-if-active" placeholder="x,y"><br>
+
+                <label for="planets">Pentium 1-7</label><br>
+                <input type="text" id="Pentium" name="Pentium" class="require-if-active" placeholder="x1,y1 x2,y2 ... x7,y7"><br>
+              </div>
+            </div>
+          </div>
+
+          <br><label for="stations">Space Stations</label><br>
+
+          <div>
+            <div>
+              <input type="radio" name="stations" id="station-random" required>
+              <label for="station-random">Random</label>
+            </div>
+
+            <div>
+              <input type="radio" name="stations" id="station-fixed">
+              <label for="station-fixed">Fixed</label>
+
+              <div class="reveal-if-active">
+                <label for="stations">Where would you like to place the space stations?.</label><br>
+                <input type="text" id="station-location" name="station-location" class="require-if-active" placeholder="x1,y1 x2,y2 x3,y3 ...">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="parent_div">
+          <br><a href="spaceMap.html"><button type="button">Continue</button></a>
+          <button type="button" onclick="debugAlert()">View localStorage</button>
+          <button type="button" onclick="localStorage.clear()">Clear localStorage</button>
+          <button type="button" onclick="save()">Submit changes</button>
+        </div>
+
+      </div>
+    </form>
+  </body>
+  <script src="options.js"></script>
+</html>
