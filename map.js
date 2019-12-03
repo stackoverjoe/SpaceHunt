@@ -905,8 +905,7 @@ document.onkeydown = function(e) {
       $("#theMotherShip").tooltip("show");
     }
   } else if (current && current.type === "freighter") {
-    if (current.visited != true)
-    {
+    if (current.visited != true) {
       $("#theMotherShip").tooltip({
         title: `<h4 style="padding-bottom: 20px"><img src='/assets/PNG/8.png' alt='Smiley'> <div>You have salvaged ${current.supplies} supplies, and ${current.energy} energy!</div><h4>`,
         placement: "auto",
@@ -974,15 +973,16 @@ document.onkeydown = function(e) {
   }
   */
   //checking to see if this planet has the koka kola recipe
-  if(recipeFound === 1) {
+  if (recipeFound === 1) {
     $("#theMotherShip").tooltip({
       title: `<h4 style="padding-bottom: 20px"><img src='/assets/VictoryScreen.png' alt='Smiley'> <div>You have found the Koka Kola recipe and won the game!</div><h4>`,
       placement: "auto",
       trigger: "manual",
       html: true
     });
-    $("#theMotherShip").tooltip("show")
+    $("#theMotherShip").tooltip("show");
     restart();
+  }
 };
 
 function handleEvent(mapEvent) {
@@ -1063,8 +1063,7 @@ function handleEvent(mapEvent) {
           </div>
         </div>
       </div>`;
-      $("#starBaseModal").modal("show");
-
+    $("#starBaseModal").modal("show");
   } else if (mapEvent.type === "freighter") {
     let olds = parseInt(document.getElementById("supplies").value);
     let olde = parseInt(document.getElementById("energy").value);
@@ -1109,11 +1108,9 @@ function restart() {
 //victory screen check for every planet visited
 function didIWin() {
   let random = Math.floor(Math.random() * 100);
-  if(globalRandom === random)
-    recipeFound = 1;
+  if (globalRandom === random) recipeFound = 1;
 }
-function purchaseSupplies()
-{
+function purchaseSupplies() {
   let oldSupplies = parseInt(document.getElementById("supplies").value);
   let oldCredits = parseInt(document.getElementById("credits").value);
   if (oldCredits >= 500) {
@@ -1122,8 +1119,7 @@ function purchaseSupplies()
   }
 }
 
-function sellSupplies()
-{
+function sellSupplies() {
   let oldSupplies = parseInt(document.getElementById("supplies").value);
   let oldCredits = parseInt(document.getElementById("credits").value);
   if (oldSupplies >= 500) {
@@ -1132,8 +1128,7 @@ function sellSupplies()
   }
 }
 
-function purchaseEnergy()
-{
+function purchaseEnergy() {
   let oldEnergy = parseInt(document.getElementById("energy").value);
   let oldCredits = parseInt(document.getElementById("credits").value);
   if (oldCredits >= 100) {
@@ -1142,8 +1137,7 @@ function purchaseEnergy()
   }
 }
 
-function sellEnergy()
-{
+function sellEnergy() {
   let oldEnergy = parseInt(document.getElementById("energy").value);
   let oldCredits = parseInt(document.getElementById("credits").value);
   if (oldEnergy >= 100) {
