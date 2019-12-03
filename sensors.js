@@ -43,13 +43,37 @@ function sensors()
      }
     alert(todisplay);
     
-    document.getElementById("energy") -=1;
+    document.getElementById("energy") -=10;
 }
 
 function godmode(){
   
   reveal();
+ /* let keys = mapObjs.keys();
+ for(var i = 0; i < keys.length; ++i){
+    var myObj = mapObjs.get(keys[i])
+    document.getElementById("sensorlog").value += myObj.type + " ";
+    document.getElementById("sensorlog").value += "[" + myObj.xcoord + ", " + myObj.ycoord + "]";
+    document.getElementById("sensorlog").value += "\n";
+ }
+ */
 
+ //very low tech version.  need to change to use keys and better display
+var maxX = coords[0];
+var maxY = coords[1];
+
+for(let j=0; j<maxX; ++j){
+  for(let k=0; k<maxY; ++k){
+    if(mapObjs.has(`${j}-${k}`)){
+      let myObj = mapObjs.get(`${j}-${k}`);
+      document.getElementById("sensorlog").value += myObj.type + " ";
+      document.getElementById("sensorlog").value += "[" + j + ", " + k + "]";
+      document.getElementById("sensorlog").value += "\n";
+      /* display winner
+      if(myObj.type == "planet"){}*/
+    }
+  }
+}
 }
 
 function reveal() {

@@ -960,6 +960,7 @@ document.onkeydown = function(e) {
       );
     }
   });
+  
   /*
   if (start === 0) {
     start = 1;
@@ -972,6 +973,10 @@ document.onkeydown = function(e) {
     ).value += `You visited location (${player.xcoord},${player.ycoord})\n`;
   }
   */
+ 
+  //add to sensor log whenever I move
+  //if(deployed == 1){fillLog();}
+
   //checking to see if this planet has the koka kola recipe
   if (recipeFound === 1) {
     $("#theMotherShip").tooltip({
@@ -984,6 +989,7 @@ document.onkeydown = function(e) {
     restart();
   }
 };
+
 
 function handleEvent(mapEvent) {
   if (mapEvent.type === "planet") {
