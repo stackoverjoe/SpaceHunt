@@ -5,13 +5,194 @@ class tile {
     this.energyLoss = 1;
   }
 }*/
+
+class localStoragePackage {
+  //the values seen here are default values to be overwritten by
+  //readLocalStorage() if localStorage is properly set
+  constructor() {
+    //integers, access like returnVal.varName
+    this.maxX = 128;
+    this.maxY = 128;
+    this.startX = 0;
+    this.startY = 0;
+    this.baseEnergy = 100;
+    this.baseSupplies = 200;
+    this.baseCredits = 1000;
+    this.canDie = 1;
+    this.badMaxSpeed = 2;
+    this.numBadMaxs = 1;
+    //either "random" or an array of coords, access like returnVal.varName[i].xcoord/ycoord
+    this.wormholes = "random";
+    this.spaceStations = "random";
+    this.pentium = "random";
+    //planets, either "random" or a coord, access like returnVal.varName.xcoord/ycoord
+    this.celeron = "random";
+    this.rhyzen = "random";
+    this.xeon = "random";
+  }
+}
+
+//==================sh1 people, you don't need to read past this line :)==================
+
+function debugAlert(pkg) {
+  var alertMessage = `DEBUG ALERT
+To turn me off, comment me out at the bottom of the file. See options.html to set and know your localStorage.
+
+localStoragePackage
+maxX\t\t${pkg.maxX}
+maxY\t\t${pkg.maxY}
+
+startX\t\t${pkg.startX}
+startY\t\t${pkg.startY}
+
+badMaxSpeed\t${pkg.badMaxSpeed}
+numBadMaxs\t${pkg.numBadMaxs}
+
+baseEnergy\t${pkg.baseEnergy}
+baseSupplies\t${pkg.baseSupplies}
+baseCredits\t${pkg.baseCredits}
+
+canDie\t\t${pkg.canDie}`;
+
+  alertMessage += "\n\nwormholes\t";
+  if (pkg.wormholes === "random") alertMessage += "random";
+  else for (i of pkg.wormholes) alertMessage += i.xcoord + "," + i.ycoord + " ";
+
+  alertMessage += "\nspaceStations\t";
+  if (pkg.spaceStations === "random") alertMessage += "random";
+  else
+    for (i of pkg.spaceStations)
+      alertMessage += i.xcoord + "," + i.ycoord + " ";
+
+  alertMessage += "\n\npentium\t\t";
+  if (pkg.spaceStations === "random") alertMessage += "random";
+  else for (i of pkg.pentium) alertMessage += i.xcoord + "," + i.ycoord + " ";
+
+  alertMessage += "\nceleron\t\t";
+  if (pkg.xort === "random") alertMessage += "random";
+  else alertMessage += pkg.xort.xcoord + "," + pkg.xort.ycoord;
+
+  alertMessage += "\nrhyzen\t\t";
+  if (pkg.blarg === "random") alertMessage += "random";
+  else alertMessage += pkg.blarg.xcoord + "," + pkg.blarg.ycoord;
+
+  alertMessage += "\nxeon\t\t";
+  if (pkg.irk === "random") alertMessage += "random";
+  else alertMessage += pkg.irk.xcoord + "," + pkg.irk.ycoord;
+
+  alert(alertMessage);
+}
+
+function toNumber(name) {
+  var dummy = localStorage.getItem(name);
+  if (!dummy) return "NaN";
+  //NULL, an empty entry, will evaluate to number 0 if I convert it to a number first
+  return Number(dummy);
+}
+
+function toCoordArray(name, maxX, maxY) {
+  var x,
+    y,
+    dummyLength,
+    dummy = localStorage.getItem(name);
+
+  if (dummy && dummy != "random") {
+    dummy = dummy.split(" ");
+    var dummyLength = dummy.length;
+
+    for (var i = 0; i < dummyLength; ++i) {
+      //for( of ) loops uses pass by value for each index :(
+      dummy[i] = dummy[i].split(",", 2);
+
+      x = Number(dummy[i][0]);
+      y = Number(dummy[i][1]);
+      if (x != "NaN" && x >= 0 && x < maxX && y != "NaN" && y >= 0 && y < maxY)
+        dummy[i] = new coord(x, y);
+      else {
+        dummy = 0;
+        break;
+      }
+    }
+  }
+  return dummy;
+}
+
+function toCoord(name, maxX, maxY) {
+  var dummy = localStorage.getItem(name);
+  if (dummy) {
+    dummy = dummy.split(",", 2);
+
+    x = Number(dummy[0]);
+    y = Number(dummy[1]);
+    if (x != "NaN" && x >= 0 && x < maxX && y != "NaN" && y >= 0 && y < maxY)
+      dummy = new coord(x, y);
+  }
+  return dummy;
+}
+
+//returns the results packaged in a class of the above, changing any non-default values
+function readLocalStorage() {
+  var pkg = new localStoragePackage();
+  //no pass by reference mean a lot of code duplication :/
+
+  //integer
+  dummy = toNumber("maxX"); //maxX
+  if (dummy != "NaN" && dummy > 0) pkg.maxX = dummy;
+  dummy = toNumber("maxY"); //maxY
+  if (dummy != "NaN" && dummy > 0) pkg.maxY = dummy;
+
+  dummy = toNumber("startX"); //startX
+  if (dummy != "NaN" && dummy > 0 && dummy < pkg.maxX) pkg.startX = dummy;
+  else pkg.startX = 0;
+  dummy = toNumber("startY"); //startY
+  if (dummy != "NaN" && dummy > 0 && dummy < pkg.maxY) pkg.startY = dummy;
+  else pkg.startY = 0;
+
+  dummy = toNumber("baseEnergy"); //baseEnergy
+  if (dummy != "NaN") pkg.baseEnergy = dummy;
+  dummy = toNumber("baseSupplies"); //baseSupplies
+  if (dummy != "NaN") pkg.baseSupplies = dummy;
+  dummy = toNumber("baseCredits"); //baseCredits
+  if (dummy != "NaN") pkg.baseCredits = dummy;
+  dummy = toNumber("baseCredits"); //baseCredits
+  if (dummy != "NaN") pkg.baseCredits = dummy;
+
+  dummy = toNumber("badMaxSpeed"); //badMaxSpeed
+  if (dummy != "NaN" && dummy >= 0) pkg.badMaxSpeed = dummy;
+  dummy = toNumber("numBadMaxs"); //numBadMaxs
+  if (dummy != "NaN" && dummy >= 0) pkg.numBadMaxs = dummy;
+
+  dummy = toNumber("canDie"); //canDie
+  if (dummy === 0 || dummy === 1) pkg.canDie = dummy;
+
+  //coord[]
+  const maxX = pkg.maxX;
+  const maxY = pkg.maxY;
+  dummy = toCoordArray("wormholes", maxX, maxY); //wormholes
+  if (dummy) pkg.wormholes = dummy;
+  dummy = toCoordArray("spaceStations", maxX, maxY); //spaceStations
+  if (dummy) pkg.spaceStations = dummy;
+  dummy = toCoordArray("pentium", maxX, maxY); //pentium
+  if (dummy && dummy.length == 7) pkg.pentium = dummy;
+
+  //coord
+  dummy = toCoord("celeron", maxX, maxY); //xort
+  if (dummy) pkg.xort = dummy;
+  dummy = toCoord("rhyzen", maxX, maxY); //blarg
+  if (dummy) pkg.blarg = dummy;
+  dummy = toCoord("xeon", maxX, maxY); //irk
+  if (dummy) pkg.irk = dummy;
+
+  // debugAlert(pkg);
+  return pkg;
+}
 //global player object that hold player location and orientation for animations.
 var player = {
   xcoord: 0,
   ycoord: 0,
   orientation: 1 //1right, 2left, 3up, 4 down
 };
-
+var localS = null;
 //badMax object that has the information regarding where badMax is on the screen
 var badMax = {
   xcoord: null,
@@ -128,7 +309,12 @@ let snd = null;
 let jet = null;
 
 //renderMap generates the html table for the map
+localS = readLocalStorage();
 function renderMap(X, Y) {
+  localS = readLocalStorage();
+  X = localS.maxX;
+  Y = localS.maxY;
+  console.log(localS);
   //dead variable used to control sound output and represents current life status
   dead = false;
   pirateSnd.pause();
@@ -183,25 +369,28 @@ function renderMap(X, Y) {
   }
 
   //set the player ship at the 0,0 coords of the map
+  //console.log(localS);
   document.getElementById(
-    "0-0"
+    `${localS.startX}-${localS.startY}`
   ).innerHTML = `<div style='text-align: center; color: white'><img style='height: 100%' src='/assets/Titan.png'/></div>`;
   //set player coords back to start incase reset function called.
-  player.xcoord = 0;
-  player.ycoord = 0;
+  player.xcoord = `${localS.startX}`;
+  player.ycoord = `${localS.startY}`;
   badMax.xcoord = Math.floor(Math.random() * 127) + 1;
   badMax.ycoord = Math.floor(Math.random() * 127) + 1;
   //snap to start of game
   //scroll ship back into view
-  document.getElementById("0-0").scrollIntoView();
+  document.getElementById(`${localS.startX}-${localS.startY}`).scrollIntoView();
   //make sure title is visible
   window.location = "spaceMap.html#top";
 
   //set all starting values for game
-  document.getElementById("energy").value = 10000;
-  document.getElementById("supplies").value = 10000;
-  document.getElementById("credits").value = 10000;
-  document.getElementById("coords").value = "(0,0)";
+  document.getElementById("energy").value = localS.baseEnergy;
+  document.getElementById("supplies").value = localS.baseSupplies;
+  document.getElementById("credits").value = localS.baseCredits;
+  document.getElementById(
+    "coords"
+  ).value = `(${localS.startX},${localS.startY})`;
   start = 0;
   document.getElementById("history").value = "";
   //populate the map with celestial objects
