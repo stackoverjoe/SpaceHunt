@@ -974,13 +974,14 @@ document.onkeydown = function(e) {
   */
   //checking to see if this planet has the koka kola recipe
   if (recipeFound === 1) {
-    $("#theMotherShip").tooltip({
+    /*$("#theMotherShip").tooltip({
       title: `<h4 style="padding-bottom: 20px"><img src='/assets/VictoryScreen.png' alt='Smiley'> <div>You have found the Koka Kola recipe and won the game!</div><h4>`,
       placement: "auto",
       trigger: "manual",
       html: true
-    });
-    $("#theMotherShip").tooltip("show");
+    });*/
+    //$("#theMotherShip").tooltip("show");
+    $("#win").modal("show");
     recipeFound = 0;
     restart();
   }
