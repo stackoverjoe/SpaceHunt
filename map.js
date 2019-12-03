@@ -981,6 +981,7 @@ document.onkeydown = function(e) {
       html: true
     });
     $("#theMotherShip").tooltip("show");
+    recipeFound = 0;
     restart();
   }
 };
