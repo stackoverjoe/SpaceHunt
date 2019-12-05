@@ -20,7 +20,6 @@ baseSupplies\t${localStorage.baseSupplies}
 baseCredits\t${localStorage.baseCredits}
 
 badMaxSpeed\t${localStorage.badMaxSpeed}
-numBadMaxs\t${localStorage.numBadMaxs}
 
 canDie\t\t${localStorage.canDie}
 
@@ -32,6 +31,7 @@ celeron\t\t${localStorage.celeron}
 rhyzen\t\t${localStorage.rhyzen}
 xeon\t\t${localStorage.xeon}`);
 }
+//numBadMaxs\t${localStorage.numBadMaxs}
 
 //=============================max_=================================
 function validNumChange(element){
@@ -86,7 +86,7 @@ function baseCreditsCheck(){
 //=============================badMax===============================
 function badMaxCheck(){
   badMaxSpeedCheck();
-  numBadMaxsCheck();
+  //numBadMaxsCheck();
 }
 function badMaxSpeedCheck(){
   var badMaxSpeed = form.badMaxSpeed;
@@ -94,12 +94,12 @@ function badMaxSpeedCheck(){
     invalidChange(badMaxSpeed);
   else validNumChange(badMaxSpeed);
 }
-function numBadMaxsCheck(){
+/*function numBadMaxsCheck(){
   var numBadMaxs = form.numBadMaxs;
   if(Number(numBadMaxs.value) < 0)
     invalidChange(numBadMaxs);
   else validNumChange(numBadMaxs);
-}
+}*/
 
 //=================specific format _,_ _,_ _,_...===================
 function isNotCustomArray(val){

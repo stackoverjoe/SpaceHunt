@@ -19,7 +19,7 @@ class localStoragePackage {
     this.baseCredits = 1000;
     this.canDie = 1;
     this.badMaxSpeed = 2;
-    this.numBadMaxs = 1;
+    //this.numBadMaxs = 1;
     //either "random" or an array of coords, access like returnVal.varName[i].xcoord/ycoord
     this.wormholes = "random";
     this.spaceStations = "random";
@@ -45,13 +45,13 @@ startX\t\t${pkg.startX}
 startY\t\t${pkg.startY}
 
 badMaxSpeed\t${pkg.badMaxSpeed}
-numBadMaxs\t${pkg.numBadMaxs}
 
 baseEnergy\t${pkg.baseEnergy}
 baseSupplies\t${pkg.baseSupplies}
 baseCredits\t${pkg.baseCredits}
 
 canDie\t\t${pkg.canDie}`;
+//numBadMaxs\t${pkg.numBadMaxs}
 
   alertMessage += "\n\nwormholes\t";
   if (pkg.wormholes === "random") alertMessage += "random";
@@ -158,8 +158,8 @@ function readLocalStorage() {
 
   dummy = toNumber("badMaxSpeed"); //badMaxSpeed
   if (dummy != "NaN" && dummy >= 0) pkg.badMaxSpeed = dummy;
-  dummy = toNumber("numBadMaxs"); //numBadMaxs
-  if (dummy != "NaN" && dummy >= 0) pkg.numBadMaxs = dummy;
+  /*dummy = toNumber("numBadMaxs"); //numBadMaxs
+  if (dummy != "NaN" && dummy >= 0) pkg.numBadMaxs = dummy;*/
 
   dummy = toNumber("canDie"); //canDie
   if (dummy === 0 || dummy === 1) pkg.canDie = dummy;
@@ -182,6 +182,6 @@ function readLocalStorage() {
   dummy = toCoord("xeon", maxX, maxY); //irk
   if (dummy) pkg.irk = dummy;
 
-  // debugAlert(pkg);
+  //debugAlert(pkg);
   return pkg;
 }
