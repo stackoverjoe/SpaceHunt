@@ -1,7 +1,8 @@
 /* would be placed in map.js and be used as an onclick event in a button at the bottom
  * creates an object in localStorage with information from the current session of the game
  * so far you can only have one save at a time, because they'd overwrite eachother
- * TODO: complete initalization of saveData class. I don't know how map.js stores everything yet*/
+ * TODO: remember what's destroyed somehow. It's pretty easy on my side,
+   but it may not be on on the other side, so it can wait to be put in*/
 
 function saveGame(){
   var localStorage = window.localStorage;
@@ -9,28 +10,28 @@ function saveGame(){
   class saveData{
     this.valid = 1; //can be set invalid by one mistake, intentionally
 
-    this.maxX = X;
-    this.maxY = Y;
-
-    this.startX = player.xCoord;
-    this.startY = player.yCoord;
-
-    this.energy = current.energy;
-    this.supplies = current.supplies;
-    this.credits = ;
-
-    this.badMaxSpeed = ;
+    this.maxX          = X;
+    this.maxY          = Y;
+                    
+    this.startX        = player.xCoord;
+    this.startY        = player.yCoord;
+                    
+    this.energy        = current.energy;
+    this.supplies      = current.supplies;
+    this.credits       = Number(document.getElementById("credits").value);
+                      
+    this.badMaxSpeed   = localS.badMaxSpeed;
     //this.numBadMaxs = ;
 
-    this.canDie = ;
+    this.canDie        = localS.canDie;
 
-    this.wormholes = ;
-    this.spaceStations = ;
+    this.wormholes     = localS.wormholes;
+    this.spaceStations = localS.wormholes;
 
-    this.pentium = ;
-    this.celeron = ;
-    this.rhyzen = ;
-    this.xeon = ;
+    this.pentium       = localS.pentium;
+    this.celeron       = localS.celeron;
+    this.rhyzen        = localS.rhyzen;
+    this.xeon          = localS.xeon;
   }
 
   var save = new saveData();
@@ -41,27 +42,25 @@ function saveGame(){
     return 1;
   }
   function invalidNum(input){
-    if(typeof input === "Number") return 0;
-    return invalidSaveData();
+    if(typeof input != "Number") return invalidSaveData();
+    return 0;
   }
   function invalidCoord(input){
-    if(typeof input === "String"){
-      const coord = input.split(",");
-      const x = Number(coord[0]);
-      if(x == "NaN" || x < 0 || x > save.maxX) return invalidSaveData();
-      const y = Number(coord[1]);
-      if(y == "NaN" || y < 0 || y > save.maxY) return invalidSaveData();
-    }
-    else return invalidSaveData();
+    if(typeof input != "String") return invalidSaveData();
+
+    const coord = input.split(",");
+    const x = Number(coord[0]);
+    if(x == "NaN" || x < 0 || x > save.maxX) return invalidSaveData();
+    const y = Number(coord[1]);
+    if(y == "NaN" || y < 0 || y > save.maxY) return invalidSaveData();
 
     return 0;
   }
   function invalidCoordArray(input){
-    if(typeof input === "String"){
-      const coords = input.split(" ");
-      for(coord in coords) if(!validCoord(coord)) return invalidSaveData();
-    }
-    else return invalidSaveData();
+    if(typeof input != "String") return invalidSaveData();
+
+    const coords = input.split(" ");
+    for(coord in coords) if(!validCoord(coord)) return invalidSaveData();
 
     return 0;
   }
