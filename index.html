@@ -1,140 +1,138 @@
 <html>
   <head>
-    <link rel="stylesheet" href="options.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+    <!--
+        star styles authored by Nazar The Vis Azhar -
+        open source on codepen.io
+    -->
+    <style>
+      @import "susy";
+      @import "compass/reset";
 
-    <script type="text/javascript" src="options.js"></script>
+      .stars,
+      .twinkling,
+      .clouds {
+        position: absolute;
+        display: block;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        height: 100%;
+      }
 
+      .stars {
+        z-index: 0;
+        background: #000 url("https://image.ibb.co/mjnygo/stars.png") repeat top
+          center;
+      }
+
+      .twinkling {
+        z-index: 1;
+        background: transparent url("https://image.ibb.co/ir1DE8/twinkling.png")
+          repeat top center;
+        animation: move-twink-back 200s linear infinite;
+      }
+
+      .clouds {
+        z-index: 2;
+        background: transparent url("https://image.ibb.co/bT4N7T/clouds.png")
+          repeat top center;
+        animation: move-clouds-back 200s linear infinite;
+      }
+
+      @keyframes move-twink-back {
+        from {
+          background-position: 0 0;
+        }
+        to {
+          background-position: -10000px 5000px;
+        }
+      }
+
+      @keyframes move-clouds-back {
+        from {
+          background-position: 0 0;
+        }
+        to {
+          background-position: 10000px 0;
+        }
+      }
+
+      .listitems {
+        padding-left: 15rem;
+        padding-right: 15rem;
+        margin-bottom: 100px;
+        border-radius: 14px;
+        font-size: 2rem;
+      }
+      @font-face {
+        font-family: "spaceAge";
+        src: url("fonts/spaceAge.ttf") format("truetype");
+      }
+    </style>
+    <title>Spacehunt</title>
   </head>
-  <body onload="init()">
+  <canvas id="scene"></canvas>
+  <body class="stars">
+    <div class="twinkling">
+      <h1
+        style="margin-top: 4rem; text-align: center;font-family: spaceAge; font-size: 4.5rem; padding-top: 1rem; color:white"
+      >
+        SpaceHunt
+      </h1>
 
-    <link href='https://fonts.googleapis.com/css?family=Lato:300,400,700' rel='stylesheet' type='text/css'>
-    <div id='stars'></div>
-    <div id='stars2'></div>
-    <div id='stars3'></div>
-    <div class="galaxy"></div>
-
-    <div id="title">
-      <span>
-        Customize your Experience!
-      </span>
+      <ul style="padding-top: 10rem;text-align:center; list-style: none">
+        <li>
+          <a href="spaceMap.html">
+            <button
+              id="playGame"
+              type="button"
+              class="btn btn-outline-primary listitems"
+            >
+              Play
+            </button>
+          </a>
+        </li>
+        <li>
+          <a href="settings.html">
+            <button
+              id="settings"
+              type="button"
+              class="btn btn-outline-warning listitems"
+              style="padding-left: 13.5rem!important; padding-right:13.5rem!important"
+            >
+              Settings
+            </button>
+          </a>
+        </li>
+        <li>
+          <button type="loadGame" class="btn btn-outline-success listitems">
+            Load
+          </button>
+        </li>
+      </ul>
     </div>
-
-    <form name="options">
-      <div class="wrapper">
-
-        <div class="columnA">
-          <label for="maxX">Max Map X</label>
-          <input type="number" name="maxX" placeholder="positive number">
-          <label for="maxY">Max Map Y</label>
-          <input type="number" name="maxY" placeholder="positive number">
-
-          <label for="startX">Starting X</label>
-          <input type="number" name="startX" placeholder="positive number">
-          <label for="startY">Starting Y</label>
-          <input type="number" name="startY" placeholder="positive number">
-
-          <label for="baseEnergy">Energy</label>
-          <input type="number" name="baseEnergy" placeholder="positive number">
-
-          <label for="baseSupplies">Supplies</label>
-          <input type="number" name="baseSupplies" placeholder="positive number">
-
-          <label for="baseCredits">Credits</label>
-          <input type="number" name="baseCredits" placeholder="positive number">
-        </div>
-
-        <div class="columnB">
-          <br><label for="wormhole">Wormholes</label><br>
-          <div>
-            <div>
-              <input type="radio" name="wormhole" id="wormhole-random" value="random" required>
-              <label for="wormhole-random">Random</label>
-            </div>
-
-            <div>
-              <input type="radio" name="wormhole" id="wormhole-fixed" value="fixed">
-              <label for="wormhole-fixed">Fixed</label>
-
-              <div class="reveal-if-active">
-                <label for="wormhole">Where would you like to place the wormholes?.</label><br>
-                <input type="text" id="wormhole-location" name="wormhole-location" class="require-if-active" placeholder="x1,y1 x2,y2 x3,y3 ...">
-              </div>
-            </div>
-          </div>
-
-          <br><label for="death">Regular Mode</label><br>
-          <input type="radio" name="canDie" value="on"  id="canDie-on">
-          <label for="canDie-on" >On</label><br>
-          <input type="radio" name="canDie" value="off" id="canDie-off">
-          <label for="canDie-off">Off</label>
-          
-          <br><br><label for="badMax">BadMax</label>
-          <br><label for="badMaxSpeed">Speed (tiles/sec)</label>
-          <input type="number" id="badMaxSpeed" name="badMaxSpeed" placeholder="positive number">
-          <label for="numBadMaxs">Number</label>
-          <input type="number" id="numBadMaxs" name="numBadMaxs" placeholder="positive number">
-        </div>
-
-        <div class="columnC">
-          <br><label for="planets">Planets</label><br>
-
-          <!-- Placing Planets -->
-          <div>
-            <div>
-              <input type="radio" name="planets" id="planets-random" required>
-              <label for="planets-random">Random</label>
-            </div>
-
-            <div>
-              <input type="radio" name="planets" id="planets-fixed">
-              <label for="planets-fixed">Fixed</label>
-
-              <div class="reveal-if-active">
-                <label for="planets">Celeron</label><br>
-                <input type="text" id="Celeron" name="Celeron" class="require-if-active" placeholder="x,y"><br>
-
-                <label for="planets">Rhyzen</label><br>
-                <input type="text" id="Rhyzen" name="Rhyzen" class="require-if-active" placeholder="x,y"><br>
-
-                <label for="planets">Xeon</label><br>
-                <input type="text" id="Xeon" name="Xeon" class="require-if-active" placeholder="x,y"><br>
-
-                <label for="planets">Pentium 1-7</label><br>
-                <input type="text" id="Pentium" name="Pentium" class="require-if-active" placeholder="x1,y1 x2,y2 ... x7,y7"><br>
-              </div>
-            </div>
-          </div>
-
-          <br><label for="stations">Space Stations</label><br>
-
-          <div>
-            <div>
-              <input type="radio" name="stations" id="station-random" required>
-              <label for="station-random">Random</label>
-            </div>
-
-            <div>
-              <input type="radio" name="stations" id="station-fixed">
-              <label for="station-fixed">Fixed</label>
-
-              <div class="reveal-if-active">
-                <label for="stations">Where would you like to place the space stations?.</label><br>
-                <input type="text" id="station-location" name="station-location" class="require-if-active" placeholder="x1,y1 x2,y2 x3,y3 ...">
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="parent_div">
-          <br><a href="spaceMap.html"><button type="button">Continue</button></a>
-          <button type="button" onclick="debugAlert()">View localStorage</button>
-          <button type="button" onclick="localStorage.clear()">Clear localStorage</button>
-          <button type="button" onclick="save()">Submit changes</button>
-        </div>
-
-      </div>
-    </form>
   </body>
-  <script src="options.js"></script>
+  <script
+    src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"
+  ></script>
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+    crossorigin="anonymous"
+  ></script>
+  <script
+    src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+    crossorigin="anonymous"
+  ></script>
 </html>
